@@ -6,12 +6,14 @@ title: blank # the website title (if blank, full name will be used instead)
 first_name: Eyezuhk
 middle_name: Isaac
 last_name: Fernandes
-email: Eyezuhk@gmail.com
+email: eyezuhk@gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Just a personal blog.
 footer_text: >
   Powered by <a href="https://jekyllrb.com/" target="_blank">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio">al-folio</a> theme.
-keywords: Cyber, Security, DFIR, Malware-Analysis, Tecnology # add your own keywords or leave empty
+  Hosted by <a href="https://pages.github.com/" target="_blank">GitHub Pages</a>.
+  Photos from <a href="https://unsplash.com" target="_blank">Unsplash</a>.
+keywords: jekyll, jekyll-theme, academic-website, portfolio-website # add your own keywords or leave empty
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: ♠️ # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
@@ -46,7 +48,7 @@ rss_icon: true
 # -----------------------------------------------------------------------------
 
 navbar_fixed: true
-footer_fixed: false
+footer_fixed: true
 search_enabled: true
 socials_in_search: true
 bib_search: true
@@ -79,7 +81,7 @@ flickr_id: # your flickr id
 github_username: Eyezuhk # your GitHub user name
 gitlab_username: # your GitLab user name
 ieee_id: # your ieeexplore.ieee.org/author/id
-inspirehep_id: # Inspire HEP author ID
+inspirehep_id: 1010907 # Inspire HEP author ID
 instagram_id: # your instagram id
 kaggle_id: # your kaggle id
 keybase_username: # your keybase user name
@@ -111,7 +113,7 @@ youtube_id: # your youtube channel id (youtube.com/@<youtube_id>)
 zotero_username: # your zotero username
 
 contact_note: >
- Email eyezuhk@gmail.com.
+  Email eyezuhk@gmail.com.
 
 # -----------------------------------------------------------------------------
 # Analytics and search engine verification
