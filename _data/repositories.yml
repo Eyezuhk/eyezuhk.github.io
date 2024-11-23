@@ -1,10 +1,11 @@
 github_users:
   - eyezuhk
 
-repo_description_lines_max: 3
+repo_description_lines_max: 2
 
 github_repos:
   - eyezuhk/FNLocalCloud
   - eyezuhk/FnStegoCrypt
   - eyezuhk/InfoSec-Misc
   - eyezuhk/Tools
+  
