@@ -6,7 +6,7 @@ title: blank # the website title (if blank, full name will be used instead)
 first_name: Eyezuhk
 middle_name: Isaac
 last_name: Fernandes
-email: eyezuhk@gmail.com
+email: you@example.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   Just a personal blog.
 footer_text: >
@@ -24,7 +24,7 @@ impressum_path: # set to path to include impressum link in the footer, use the s
 back_to_top: true # set to false to disable the back to top button
 
 # -----------------------------------------------------------------------------
-# Theme 
+# Theme
 # -----------------------------------------------------------------------------
 
 # repo color theme
