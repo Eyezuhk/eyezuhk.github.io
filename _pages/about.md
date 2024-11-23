@@ -19,8 +19,8 @@ social: true # includes social icons at the bottom of the page
 
 With a background in Telecommunications Engineering and a passion for personal and interpersonal development, I am committed to advancing my career in cybersecurity.
 
-I have honed my problem-solving and communication skills, believing that knowledge sharing is essential for achieving common goals. My experience in Security Operations (SOC), particularly with SIEM, has fueled my interest in Threat Hunting, where I actively seek hidden threats. Working with large national and international companies has enriched my expertise and equipped me to multitask effectively, balancing responsibilities while maintaining quality and efficiency.
+I have honed my problem-solving and communication skills, believing that knowledge sharing is essential for achieving common goals. My experience in Security Operations (SOC), particularly with <code class="language-plaintext highlighter-rouge">SIEM</code>, has fueled my interest in <code class="language-plaintext highlighter-rouge">Threat Hunting</code>, where I actively seek hidden threats. Working with large national and international companies has enriched my expertise and equipped me to multitask effectively, balancing responsibilities while maintaining quality and efficiency.
 
-I am currently focused on expanding my skills in Digital Forensics and Incident Response (DFIR) and Malware Analysis.
+I am currently focused on expanding my skills in <code class="language-plaintext highlighter-rouge">Digital Forensics and Incident Response (DFIR)</code> and <code class="language-plaintext highlighter-rouge">Malware Analysis</code>.
 
 I am dedicated to contributing to a safer digital environment, protecting organizations and individuals from cyber threats, and I am eager to grow in this dynamic field.
