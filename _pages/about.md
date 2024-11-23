@@ -2,24 +2,25 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Motto. Etc.
+subtitle: <a href='#'>I don't want to believe. I want to know.</a>
 
 profile:
   align: right
   image: prof_pic.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
-    <p>555 your office number</p>
-    <p>123 your address street</p>
-    <p>Your City, State 12345</p>
+    <p>Cyber Security Analyst</p>
+    <p>Fortaleza - CE</p>
 
-news: true # includes a list of news items
-selected_papers: true # includes a list of papers marked as "selected={true}"
+news: false # includes a list of news items
+selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+With a background in Telecommunications Engineering and a passion for personal and interpersonal development, I am committed to advancing my career in cybersecurity.
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+I have honed my problem-solving and communication skills, believing that knowledge sharing is essential for achieving common goals. My experience in Security Operations (SOC), particularly with SIEM, has fueled my interest in Threat Hunting, where I actively seek hidden threats. Working with large national and international companies has enriched my expertise and equipped me to multitask effectively, balancing responsibilities while maintaining quality and efficiency.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+I am currently focused on expanding my skills in Digital Forensics and Incident Response (DFIR) and Malware Analysis.
+
+I am dedicated to contributing to a safer digital environment, protecting organizations and individuals from cyber threats, and I am eager to grow in this dynamic field.
