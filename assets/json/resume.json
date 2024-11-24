@@ -1,36 +1,59 @@
 {
   "basics": {
-    "name": "Albert Einstein",
-    "label": "Scientist",
+    "name": "Isaac Fernandes",
+    "label": "Information Security Analyst",
     "image": "",
-    "email": "albert@einstein.de",
-    "phone": "(912) 123-4567",
-    "url": "https://alshedivat.github.io/al-folio/",
-    "summary": "A German-born theoretical physicist, widely ranked among the greatest and most influential scientists of all time",
+    "email": "isaacfn95@gmail.com",
+    "phone": "+55 (85) 9",
+    "url": "https://eyezuhk.com.br",
+    "summary": "Experienced Information Security Analyst with expertise in Detection Engineering, Threat Hunting, Digital Forensics and Incident Response (DFIR), and Security Operations Center (SOC) management. Proven ability to improve security posture, reduce false positives, and enhance incident response capabilities.",
     "location": {
-      "address": "2712 Broadway St",
-      "postalCode": "CA 94115",
-      "city": "San Francisco",
-      "countryCode": "US",
-      "region": "California"
+      "address": "",
+      "postalCode": "60100",
+      "city": "Fortaleza",
+      "countryCode": "BR",
+      "region": "Ceará"
     },
     "profiles": [
       {
-        "network": "Twitter",
-        "username": "AlbertEinstein",
-        "url": "https://twitter.com/AlbertEinstein"
+        "network": "LinkedIn",
+        "username": "isaacfn",
+        "url": "linkedin.com/in/isaacfn/"
       }
     ]
   },
   "work": [
     {
-      "name": "Institute for Advanced Study, Princeton University",
-      "position": "Professor of Theoretical Physics",
-      "url": "https://example.com",
-      "startDate": "1933-01-01",
-      "endDate": "1955-01-01",
-      "summary": "Teaching at Palmer Physical Laboratory (now 302 Frist Campus Center). While not a professor at Princeton, I associated with the physics professors and continued to give lectures on campus.",
-      "highlights": ["Relativity"]
+      "name": "Capgemini",
+      "position": "Security Consultant V | SOC Detection Engineer",
+      "startDate": "2023-03-01",
+      "endDate": "Present",
+      "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
+      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
+    },
+    {
+      "name": "Capgemini",
+      "position": "Security Consultant V | SOC Detection Engineer",
+      "startDate": "2023-03-01",
+      "endDate": "Present",
+      "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
+      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
+    },
+    {
+      "name": "Capgemini",
+      "position": "Security Consultant V | SOC Detection Engineer",
+      "startDate": "2023-03-01",
+      "endDate": "Present",
+      "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
+      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
+    },
+    {
+      "name": "Capgemini",
+      "position": "Security Consultant V | SOC Detection Engineer",
+      "startDate": "2023-03-01",
+      "endDate": "Present",
+      "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
+      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
     }
   ],
   "volunteer": [
