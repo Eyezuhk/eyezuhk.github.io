@@ -167,12 +167,14 @@ disqus_shortname: # put your disqus shortname
 # If you have blog posts published on medium.com or other external sources,
 # you can display them in your blog by adding a link to the RSS feed.
 external_sources:
-  - name: ""
-    rss_url: ""
-  - name: ""
+  enabled: false
+  - name: medium.com
+    rss_url: https://medium.com/@isaacfn/feed
+  - name: Isaac Blog
     posts:
-      - url: ""
-        published_date: ""
+      - url: "https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c"
+        published_date: 2022-02-16
+
 # -----------------------------------------------------------------------------
 # Newsletter
 # -----------------------------------------------------------------------------
