@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CyberDefenders Qradar Write up
+title: CyberDefenders Qradar101 Write up
 date: 2022-02-16 12:00:00
 description: this is what included videos could look like
 tags: Qradar, Cyberdefenders, Threat Hunting

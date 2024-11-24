@@ -171,7 +171,7 @@ external_sources:
     rss_url: https://medium.com/@isaacfn/feed
   - name: Isaac Blog
     posts:
-      - url: https://medium.com/bugbountywriteup/cyberdefenders-qradar101-write-up-88bf45fdf82c
+      - url: https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c
         published_date: 2022-02-16
 
 # -----------------------------------------------------------------------------
