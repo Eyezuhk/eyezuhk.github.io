@@ -132,7 +132,7 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # -----------------------------------------------------------------------------
 
 blog_name: Eyezuhk Blog # blog_name will be displayed in your blog page
-blog_description: Just a blog.
+blog_description: Mostly personal notes.
 permalink: /blog/:year/:title/
 lsi: true # produce an index for related posts
 
@@ -303,8 +303,8 @@ jekyll-archives:
     tag: "/blog/tag/:name/"
     category: "/blog/category/:name/"
 
-display_tags: ["formatting", "images", "links", "math", "code", "blockquotes"] # these tags will be displayed on the front page of your blog
-display_categories: ["external-services"] # these categories will be displayed on the front page of your blog
+display_tags: ["DFIR", "Malware-Analysis", "Incident-Response"] # these tags will be displayed on the front page of your blog
+display_categories: ["Threat-Hunting"] # these categories will be displayed on the front page of your blog
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
