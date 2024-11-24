@@ -29,7 +29,9 @@
       "startDate": "2023-03-06",
       "endDate": "Now",
       "summary": "Detection Engineering, Threat Hunting, Digital Forensics and Incident Response, Qradar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
-      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
+      "highlights": [
+        "Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."
+      ]
     },
     {
       "name": "ISH TECNOLOGIA",
@@ -37,7 +39,9 @@
       "startDate": "2022-05-02",
       "endDate": "2023-03-05",
       "summary": "Threat Hunting, Digital Forensics and Incident Response, RSA Netwitness Management, Securonix SNYPR, Kape, Volatility, Dettect, Mitre, TaHiTI, MAGMA, NIST, ServiceNow, Reporting, Documentation Creation, Daily Client Meetings.",
-      "highlights": ["Evolution in Information Security Maturity of Large Brazilian Companies"]
+      "highlights": [
+        "Evolution in Information Security Maturity of Large Brazilian Companies"
+      ]
     },
     {
       "name": "MORPHUS SEGURANÇA DA INFORMAÇÃO",
@@ -45,7 +49,9 @@
       "startDate": "2021-06-01",
       "endDate": "2022-05-01",
       "summary": "SIEM and Threat Intelligence alert triage, Threat Hunting, Incident Response, LogRhythm and Qradar management, Resilient SOAR, Azure Sentinel, Splunk, Nessus, Darktrace, Proofpoint, Zabbix, Fortinet, Kaspersky Security Center, BAS, OSINT, Mitre, OWASP, NIST compliance, OTRS ticket handling with vendors, Reporting, Daily checklists, Documentation creation.",
-      "highlights": ["Maintained security for multiple large companies in Latin America."]
+      "highlights": [
+        "Maintained security for multiple large companies in Latin America."
+      ]
     },
     {
       "name": "ENERGY TELECOM",
@@ -53,7 +59,9 @@
       "startDate": "2018-07-01",
       "endDate": "2021-05-31",
       "summary": "Management of PRTG Network Monitor, Centreon, Icinga, Troubleshooting Sonicwall, Sophos, Routing, Switching, DHCP, DNS, NAT, Service Desk Telephone and Qualitor, Documentation of routine checklists for Bacula, Veeam, vSphere Data Protection, and Backup Exec backups.",
-      "highlights": ["Ensured availability of critical assets for important companies in Brazil."]
+      "highlights": [
+        "Ensured availability of critical assets for important companies in Brazil."
+      ]
     },
     {
       "name": "PHOTONICS LABORATORY",
@@ -61,54 +69,71 @@
       "startDate": "2016-05-01",
       "endDate": "2016-12-01",
       "summary": "Research in Photonics, Numerical Simulations, Optical Communication Systems, Article Writing, Support for the Annual Iecom Meeting on Communications, Networks, and Cryptography.",
-      "highlights": ["Fundamental scientific contribution in the field of optical computing."]
+      "highlights": [
+        "Fundamental scientific contribution in the field of optical computing."
+      ]
     }
   ],
-    "education": [
+  "education": [
     {
       "institution": "Federal Institute of Ceará",
       "location": "Fortaleza, Ceará, BR",
       "url": "https://ifce.edu.br/",
       "area": "Telecommunications Engineering",
-      "studyType": "Bachelor's Degree"
+            "studyType": "Bachelor's Degree"
     }
   ],
-   "certifications": [
-    
+  "certifications": [
     {
-    "name": "Blue Team Level 1 (BTL1)",
-    "issuer": "Security Blue Team",
-    "date": "2023-11-01",
-    "credentialId": "463658876",
-    "skills": ["Phishing Analysis", "Threat Intelligence", "SIEM", "Incident Response", "DFIR"]
+      "name": "Blue Team Level 1 (BTL1)",
+      "issuer": "Security Blue Team",
+      "date": "2023-11-01",
+      "credentialId": "463658876",
+      "skills": [
+        "Phishing Analysis",
+        "Threat Intelligence",
+        "SIEM",
+        "Incident Response",
+        "DFIR"
+      ]
     },
     {
       "name": "CCD",
       "date": "2020-01-01"
     },
     {
-    "name": "GHSOC - Security Operation Center Foundations",
-    "issuer": "GoHacking",
-    "date": "2022-11-01",
-    "credentialId": "9pBD7aH8UMCZTKdLVllB",
-    "skills": ["Security Operations Center", "SOC", "Cybersecurity"]
+      "name": "GHSOC - Security Operation Center Foundations",
+      "issuer": "GoHacking",
+      "date": "2022-11-01",
+      "credentialId": "9pBD7aH8UMCZTKdLVllB",
+      "skills": [
+        "Security Operations Center",
+        "SOC",
+        "Cybersecurity"
+      ]
     },
     {
-    "name": "Cisco Certified CyberOps Associate",
-    "issuer": "Cisco Networking Academy",
-    "date": "2022-02-01",
-    "credentialId": "",
-    "skills": ["Cybersecurity"]
+      "name": "Cisco Certified CyberOps Associate",
+      "issuer": "Cisco Networking Academy",
+      "date": "2022-02-01",
+      "credentialId": "",
+      "skills": [
+        "Cybersecurity"
+      ]
     },
     {
-    "name": "IBM QRadar SIEM Foundation",
-    "issuer": "IBM",
-    "date": "2022-02-01",
-    "credentialId": "",
-    "skills": ["SIEM", "Qradar", "Cybersecurity"]
+      "name": "IBM QRadar SIEM Foundation",
+      "issuer": "IBM",
+      "date": "2022-02-01",
+      "credentialId": "",
+      "skills": [
+        "SIEM",
+        "Qradar",
+        "Cybersecurity"
+      ]
     }
   ],
-   "skills": [
+  "skills": [
     {
       "name": "Physics",
       "level": "Master",
@@ -120,6 +145,47 @@
         "Quantum Cryptography",
         "Quantum Communication",
         "Quantum Teleportation"
+      ]
+    },
+    {
+      "name": "Programming Languages",
+      "level": "Basic",
+      "keywords": [
+        "Python",
+        "C",
+        "MATLAB"
+      ]
+    },
+    {
+      "name": "Security Tools",
+      "level": "Advanced",
+      "keywords": [
+        "Qradar",
+        "Crowdstrike",
+        "Splunk",
+        "Resilient",
+        "Detect Mitre",
+        "Confluence"
+      ]
+    },
+    {
+      "name": "Networking",
+      "level": "Advanced",
+      "keywords": [
+        "Firewall",
+        "Routing",
+        "DHCP",
+        "DNS",
+        "NAT"
+      ]
+    },
+    {
+      "name": "Cloud Computing",
+      "level": "Basic",
+      "keywords": [
+        "AWS",
+        "Azure",
+        "Oracle"
       ]
     }
   ],
@@ -137,28 +203,6 @@
     {
       "language": "Spanish",
       "fluency": "Basic"
-    }
-  ],
-  "skills": [
-    {
-      "name": "Programming Languages",
-      "level": "Basic",
-      "keywords": ["Python", "C", "MATLAB"]
-    },
-    {
-      "name": "Security Tools",
-      "level": "Advanced",
-      "keywords": ["Qradar", "Crowdstrike", "Splunk", "Resilient", "Detect Mitre", "Confluence"]
-    },
-    {
-      "name": "Networking",
-      "level": "Advanced",
-      "keywords": ["Firewall", "Routing", "DHCP", "DNS", "NAT"]
-    },
-    {
-      "name": "Cloud Computing",
-      "level": "Basic",
-      "keywords": ["AWS", "Azure", "Oracle"]
     }
   ],
   "volunteer": [
