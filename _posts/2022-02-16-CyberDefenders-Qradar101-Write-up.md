@@ -1,10 +1,10 @@
 ---
 layout: post
-title: a post with videos
-date: 2023-04-24 21:01:00
+title: CyberDefenders Qradar101 Write up
+date: 2022-02-16 12:00:00
 description: this is what included videos could look like
-tags: formatting videos
-categories: sample-posts
+tags: Qradar, Cyberdefenders, Threat Hunting
+categories: SIEM
 ---
 
 This is an example post with videos. It supports local video files.
