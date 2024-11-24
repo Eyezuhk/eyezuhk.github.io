@@ -1,7 +1,7 @@
 ---
 layout: page
-permalink: /github-repositories/
-title: gitHub repositories
+permalink: /Github-Repositories/
+title: github repositories
 description: Personal projects.
 nav: true
 nav_order: 2
