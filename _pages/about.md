@@ -10,7 +10,7 @@ profile:
   image_circular: true # crops the image to make it circular
   more_info: >
     <p>Cyber Security Analyst</p>
-    <p>Fortaleza - CE</p>
+    <p>Fortaleza - CE - Brazil</p>
 
 news: false # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
