@@ -26,20 +26,10 @@
     {
       "name": "Capgemini",
       "position": "Security Consultant V | SOC Detection Engineer",
-      "url": "",
       "startDate": "2023-03-01",
       "endDate": "Present",
       "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
-      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
-    },
-    {
-      "name": "Capgemini",
-      "position": "Security Consultant V | SOC Detection Engineer",
-      "url": "",
-      "startDate": "2023-03-01",
-      "endDate": "Present",
-      "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
-      "highlights": ["Significant progress in detection maturity for a leading multinational automotive manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident response capabilities."]
+      "highlights": ["Relativity"]
     }
   ],
   "volunteer": [
