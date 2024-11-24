@@ -144,7 +144,7 @@ related_blog_posts:
   enabled: true
   max_related: 6
 
-# Giscus comments (RECOMMENDED)
+# Giscus comments (RECOMMENDED) 
 # Follow instructions on https://giscus.app/ to setup for your repo to fill out the information below.
 giscus:
   repo: # <your-github-user-name>/<your-github-repo-name>
