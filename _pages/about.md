@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href=\'#\'>I don\'t want to believe. I want to know.</a>
+subtitle: <a href='#'>I don't want to believe. I want to know.</a>
 
 profile:
   align: right
