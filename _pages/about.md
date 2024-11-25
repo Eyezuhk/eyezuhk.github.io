@@ -10,20 +10,17 @@ profile:
   image_circular: true # crops the image to make it circular
   more_info: >
     <p>Cyber Security Analyst</p>
-    <p>Fortaleza - CE - Brazil</p>
+    <p>Fortaleza - CE</p>
 
-news: true # includes a list of news items
+news: false # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-I've always been curious about how things work, which led me to study Telecommunications Engineering. I gained valuable experience in scientific research within a photonics laboratory, where I explored the fascinating world of light and its applications.
+With a background in <code class="language-plaintext highlighter-rouge">Telecommunications Engineering</code> and a passion for personal and interpersonal development, I am committed to advancing my career in <code class="language-plaintext highlighter-rouge">cybersecurity</code>.
 
-However, my true passion is in information security. I've spent most of my career working in Security Operations, where I've developed strong problem-solving and communication skills. I believe that sharing knowledge is key to achieving common goals. 
+I have honed my problem-solving and communication skills, believing that knowledge sharing is essential for achieving common goals. My experience in Security Operations (<code class="language-plaintext highlighter-rouge">SOC</code>), particularly with <code class="language-plaintext highlighter-rouge">SIEM</code>, has fueled my interest in <code class="language-plaintext highlighter-rouge">Threat Hunting</code>, where I actively seek hidden threats. Working with large national and international companies has enriched my expertise and equipped me to multitask effectively, balancing responsibilities while maintaining quality and efficiency.
 
-My experience with SIEM has sparked a passion for Threat Hunting, where I actively seek out hidden threats.
+I am currently focused on expanding my skills in <code class="language-plaintext highlighter-rouge">Digital Forensics and Incident Response (DFIR)</code> and <code class="language-plaintext highlighter-rouge">Malware Analysis</code>.
 
-I've had the opportunity to work with organizations from around the world, which has helped me become a skilled multitasker and team player. I'm currently looking to expand my skills in Digital Forensics and Incident Response (DFIR), and Malware Analysis.
-
-My goal is to contribute to a safer online world, protecting people and organizations from cyber threats. 
-I'm excited to continue learning and growing in this dynamic field.
+I am dedicated to contributing to a safer digital environment, protecting organizations and individuals from cyber threats, and I am eager to grow in this dynamic field.
