@@ -17,9 +17,9 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-I've always been curious about how things work, which led me to study <code class="language-plaintext highlighter-rouge">Telecommunications Engineering</code>. I gained valuable experience in scientific research within a photonics laboratory, where I explored the fascinating world of light and its applications.
+I've always been curious about how things work, which led me to study <code class="language-plaintext highlighter-rouge">Telecommunications Engineering</code>. I gained valuable experience in scientific <code class="language-plaintext highlighter-rouge">research</code> within a photonics laboratory, where I explored the fascinating world of light and its applications.
 
-However, my true passion is in information security. I've spent most of my career working in Security Operations, where I've developed strong problem-solving and communication skills. I believe that sharing knowledge is key to achieving common goals. My experience with SIEM has sparked a passion for Threat Hunting, where I actively seek out hidden threats.
+However, my true passion is in <code class="language-plaintext highlighter-rouge">information security</code>. I've spent most of my career working in <code class="language-plaintext highlighter-rouge">Security Operations</code>, where I've developed strong problem-solving and communication skills. I believe that sharing knowledge is key to achieving common goals. My experience with SIEM has sparked a passion for Threat Hunting, where I actively seek out hidden threats.
 
 I've had the opportunity to work with organizations from around the world, which has helped me become a skilled multitasker and team player. I'm currently looking to expand my skills in Digital Forensics and Incident Response (DFIR), and Malware Analysis.
 
