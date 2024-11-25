@@ -17,7 +17,7 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-I've always been curious about how things work, which led me to study Telecommunications Engineering. I gained valuable experience in scientific research within a photonics laboratory, where I explored the fascinating world of light and its applications.
+I've always been curious about how things work, which led me to study <code class="language-plaintext highlighter-rouge">Telecommunications Engineering</code>. I gained valuable experience in scientific research within a photonics laboratory, where I explored the fascinating world of light and its applications.
 
 However, my true passion is in information security. I've spent most of my career working in Security Operations, where I've developed strong problem-solving and communication skills. I believe that sharing knowledge is key to achieving common goals. My experience with SIEM has sparked a passion for Threat Hunting, where I actively seek out hidden threats.
 
