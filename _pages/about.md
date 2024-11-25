@@ -12,7 +12,7 @@ profile:
     <p>Cyber Security Analyst</p>
     <p>Fortaleza - CE - Brazil</p>
 
-news: true # includes a list of news items
+news: false # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
