@@ -9,21 +9,10 @@ profile:
   image: prof_pic.jpg
   image_circular: true # crops the image to make it circular
   more_info: >
-    <p>Cyber Security Analyst</p>
-    <p>Fortaleza - CE - Brazil</p>
+    <p align="right">Cyber Security Analyst</p>
+    <p align="right">Fortaleza - CE - Brazil</p>
 
 news: true # includes a list of news items
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
-
-I&apos;ve always been curious about how things work, which led me to study <code class="language-plaintext highlighter-rouge">Telecommunications Engineering</code>. I gained valuable experience in scientific <code class="language-plaintext highlighter-rouge">research</code> within a photonics laboratory, where I explored the fascinating world of light and its applications.
-
-However, my true passion is in <code class="language-plaintext highlighter-rouge">information security</code>. I&apos;ve spent most of my career working in <code class="language-plaintext highlighter-rouge">Security Operations</code>, where I&apos;ve developed strong problem-solving and communication skills. I believe that sharing knowledge is key to achieving common goals. 
-
-My experience with <code class="language-plaintext highlighter-rouge">SIEM</code> has sparked a passion for <code class="language-plaintext highlighter-rouge">Threat Hunting</code>, where I actively seek out hidden threats.
-
-I&apos;ve had the opportunity to work with organizations from around the world, which has helped me become a skilled multitasker and team player. I&apos;m currently looking to expand my skills in <code class="language-plaintext highlighter-rouge">Digital Forensics and Incident Response (DFIR)</code>, and <code class="language-plaintext highlighter-rouge">Malware Analysis</code>.
-
-My goal is to contribute to a safer online world, protecting people and organizations from cyber threats. 
-I&apos;m excited to continue learning and growing in this dynamic field.
