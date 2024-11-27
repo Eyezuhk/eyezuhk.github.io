@@ -7,7 +7,7 @@ tags: Qradar, Cyberdefenders, Threat Hunting
 categories: SIEM
 ---
 
-This is an example post with videos. It supports local video files.
+Original publication https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c
 
 <div class="row mt-3">
     <div class="col-sm mt-3 mt-md-0">
