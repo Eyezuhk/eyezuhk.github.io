@@ -40,7 +40,7 @@ Make sure you followed through the [deployment instructions](#deployment) in the
 
 If the website does not load the theme, the layout looks weird, and all links are broken, being the main page displayed this way:
 
-<img src="assets/img/template_error.png" width="500">
+image deleted
 
 make sure to correctly specify the `url` and `baseurl` paths in `_config.yml`. Set `url` to `https://<your-github-username>.github.io` or to `https://<your.custom.domain>` if you are using a custom domain. If you are deploying a <ins>personal</ins> or <ins>organization</ins> website, leave `baseurl` **empty** (do **NOT** delete it). If you are deploying a project page, set `baseurl: /<your-project-name>/`. If all previous steps were done correctly, all is missing is for your browser to fetch again the site stylesheet. For this, you can:
 
