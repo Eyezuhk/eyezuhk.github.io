@@ -7,6 +7,6 @@ tags: Qradar, Cyberdefenders, Threat Hunting
 categories: SIEM
 ---
 
-Original publication [InfosecWriteups CyberDefenders QRadar101](https://infosecwriteups.com/cyberdefenders-qradar101)
+Original publication [InfosecWriteups CyberDefenders QRadar101](https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c)
 
 Loading.
