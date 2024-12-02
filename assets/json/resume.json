@@ -30,6 +30,21 @@
       "endDate": "Present",
       "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
       "highlights": ["False positive rate reduced by 90%"]
+    },
+    {
+      "name": "Ish Tecnologia",
+      "position": "Threat Hunter",
+      "startDate": "2022-05-01",
+      "endDate": "2023-03-01",
+      "location": "Vitória, Espírito Santo",
+      "summary": "Threat Hunting, Inteligência de Ameaças, Análise de Logs, SIEM, MITRE ATT&CK, Cyber Kill Chain",
+      "highlights": [
+        "Realizado Threat Hunting utilizando MaGMa e TaHiTI para identificar ameaças não detectadas",
+        "Desenvolvimento de regras SIGMA",
+        "Criação de casos de uso para SIEM baseados em TTPs de grupos APT",
+        "Análise de logs para identificar potenciais ameaças",
+        "Colaboração com equipes de segurança para investigar incidentes"
+      ]
     }
   ],
   "volunteer": [
