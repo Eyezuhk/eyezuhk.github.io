@@ -28,6 +28,7 @@ jobs:
           echo "$output"
           if echo "$output" | grep -q "Unknown status (999"; then
             echo "Ignoring error 999, usually due Linkedin."
+            exit 0
           else
             exit 1
           fi   
