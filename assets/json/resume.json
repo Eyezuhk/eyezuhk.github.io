@@ -9,7 +9,7 @@
     "summary": "Experienced Information Security Analyst with expertise in Detection Engineering, Threat Hunting, Digital Forensics and Incident Response (DFIR), and Security Operations Center (SOC) management. Proven ability to improve security posture, reduce false positives, and enhance incident response capabilities.",
     "location": {
       "address": "",
-      "postalCode": "60100",
+      "postalCode": "6016500",
       "city": "Fortaleza",
       "countryCode": "BR",
       "region": "Ceará"
@@ -29,7 +29,9 @@
       "startDate": "2023-03-01",
       "endDate": "Present",
       "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
-      "highlights": ["Relativity"]
+      "highlights": ["Significant progress in detection maturity for a leading multinational automotive
+manufacturer, reducing false positives by 90%, while strengthening overall security operations and incident
+response capabilities"]
     }
   ],
   "volunteer": [
