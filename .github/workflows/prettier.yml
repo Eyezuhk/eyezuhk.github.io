@@ -23,15 +23,7 @@ jobs:
         run: npm install --save-dev --save-exact prettier @shopify/prettier-plugin-liquid
       - name: Prettier Check 🔎
         id: prettier
-        run: |
-          output=$(npx prettier . --check 2>&1) || true
-          echo "$output"
-          if echo "$output" | grep -q "Unknown status (999"; then
-            echo "Ignoring error 999, usually due Linkedin."
-            exit 0
-          else
-            exit 1
-          fi   
+        run: npx prettier . --check
       - name: Create diff 📝
         # https://docs.github.com/en/actions/learn-github-actions/expressions#failure
         if: ${{ failure() }}
