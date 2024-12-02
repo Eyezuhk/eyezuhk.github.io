@@ -11,6 +11,6 @@ Originally published by me on Medium [InfosecWriteups CyberDefenders QRadar101](
 
 This was the first write-up for this CTF.
 
-"Looking back, I realize it would have been much easier if I had known then what I know now. Still, I'm proud to have been the first!
+Looking back, I realize it would have been much easier if I had known then what I know now. Still, I'm proud to have been the first!
 
 Loading.
