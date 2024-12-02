@@ -37,13 +37,13 @@ _Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM_
 
 ![Fig 2— Log Activity](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ.png)
 
-> **How many log sources available?**
+>### **How many log sources available?**
 
 We can find this information going to Admin > Log Sources.
 
 ![Fig 3 — Log Sources](https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A.png)
 
-> **What is the IDS software used to monitor the network?**
+>### **What is the IDS software used to monitor the network?**
 
 We can see in figure 3 the IDS is one of the log sources.
 
