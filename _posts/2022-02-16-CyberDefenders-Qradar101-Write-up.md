@@ -144,12 +144,7 @@ We found the file with the md5 hash.
 
 We can search for Event id 4720 A user account was created.
 
-[Windows Security Log Event ID 4720 - A user account was created
----------------------------------------------------------------
-
-### 4720: A user account was created On this page The user identified by Subject: created the user identified by New…
-
-www.ultimatewindowssecurity.com](https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4720&source=post_page-----88bf45fdf82c--------------------------------)
+[Ref: ultimatewindowssecurity EVENT 4720](https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4720)
 
 ![Fig 24–4720](https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw.png)![Fig 25–4720 payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw.png)
 
@@ -191,4 +186,4 @@ While searching for which tool the attacker was performing data exfiltration we 
 
 I hope this write-up has helped you. Any questions, feel free to contact me on [https://www.linkedin.com/in/isaacfn/](https://www.linkedin.com/in/isaacfn/)
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2CKrn4VFJyPr4-hMNEE1UA.png)
+![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
