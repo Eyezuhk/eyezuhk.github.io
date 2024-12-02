@@ -13,12 +13,11 @@ This was the first write-up for this CTF.
 
 Looking back, I realize it would have been much easier if I had known then what I know now. Still, I'm proud to have been the first!
 
------------------------------
+---
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
 
-This write-up is based on Cyberdefenders Qradar101 challenge from _Ali Alwashali._
-----------------------------------------------------------------------------------
+## This write-up is based on Cyberdefenders Qradar101 challenge from _Ali Alwashali._
 
 You can check on [https://cyberdefenders.org/blueteam-ctf-challenges/39](https://cyberdefenders.org/blueteam-ctf-challenges/39)
 
