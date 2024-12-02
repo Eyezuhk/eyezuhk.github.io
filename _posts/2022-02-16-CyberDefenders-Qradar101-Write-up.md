@@ -9,4 +9,8 @@ categories: SIEM
 
 Originally published by me on Medium [InfosecWriteups CyberDefenders QRadar101](https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c)
 
+This was the first write-up for this CTF.
+
+Looking back, I wish I knew then what I know now, but proud to be the first!"
+
 Loading.
