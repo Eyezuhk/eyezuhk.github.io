@@ -13,42 +13,7 @@ This was the first write-up for this CTF.
 
 Looking back, I realize it would have been much easier if I had known then what I know now. Still, I'm proud to have been the first!
 
-Loading.
-
-CyberDefenders Qradar101 Write-up
-=================================
-
-[![Isaac Fernandes](https://miro.medium.com/v2/resize:fill:88:88/1*i2kNneFcfDFXvsqvQm174Q.jpeg)](https://medium.com/@isaacfn?source=post_page---byline--88bf45fdf82c--------------------------------)
-
-[![InfoSec Write-ups](https://miro.medium.com/v2/resize:fill:48:48/1*SWJxYWGZzgmBP1D0Qg_3zQ.png)](https://infosecwriteups.com/?source=post_page---byline--88bf45fdf82c--------------------------------)
-
-[Isaac Fernandes](https://medium.com/@isaacfn?source=post_page---byline--88bf45fdf82c--------------------------------)
-
-·
-
-[Follow](https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fsubscribe%2Fuser%2F5f14724f27db&operation=register&redirect=https%3A%2F%2Finfosecwriteups.com%2Fcyberdefenders-qradar101-write-up-88bf45fdf82c&user=Isaac+Fernandes&userId=5f14724f27db&source=post_page-5f14724f27db--byline--88bf45fdf82c---------------------post_header-----------)
-
-Published in
-
-[InfoSec Write-ups](https://infosecwriteups.com/?source=post_page---byline--88bf45fdf82c--------------------------------)
-
-·
-
-7 min read
-
-·
-
-Feb 16, 2022
-
-[nameless link](https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fvote%2Fbugbountywriteup%2F88bf45fdf82c&operation=register&redirect=https%3A%2F%2Finfosecwriteups.com%2Fcyberdefenders-qradar101-write-up-88bf45fdf82c&user=Isaac+Fernandes&userId=5f14724f27db&source=---header_actions--88bf45fdf82c---------------------clap_footer-----------)
-
---
-
-[nameless link](https://medium.com/m/signin?actionUrl=https%3A%2F%2Fmedium.com%2F_%2Fbookmark%2Fp%2F88bf45fdf82c&operation=register&redirect=https%3A%2F%2Finfosecwriteups.com%2Fcyberdefenders-qradar101-write-up-88bf45fdf82c&source=---header_actions--88bf45fdf82c---------------------bookmark_footer-----------)
-
-Listen
-
-Share
+-----------------------------
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
 
