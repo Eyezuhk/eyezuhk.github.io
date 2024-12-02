@@ -3,8 +3,8 @@ layout: post
 title: CyberDefenders Qradar101 Write up
 date: 2022-02-16 12:00:00
 description: Ctf Writeup
-tags: Qradar, Cyberdefenders, Threat Hunting
-categories: SIEM
+tags: Qradar, Cyberdefenders, Threat-Hunting
+categories: SIEM, Incident-Response
 ---
 
 Originally published by me on Medium [InfosecWriteups CyberDefenders QRadar101](https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c)
@@ -17,9 +17,11 @@ Looking back, I realize it would have been much easier if I had known then what 
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
 
-## This write-up is based on Cyberdefenders Qradar101 challenge from _Ali Alwashali._
+### This write-up is based on Cyberdefenders Qradar101 challenge from _Ali Alwashali._
 
 You can check on [https://cyberdefenders.org/blueteam-ctf-challenges/39](https://cyberdefenders.org/blueteam-ctf-challenges/39)
+
+---
 
 First of all, let’s start looking for offenses.
 
