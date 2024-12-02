@@ -132,7 +132,7 @@ We can discover this information by analyzing the outgoing traffic from the firs
 
 > **What is the email service used by the company?(one word)**
 
-We can look for traffic directed to the standard ports of the IP’s services, in this case, we had no success so let’s look at HTTPS traffic port 443 We checked on [https://viewdns.inf](https://viewdns.inf) that most IP’s belong to Microsoft and so we found our answer.
+We can look for traffic directed to the standard ports of the IP’s services, in this case, we had no success so let’s look at HTTPS traffic port 443 We checked on [https://viewdns.info](https://viewdns.info) that most IP’s belong to Microsoft and so we found our answer.
 
 > **What is the name of the malicious file used for the initial infection?**
 
