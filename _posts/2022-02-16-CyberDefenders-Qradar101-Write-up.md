@@ -192,13 +192,3 @@ While searching for which tool the attacker was performing data exfiltration we 
 I hope this write-up has helped you. Any questions, feel free to contact me on [https://www.linkedin.com/in/isaacfn/](https://www.linkedin.com/in/isaacfn/)
 
 ![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2CKrn4VFJyPr4-hMNEE1UA.png)
-
-🔈 🔈 Infosec Writeups is organizing its first-ever virtual conference and networking event. If you’re into Infosec, this is the coolest place to be, with 16 incredible speakers and 10+ hours of power-packed discussion sessions. [Check more details and register here.](https://iwcon.live/)
-=================================================================================================================================================================================================================================================================================================
-
-[IWCon2022 - Infosec WriteUps Virtual Conference
------------------------------------------------
-
-### Network With World's Best Infosec Professionals. Find How Cybersecurity Pros Achieved Success. Add New Skills to Your…
-
-iwcon.live](https://iwcon.live/?source=post_page-----88bf45fdf82c--------------------------------)
