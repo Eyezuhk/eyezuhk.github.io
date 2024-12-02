@@ -200,7 +200,7 @@ collections:
 announcements:
   enabled: true
   scrollable: true # adds a vertical scroll bar if there are more than 3 news items
-  limit: 5 # leave blank to include all the news in the `_news` folder
+  limit: 3 # leave blank to include all the news in the `_news` folder
 
 latest_posts:
   enabled: true
@@ -304,7 +304,7 @@ jekyll-archives:
     category: "/blog/category/:name/"
 
 display_tags: ["Qradar","Python","Powershell"] # these tags will be displayed on the front page of your blog
-display_categories: ["DFIR","SIEM","Malware-Analysis", "Incident-Response"],"Threat-Hunting","Red-Team] # these categories will be displayed on the front page of your blog
+display_categories: ["DFIR","SIEM","Malware-Analysis", "Incident-Response","Threat-Hunting","Red-Team"] # these categories will be displayed on the front page of your blog
 
 # -----------------------------------------------------------------------------
 # Jekyll Scholar
