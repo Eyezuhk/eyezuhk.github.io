@@ -41,6 +41,8 @@ _Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM_
 
 ![Fig 2— Log Activity](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ.png "Fig 2— Log Activity")
 
+## **Questions**
+
 > ### **How many log sources available?**
 
 We can find this information going to Admin > ### Log Sources.
