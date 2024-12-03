@@ -16,7 +16,7 @@
 
 <br><br>
 <span>
-  <a href="https://br.linkedin.com/in/Eyezuhk"><img src="https://img.shields.io/badge/Connect-0077B5?style=social&logo=linkedin"/></a>
+<a href="https://br.linkedin.com/in/Eyezuhk"><img src="https://img.shields.io/badge/Connect-0077B5?style=social&logo=linkedin"/></a>
 </span>
 <br><br>
 
