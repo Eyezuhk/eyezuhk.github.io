@@ -43,29 +43,29 @@ _Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM_
 
 ## **Questions**
 
-### > **How many log sources available?**
+> ### **How many log sources available?**
 
-We can find this information going to Admin ### > Log Sources.
+We can find this information going to Admin > ### Log Sources.
 
 ![Fig 3 — Log Sources](https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A.png "Fig 3 — Log Sources")
 
-### > **What is the IDS software used to monitor the network?**
+> ### **What is the IDS software used to monitor the network?**
 
 We can see in figure 3 the IDS is one of the log sources.
 
-### > **What is the domain name used in the network?**
+> ### **What is the domain name used in the network?**
 
 We can find this information looking for payload events related to hosts as an example: Success Audit: A Kerberos service ticket was granted.
 
 ![Fig 4 — Domain Payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA.png "Fig 4 — Domain Payload")
 
-### > **Multiple IPs were communicating with the malicious server. One of them ends with “20”. Provide the full IP.**
+> ### **Multiple IPs were communicating with the malicious server. One of them ends with “20”. Provide the full IP.**
 
 We can display log Activity by Source IP to see what IPs generated more communication.
 
 ![Fig 5 — Ip .20](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w.png)
 
-### > **What is the SID of the most frequent alert rule in the dataset?**
+> ### **What is the SID of the most frequent alert rule in the dataset?**
 
 We can look for sid: in the payload with regular expression.
 
@@ -75,13 +75,13 @@ We will find 110 logs from SO-Suricata where 72
 
 ![Fig 7— RULE SID](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw.png)
 
-### > **What is the attacker’s IP address?**
+> ### **What is the attacker’s IP address?**
 
 In closed offenses, we can see a suspicious public IP.
 
 ![Fig 8— Attacker IP](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg.png)
 
-### > **The attacker was searching for data belonging to one of the company’s projects, can you find the name of the project?**
+> ### **The attacker was searching for data belonging to one of the company’s projects, can you find the name of the project?**
 
 We can search for project with regular expression.
 
@@ -91,19 +91,19 @@ We will find 4 events, then we will read the payload.
 
 ![Fig 10— Project.xlsx](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw.png)
 
-### > **What is the IP address of the first infected machine?**
+> ### **What is the IP address of the first infected machine?**
 
 We can order the events by increasing time. We can see a suspicious event.
 
 ![Fig 11 — First Infected](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA.png)
 
-### > **What is the username of the infected employee using 192.168.10.15?**
+> ### **What is the username of the infected employee using 192.168.10.15?**
 
 Adding a filter where Source IP is 192.168.10.15 we can find the first username that logged in.
 
 ![Fig 12 — Infected employee](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A.png)
 
-### > **Hackers do not like logging, what logging was the attacker checking to see if enabled?**
+> ### **Hackers do not like logging, what logging was the attacker checking to see if enabled?**
 
 Let’s look for the first events that the attacker generated. We can observe a tool widely used in attacks.
 
@@ -111,47 +111,47 @@ Let’s look for the first events that the attacker generated. We can observe a 
 
 We can also see that the attacker is using PowerShell to find project48.
 
-### > **Name of the second system the attacker targeted to cover up the employee?**
+> ### **Name of the second system the attacker targeted to cover up the employee?**
 
 We can search for deleted files.
 
 ![Fig 14— Second System](https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w.png)![Fig 15 — Del](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA.png)
 
-### > **When was the first malicious connection to the domain controller (log start time — hh:mm:ss)?**
+> ### **When was the first malicious connection to the domain controller (log start time — hh:mm:ss)?**
 
 We can look for detected network connections by looking at the payloads, we can see that the first event is for a connection to the attacker’s server 192.20.80.25. And by a process that should not be making this connection.
 
 ![Fig 16 — Connection](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw.png)
 
-### > **What is the md5 hash of the malicious file?**
+> ### **What is the md5 hash of the malicious file?**
 
 Filtering by hash, we find 10 events, when we look at the first one from the infected machine 192.168.10.15 we can find the .docx file with malicious hash.
 
 ![Fig 17 — Hash](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA.png)![Fig 18 — Hash Payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA.png)
 
-### > **What is the MITRE persistence technique ID used by the attacker?**
+> ### **What is the MITRE persistence technique ID used by the attacker?**
 
 By looking up persistence techniques in [**_mitre_**](https://attack.mitre.org/tactics/TA0003/), we can search for logs about which techniques the attacker may have used.
 
 ![Fig 19 — Run](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q.png)![Fig 20— Persistence](https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A.png)
 
-### > **What protocol is used to perform host discovery?**
+> ### **What protocol is used to perform host discovery?**
 
 We can discover this information by analyzing the outgoing traffic from the first compromised host.
 
 ![Fig 21— Protocol](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg.png)![Fig 22 — Protocol payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g.png)
 
-### > **What is the email service used by the company?(one word)**
+> ### **What is the email service used by the company?(one word)**
 
 We can look for traffic directed to the standard ports of the IP’s services, in this case, we had no success so let’s look at HTTPS traffic port 443 We checked on [https://viewdns.info](https://viewdns.info) that most IP’s belong to Microsoft and so we found our answer.
 
-### > **What is the name of the malicious file used for the initial infection?**
+> ### **What is the name of the malicious file used for the initial infection?**
 
 We found the file with the md5 hash.
 
 ![Fig 23 — File](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA.png)
 
-### > **What is the name of the new account added by the attacker?**
+> ### **What is the name of the new account added by the attacker?**
 
 We can search for Event id 4720 A user account was created.
 
@@ -159,37 +159,37 @@ We can search for Event id 4720 A user account was created.
 
 ![Fig 24–4720](https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw.png)![Fig 25–4720 payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw.png)
 
-### > **What is the PID of the process that performed injection?**
+> ### **What is the PID of the process that performed injection?**
 
 We can look for process creation on the infected host.
 
 ![Fig 26— PID filter](https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig.png)![Fig 27 — PID event](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w.png)![Fig 28 — PID payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA.png)
 
-### > **What is the name of the tool used for lateral movement?**
+> ### **What is the name of the tool used for lateral movement?**
 
 I didn’t know about this tool and couldn’t find anything in the logs, I needed to use the tip, so searching on google I found [https://github.com/SecureAuthCorp/impacket](https://github.com/SecureAuthCorp/impacket)
 
 ![Fig 29 — Impacket](https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw.png)
 
-### > **Attacker exfiltrated one file, what is the name of the tool used for exfiltration?**
+> ### **Attacker exfiltrated one file, what is the name of the tool used for exfiltration?**
 
 Searching for the events where there was communication with the attacker.
 
 ![Fig 30— Exfiltration](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w.png)![Fig 31— Exfiltration payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g.png)
 
-### > **Who is the other legitimate domain admin other than the administrator?**
+> ### **Who is the other legitimate domain admin other than the administrator?**
 
 We can see a list of users grouped by username and search for event [**_4672_**](https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4672)**_._**
 
 ![Fig 32–4672](https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w.png)![Fig 33— Admin](https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA.png)
 
-### > **The attacker used the host discovery technique to know how many hosts available in a certain network, what is the network the hacker scanned from the host IP 1 to 30?**
+> ### **The attacker used the host discovery technique to know how many hosts available in a certain network, what is the network the hacker scanned from the host IP 1 to 30?**
 
 We can check if the first compromised machine scanned the network.
 
 ![Fig 34 — Scan](https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q.png)![Fig 35 — Scan network](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ.png)
 
-### > **What is the name of the employee who hired the attacker?**
+> ### **What is the name of the employee who hired the attacker?**
 
 While searching for which tool the attacker was performing data exfiltration we noticed a suspicious .xlsx spreadsheet.
 
