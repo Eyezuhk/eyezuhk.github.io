@@ -628,6 +628,15 @@ third_party_libraries:
 
 # -----------------------------------------------------------------------------
 # Get external JSON data
+#   - publications
+#   - projects
+#   - volunteer
+#   - awards
+#   - certificates
+#   - skills
+#   - languages
+#   - interests
+#   - references
 # -----------------------------------------------------------------------------
 
 jekyll_get_json:
@@ -637,12 +646,4 @@ jsonresume:
   - basics
   - work
   - education
-  - publications
-  - projects
-  - volunteer
-  - awards
-  - certificates
-  - skills
-  - languages
-  - interests
-  - references
+
