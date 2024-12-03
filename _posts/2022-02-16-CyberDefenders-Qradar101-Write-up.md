@@ -35,7 +35,7 @@ We can see 26 offenses between Oct 17 and Nov 8 of 2020.
 
 ![Fig 1 — Offenses](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.png "Fig 1 — Offenses")
 
-{% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.pn" class="img-fluid rounded z-depth-1" zoomable=true %}
+{% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 _Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM_
 
