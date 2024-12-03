@@ -19,7 +19,7 @@ Looking back, I realize it would have been much easier if I had known then what 
 
 ---
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
+![Bannher](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
 
 **This write-up is based on Cyberdefenders Qradar101 challenge from Ali Alwashali.**
 
@@ -37,23 +37,23 @@ _Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM_
 
 ![Fig 2— Log Activity](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ.png "Fig 2— Log Activity")
 
-> ### ### **How many log sources available?**
+> ### **How many log sources available?**
 
 We can find this information going to Admin > ### Log Sources.
 
 ![Fig 3 — Log Sources](https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A.png "Fig 3 — Log Sources")
 
-> ### ### ### **What is the IDS software used to monitor the network?**
+> ### **What is the IDS software used to monitor the network?**
 
 We can see in figure 3 the IDS is one of the log sources.
 
-> ### ### **What is the domain name used in the network?**
+> ### **What is the domain name used in the network?**
 
 We can find this information looking for payload events related to hosts as an example: Success Audit: A Kerberos service ticket was granted.
 
 ![Fig 4 — Domain Payload](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA.png "Fig 4 — Domain Payload")
 
-> ### ### **Multiple IPs were communicating with the malicious server. One of them ends with “20”. Provide the full IP.**
+> ### **Multiple IPs were communicating with the malicious server. One of them ends with “20”. Provide the full IP.**
 
 We can display log Activity by Source IP to see what IPs generated more communication.
 
@@ -191,4 +191,6 @@ While searching for which tool the attacker was performing data exfiltration we 
 
 I hope this write-up has helped you. Any questions, feel free to contact me on [https://www.linkedin.com/in/isaacfn/](https://www.linkedin.com/in/isaacfn/)
 
-![captionless image](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
+![Banner](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
+
+## **Comments Section**
