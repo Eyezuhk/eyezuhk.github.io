@@ -5,7 +5,7 @@ date: 2022-02-16 12:00:00
 description: Ctf Writeup
 tags: Qradar, Cyberdefenders, Threat, Hunting
 categories: SIEM, Incident-Response
-thumbnail: https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png
+thumbnail: https://img.stackshare.io/service/12032/qradar.png
 giscus_comments: true
 related_posts: true
 toc:
@@ -196,4 +196,4 @@ I hope this write-up has helped you. Any questions, feel free to contact me on [
 
 ![Banner](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
 
-## **Comments Section**
+### **Comments Section**
