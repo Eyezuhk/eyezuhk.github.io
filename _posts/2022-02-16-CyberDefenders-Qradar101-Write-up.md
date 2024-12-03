@@ -3,8 +3,9 @@ layout: post
 title: CyberDefenders Qradar101 Write up
 date: 2022-02-16 12:00:00
 description: Ctf Writeup
-tags: Qradar, Cyberdefenders, Threat-Hunting
+tags: Qradar, Cyberdefenders, Threat, Hunting
 categories: SIEM, Incident-Response
+thumbnail: https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png
 giscus_comments: true
 related_posts: true
 toc:
@@ -32,6 +33,8 @@ First of all, let’s start looking for offenses.
 We can see 26 offenses between Oct 17 and Nov 8 of 2020.
 
 ![Fig 1 — Offenses](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.png "Fig 1 — Offenses")
+
+{% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.pn" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 _Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM_
 
