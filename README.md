@@ -1,4 +1,4 @@
-### Hi, I'm Eyezuhk 👋
+### Hi, I'm Isaac Fernandes 👋
 
 - :earth_americas: From [Fortaleza](https://maps.app.goo.gl/iDiQefg1L76xPGTx7), :brazil:
 
@@ -14,12 +14,14 @@
 
 [![trophy](https://github-profile-trophy.vercel.app/?username=Eyezuhk&theme=onedark&margin-w=15&margin-h=15&no-bg=true&rank=-C&column=4)](https://github.com/ryo-ma/github-profile-trophy)
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/Eyezuhk/Eyezuhk/blob/output/github-contribution-grid-snake-dark.svg" />
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/Eyezuhk/Eyezuhk/blob/output/github-contribution-grid-snake.svg" />
-</picture>
-
 <br><br>
 <span>
   <a href="https://br.linkedin.com/in/Eyezuhk"><img src="https://img.shields.io/badge/Connect-0077B5?style=social&logo=linkedin"/></a>
 </span>
+<br><br>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/george-gca/george-gca/blob/output/github-contribution-grid-snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/george-gca/george-gca/blob/output/github-contribution-grid-snake.svg" />
+  <img alt="github-snake" src="github-snake.svg" />
+</picture>
