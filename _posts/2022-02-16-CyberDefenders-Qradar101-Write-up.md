@@ -8,6 +8,7 @@ categories: SIEM, Incident-Response
 thumbnail: https://img.stackshare.io/service/12032/qradar.png
 giscus_comments: true
 related_posts: true
+featured: true
 toc:
   sidebar: left
 ---
@@ -19,6 +20,9 @@ This was the first write-up for this CTF.
 Looking back, I realize it would have been much easier if I had known then what I know now. Still, I'm proud to have been the first!
 
 ---
+toc:
+  - name: Comments Section
+
 
 ![Bannher](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
 
@@ -195,5 +199,7 @@ While searching for which tool the attacker was performing data exfiltration we 
 I hope this write-up has helped you. Any questions, feel free to contact me on [https://www.linkedin.com/in/isaacfn/](https://www.linkedin.com/in/isaacfn/)
 
 ![Banner](https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png)
+
+<br><br>
 
 ## **Comments Section**
