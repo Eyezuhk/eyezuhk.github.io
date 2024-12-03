@@ -69,6 +69,8 @@ We can look for sid: in the payload with regular expression.
 
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
+We will find 110 logs from SO-Suricata where 72 are for the rule sid:
+
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 > ### **What is the attacker’s IP address?**
@@ -82,6 +84,8 @@ In closed offenses, we can see a suspicious public IP.
 We can search for project with regular expression.
 
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+
+We will find 4 events, then we will read the payload.
 
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
@@ -107,14 +111,15 @@ We can also see that the attacker is using PowerShell to find project48.
 
 > ### **Name of the second system the attacker targeted to cover up the employee?**
 
+We can search for deleted files.
+
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 > ### **When was the first malicious connection to the domain controller (log start time — hh:mm:ss)?**
 
 We can look for detected network connections by looking at the payloads, we can see that the first event is for a connection to the attacker’s server 192.20.80.25. And by a process that should not be making this connection.
-
-We can search for deleted files.
 
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
@@ -208,6 +213,8 @@ While searching for which tool the attacker was performing data exfiltration we 
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 I hope this write-up has helped you. Any questions, feel free to contact me on [https://www.linkedin.com/in/isaacfn/](https://www.linkedin.com/in/isaacfn/)
+
+<br>
 
 {% include figure.liquid loading="eager" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
