@@ -1,5 +1,5 @@
 {
-  "General Information": {
+  "General": {
     "name": "Isaac Fernandes",
     "label": "Information Security Analyst",
     "image": "",
@@ -37,6 +37,7 @@
     {
       "name": "Capgemini",
       "position": "Security Consultant V | SOC Detection Engineer",
+      "url": "https://www.capgemini.com/",
       "location": "Paris, France - Remote",
       "startDate": "2023-03-06",
       "endDate": "Present",
@@ -46,6 +47,7 @@
     {
       "name": "Ish Tecnologia",
       "position": "Threat Hunter",
+      "url": "https://ish.com.br/",
       "location": "ES, Brazil - Remote",
       "startDate": "2022-05-01",
       "endDate": "2023-03-01",
@@ -65,7 +67,7 @@
     {
       "name": "ENERGY TELECOM",
       "position": "Support Technician - Monitoring",
-      "url": "https://example.com",
+      "url": "https://www.energytelecom.com.br/",
       "location": "Fortaleza, Ceará",
       "startDate": "2018-07",
       "endDate": "2021-05",
