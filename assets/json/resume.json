@@ -1,5 +1,5 @@
 {
-  "basics": {
+  "General Information": {
     "name": "Isaac Fernandes",
     "label": "Information Security Analyst",
     "image": "",
@@ -9,7 +9,7 @@
     "Languages": "Portuguese, English",
     "summary": "Experienced Information Security Analyst with expertise in Detection Engineering, Threat Hunting, Digital Forensics and Incident Response (DFIR), and Security Operations Center (SOC) management. Proven ability to improve security posture, reduce false positives, and enhance incident response capabilities.",
     "location": {
-      "address": "",
+      "address": "Fortaleza - Ceará - Brazil",
       "postalCode": "6016500",
       "city": "Fortaleza",
       "countryCode": "BR",
@@ -30,7 +30,7 @@
       "url": "https://ifce.edu.br/fortaleza/cursos/graduacao/bacharelados/engenharia-telecomunicacoes",
       "area": "Telecommunications Engineering",
       "studyType": "BS Telecommunications Engineering",
-      "Yea": "2021"
+      "year": "2021"
     }
   ],
   "work": [
@@ -49,23 +49,60 @@
       "location": "ES, Brazil - Remote",
       "startDate": "2022-05-01",
       "endDate": "2023-03-01",
-      "summary": "Threat Hunting, Digital Forensics, Incident Response, RSA Netwitness Management, Securonix SNYPR, Kape, Volatility, Dettect, Mitre, TaHiTI, MAGMA, NIST, ServiceNow, Reporting, Documentation Creation, Daily Client Meetings",
+      "summary": "Threat Hunting, Digital Forensics, Incident Response, RSA Netwitness Management, Securonix SNYPR, Kape, Volatility, Dettect, Mitre, TaHiTI, MAGMA, NIST, ServiceNow, Reporting, Documentation Creation, Daily Meetings with Customers",
       "highlights": ["Evolution in Information Security Maturity of Large Brazilian Companies"]
+    },
+    {
+      "name": "MORPHUS SEGURANÇA DA INFORMAÇÃO",
+      "position": "JR - Security Analyst - SOC L1/L2 ",
+      "url": "https://newsroom.accenturebr.com/br/news/2023/accenture-adquire-morphus-empresa-cearense-de-ciberseguranca",
+      "location": "Fortaleza, Ceará",
+      "startDate": "2021-06",
+      "endDate": "2022-05",
+      "summary": "Threat Hunting, Digital Forensics, Incident Response, RSA Netwitness Management, Securonix SNYPR, Kape, Volatility, Dettect, Mitre, TaHiTI, MAGMA, NIST, ServiceNow, Reporting, Documentation Creation, Daily Client Meetings",
+      "highlights": ["Maintained security for multiple large companies in Latin America."]
+    },
+    {
+      "name": "ENERGY TELECOM",
+      "position": "Support Technician - Monitoring",
+      "url": "https://example.com",
+      "location": "Fortaleza, Ceará",
+      "startDate": "2018-07",
+      "endDate": "2021-05",
+      "summary": "Management of PRTG Network Monitor, Centreon, Icinga, Troubleshooting Sonicwall, Sophos, Routing, Switching, DHCP, DNS, NAT, Service Desk Telephone and Qualitor, Documentation of routine checklists for Bacula, Veeam, vSphere Data Protection, and Backup Exec backups.",
+      "highlights": ["Ensured availability of critical assets for important companies in Brazil."]
+    },
+    {
+      "name": "PHOTONICS LABORATORY",
+      "position": "Undergraduate Researcher",
+      "url": "https://example.com",
+      "location": "Fortaleza, Ceará",
+      "startDate": "2016-05",
+      "endDate": "2016-12",
+      "summary": "Research in Photonics, Numerical Simulations, Optical Communication Systems, Article Writing, Support for the Annual Iecom Meeting on Communications, Networks, and Cryptography",
+      "highlights": ["Fundamental scientific contribution in the field of optical computing."]
     }
   ],
   "volunteer": [
     {
-      "organization": "People's Climate March",
-      "location": "Zurich, Switzerland",
-      "position": "Lead Organizer",
+      "organization": "IFCE",
+      "location": "Fortaleza, Ceará",
+      "position": "Computer Teacher ",
       "url": "https://example.com",
-      "startDate": "2014-04-01",
-      "endDate": "2015-07-01",
-      "summary": "Lead organizer for the New York City branch of the People's Climate March, the largest climate march in history.",
-      "highlights": ["Awarded 'Climate Hero' award by Greenpeace for my efforts organizing the march.", "Men of the year 2014 by Time magazine"]
+      "startDate": "2017-01",
+      "endDate": "2017-06",
+      "summary": "Conducted computer classes for underprivileged individuals as part of a social project course."
+    },
+    {
+      "organization": "Telecommunications Engineering Academic Center",
+      "location": "Fortaleza, Ceará",
+      "position": "Coordinator",
+      "url": "https://www.instagram.com/caetifce/",
+      "startDate": "2017-01",
+      "endDate": "2015-01",
+      "summary": "Organized events and lectures aimed at reducing student dropout rates in the Telecommunications Engineering program."
     }
   ],
-
   "awards": [
     {
       "title": "Nobel Prize in Physics",
