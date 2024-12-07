@@ -109,7 +109,7 @@
   "certificates": [
     {
       "name": "Detection Engineering for Beginners",
-      "date": "2024-04-01",
+      "date": "2024-04",
       "issuer": "TCM Security",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-certificate",
@@ -118,7 +118,7 @@
     },
     {
       "name": "Practical API Hacking",
-      "date": "2024-04-01",
+      "date": "2024-04",
       "issuer": "TCM Security",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-api-hacking.pdf",
       "icon": "fa-solid fa-tag",
@@ -127,7 +127,7 @@
     },
     {
       "name": "Practical Phishing Campaigns",
-      "date": "2024-04-01",
+      "date": "2024-04",
       "issuer": "TCM Security",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-phishing-campaigns.pdf",
       "icon": "fa-solid fa-envelope",
@@ -136,7 +136,7 @@
     },
     {
       "name": "Blue Team Level 1 (BTL1)",
-      "date": "2023-11-01",
+      "date": "2023-11",
       "issuer": "Security Blue Team",
       "url": "https://www.credly.com/badges/fe12cfcc-ede9-493a-8f02-82ef9766b36b",
       "icon": "fa-solid fa-certificate",
@@ -144,7 +144,7 @@
     },
     {
       "name": "Practical Malware Analysis & Triage",
-      "date": "2023-10-01",
+      "date": "2023-10",
       "issuer": "TCM Security",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-malware-analysis-triage.pdf",
       "icon": "fa-solid fa-certificate",
@@ -153,7 +153,7 @@
     },
     {
       "name": "Practical Windows Forensics",
-      "date": "2023-09-01",
+      "date": "2023-09",
       "issuer": "TCM Security",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-windows-forensics.pdf",
       "icon": "fa-solid fa-certificate",
@@ -162,7 +162,7 @@
     },
     {
       "name": "GHSOC - Security Operation Center Foundations",
-      "date": "2022-11-01",
+      "date": "2022-11",
       "issuer": "GoHacking",
       "url": "https://gohacking.com.br/verificacao/9pBD7aH8UMCZTKdLVllB",
       "icon": "fa-solid fa-certificate",
@@ -171,7 +171,7 @@
     },
     {
       "name": "Practical Ethical Hacking - The Complete Course",
-      "date": "2022-08-01",
+      "date": "2022-08",
       "issuer": "TCM Security",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-ethical-hacking-the-complete-course.pdf",
       "icon": "fa-solid fa-certificate",
@@ -180,7 +180,7 @@
     },
     {
       "name": "Cisco Certified CyberOps Associate",
-      "date": "2022-02-01",
+      "date": "2022-02",
       "issuer": "Cisco Networking Academy",
       "url": "https://www.credly.com/badges/5fdeb5f0-242c-44c7-8619-ef79c4c83c26?source=linked_in_profile",
       "icon": "fa-solid fa-certificate",
@@ -189,7 +189,7 @@
     },
     {
       "name": "IBM QRadar SIEM Foundation",
-      "date": "2022-02-01",
+      "date": "2022-02",
       "issuer": "IBM",
       "url": "https://www.credly.com/badges/6c8923d1-ed8f-4214-a556-cad92f01791e?source=linked_in_profile",
       "icon": "fa-solid fa-certificate",
