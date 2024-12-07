@@ -78,7 +78,7 @@
     {
       "name": "PHOTONICS LABORATORY",
       "position": "Undergraduate Researcher",
-      "url": "https://example.com",
+      "url": "http://fotonica.fortaleza.ifce.edu.br/",
       "location": "Fortaleza, Ceará",
       "startDate": "2016-05",
       "endDate": "2016-12",
@@ -91,7 +91,7 @@
       "organization": "IFCE",
       "location": "Fortaleza, Ceará",
       "position": "Computer Teacher ",
-      "url": "https://example.com",
+      "url": "https://ifce.edu.br/",
       "startDate": "2017-01",
       "endDate": "2017-06",
       "summary": "Conducted computer classes for underprivileged individuals as part of a social project course."
@@ -120,7 +120,7 @@
       "name": "Practical API Hacking",
       "date": "2024-04-01",
       "issuer": "TCM Security",
-      "url": "https://example.com/cert_xxkjm4w4",
+      "url": "https://drive.google.com/file/d/1bbSCdGCt-jge2D8OvSw_KOH5x-uXj_pt/preview",
       "icon": "fa-solid fa-tag",
       "duration": "6H",
       "skills": ["Burp Suite", "Postman", "API"]
@@ -129,7 +129,7 @@
       "name": "Practical Phishing Campaigns",
       "date": "2024-04-01",
       "issuer": "TCM Security",
-      "url": "https://example.com/cert_vkmhnn3h",
+      "url": "https://drive.google.com/file/d/1bbSCdGCt-jge2D8OvSw_KOH5x-uXj_pt/preview",
       "icon": "fa-solid fa-envelope",
       "duration": "3H",
       "skills": ["Phishing", "Anti-phishing", "GoPhish", "Evilginx"]
