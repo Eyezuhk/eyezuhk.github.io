@@ -111,7 +111,7 @@
       "name": "Detection Engineering for Beginners",
       "date": "2024-04-01",
       "issuer": "TCM Security",
-      "url": "assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-certificate",
       "duration": "11H",
       "skills": ["Detection Engineering", "Elastic Stack (ELK)", "Elastic SIEM", "GitHub", "Python", "Adversary Emulation"]
@@ -120,7 +120,7 @@
       "name": "Practical API Hacking",
       "date": "2024-04-01",
       "issuer": "TCM Security",
-      "url": "assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-tag",
       "duration": "6H",
       "skills": ["Burp Suite", "Postman", "API"]
@@ -129,7 +129,7 @@
       "name": "Practical Phishing Campaigns",
       "date": "2024-04-01",
       "issuer": "TCM Security",
-      "url": "assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-envelope",
       "duration": "3H",
       "skills": ["Phishing", "Anti-phishing", "GoPhish", "Evilginx"]
@@ -146,7 +146,7 @@
       "name": "Practical Malware Analysis & Triage",
       "date": "2023-10-01",
       "issuer": "TCM Security",
-      "url": "assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-certificate",
       "duration": "9H",
       "skills": ["Análise de malware", "Detecção de malware"]
@@ -155,7 +155,7 @@
       "name": "Practical Windows Forensics",
       "date": "2023-09-01",
       "issuer": "TCM Security",
-      "url": "assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-certificate",
       "duration": "11H",
       "skills": ["Forense digital", "Computação forense", "DFIR"]
@@ -173,7 +173,7 @@
       "name": "Practical Ethical Hacking - The Complete Course",
       "date": "2022-08-01",
       "issuer": "TCM Security",
-      "url": "assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-certificate",
       "duration": "25H",
       "skills": ["Teste de penetração", "Hacking ético"]
