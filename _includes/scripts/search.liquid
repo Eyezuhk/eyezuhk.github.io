@@ -1,6 +1,63 @@
 {% if site.search_enabled %}
   <script type="module" src="{{ '/assets/js/search/ninja-keys.min.js' | relative_url | bust_file_cache }}"></script>
-  <ninja-keys hideBreadcrumbs noAutoLoadMdIcons placeholder="Type to start searching"></ninja-keys>
+  <ninja-keys hideBreadcrumbs noAutoLoadMdIcons placeholder="{{ site.data[site.active_lang].strings.search.placeholder }}">
+    {% comment %} modal footer and its components were extracted from assets/js/search/ninja-footer.min.js {% endcomment %}
+    <div class="modal-footer" slot="footer">
+      <span class="help">
+        <svg
+          version="1.0"
+          class="ninja-examplekey"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1280 1280"
+        >
+          <path
+            d="M1013 376c0 73.4-.4 113.3-1.1 120.2a159.9 159.9 0 0 1-90.2 127.3c-20 9.6-36.7 14-59.2 15.5-7.1.5-121.9.9-255 1h-242l95.5-95.5 95.5-95.5-38.3-38.2-38.2-38.3-160 160c-88 88-160 160.4-160 161 0 .6 72 73 160 161l160 160 38.2-38.3 38.3-38.2-95.5-95.5-95.5-95.5h251.1c252.9 0 259.8-.1 281.4-3.6 72.1-11.8 136.9-54.1 178.5-116.4 8.6-12.9 22.6-40.5 28-55.4 4.4-12 10.7-36.1 13.1-50.6 1.6-9.6 1.8-21 2.1-132.8l.4-122.2H1013v110z"
+          />
+        </svg>
+        {{ site.data[site.active_lang].strings.search.footer.select }}
+      </span>
+      <span class="help">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="ninja-examplekey"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"
+          />
+        </svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="ninja-examplekey"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z" />
+        </svg>
+        {{ site.data[site.active_lang].strings.search.footer.navigate }}
+      </span>
+      <span class="help">
+        <span class="ninja-examplekey esc">esc</span>
+        {{ site.data[site.active_lang].strings.search.footer.close }}
+      </span>
+      <span class="help">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="ninja-examplekey backspace"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z"
+            clip-rule="evenodd"
+          />
+        </svg>
+        {{ site.data[site.active_lang].strings.search.footer.parent }}
+      </span>
+    </div>
+  </ninja-keys>
   <script>
     let searchTheme = determineComputedTheme();
     const ninjaKeys = document.querySelector('ninja-keys');
@@ -20,6 +77,11 @@
       ninjaKeys.open();
     };
   </script>
+  {% if site.active_lang == site.default_lang %}
+    {% assign lang = '' %}
+  {% else %}
+    {% assign lang = site.active_lang %}
+  {% endif %}
   <script>
     // get the ninja-keys element
     const ninja = document.querySelector('ninja-keys');
@@ -32,9 +94,9 @@
       {
         id: "nav-{{ about_title | slugify }}",
         title: "{{ about_title | truncatewords: 13 }}",
-        section: "Navigation",
+        section: "{{ site.data[site.active_lang].strings.search.navigation }}",
         handler: () => {
-          window.location.href = "{{ '/' | relative_url }}";
+          window.location.href = "{{ '/' | prepend: lang | relative_url }}";
         },
       },
       {%- assign sorted_pages = site.pages | sort: "nav_order" -%}
@@ -49,14 +111,13 @@
                   id: "dropdown-{{ title | slugify }}",
                   title: "{{ title | truncatewords: 13 }}",
                   description: "{{ child.description | strip_html | strip_newlines | escape | strip }}",
-                  section: "Dropdown",
+                  section: "{{ site.data[site.active_lang].strings.search.dropdown }}",
                   handler: () => {
-                    window.location.href = "{{ url | relative_url }}";
+                    window.location.href = "{{ url | prepend: lang | relative_url }}";
                   },
                 },
               {%- endunless -%}
             {%- endfor -%}
-
           {%- else -%}
             {
               {%- assign title = p.title | escape | strip -%}
@@ -64,9 +125,9 @@
               id: "nav-{{ title | slugify }}",
               title: "{{ title | truncatewords: 13 }}",
               description: "{{ p.description | strip_html | strip_newlines | escape | strip }}",
-              section: "Navigation",
+              section: "{{ site.data[site.active_lang].strings.search.navigation }}",
               handler: () => {
-                window.location.href = "{{ url | relative_url }}";
+                window.location.href = "{{ url | prepend: lang | relative_url }}";
               },
             },
           {%- endif -%}
@@ -84,14 +145,14 @@
             title: "{{ title | truncatewords: 13 }}",
           {% endif %}
           description: "{{ post.description | strip_html | strip_newlines | escape | strip }}",
-          section: "Posts",
+          section: "{{ site.data[site.active_lang].strings.search.posts }}",
           handler: () => {
             {% if post.redirect == blank %}
-              window.location.href = "{{ post.url | relative_url }}";
+              window.location.href = "{{ post.url | prepend: lang | relative_url }}";
             {% elsif post.redirect contains '://' %}
               window.open("{{ post.redirect }}", "_blank");
             {% else %}
-              window.location.href = "{{ post.redirect | relative_url }}";
+              window.location.href = "{{ post.redirect | prepend: lang | relative_url }}";
             {% endif %}
           },
         },
@@ -106,12 +167,12 @@
                 {%- assign title = item.title | newline_to_br | replace: "<br />", " " | replace: "<br/>", " " | strip_html | strip_newlines | escape | strip -%}
               {%- endif -%}
               id: "{{ collection.label }}-{{ title | slugify }}",
-              title: '{{ title | escape | emojify | truncatewords: 13 }}',
+              title: '{{ title | emojify | truncatewords: 13 }}',
               description: "{{ item.description | strip_html | strip_newlines | escape | strip }}",
-              section: "{{ collection.label | capitalize }}",
+              section: "{{ site.data[site.active_lang].strings.search[collection.label] }}",
               {%- unless item.inline -%}
                 handler: () => {
-                  window.location.href = "{{ item.url | relative_url }}";
+                  window.location.href = "{{ item.url | prepend: lang | relative_url }}";
                 },
               {%- endunless -%}
             },
@@ -122,8 +183,8 @@
         {%- if site.email -%}
           {
             id: 'socials-email',
-            title: 'Send email',
-            section: 'Socials',
+            title: '{{ site.data[site.active_lang].strings.search.email }}',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("mailto:{{ site.email | encode_email }}", "_blank");
             },
@@ -133,7 +194,7 @@
           {
             id: 'socials-telegram',
             title: 'Telegram',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://telegram.me/{{ site.telegram_username }}", "_blank");
             },
@@ -143,7 +204,7 @@
           {
             id: 'socials-whatsapp',
             title: 'WhatsApp',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://wa.me/{{ site.whatsapp_number }}", "_blank");
             },
@@ -153,7 +214,7 @@
           {
             id: 'socials-orcid',
             title: 'ORCID',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://orcid.org/{{ site.orcid_id }}", "_blank");
             },
@@ -163,7 +224,7 @@
           {
             id: 'socials-google-scholar',
             title: 'Google Scholar',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://scholar.google.com/citations?user={{ site.scholar_userid }}", "_blank");
             },
@@ -173,7 +234,7 @@
           {
             id: 'socials-semantic-scholar',
             title: 'Semantic Scholar',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.semanticscholar.org/author/{{ site.semanticscholar_id }}", "_blank");
             },
@@ -183,7 +244,7 @@
           {
             id: 'socials-publons',
             title: 'Publons',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://publons.com/a/{{ site.publons_id }}/", "_blank");
             },
@@ -193,7 +254,7 @@
           {
             id: 'socials-lattes',
             title: 'Lattes',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("http://lattes.cnpq.br/{{ site.lattes_id }}", "_blank");
             },
@@ -203,7 +264,7 @@
           {
             id: 'socials-open-science-framework',
             title: 'Open Science Framework',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://osf.io/{{ site.osf_id }}/", "_blank");
             },
@@ -213,7 +274,7 @@
           {
             id: 'socials-researchgate',
             title: 'ResearchGate',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.researchgate.net/profile/{{ site.research_gate_profile }}/", "_blank");
             },
@@ -223,7 +284,7 @@
           {
             id: 'socials-ieee-xplore',
             title: 'IEEE Xplore',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://ieeexplore.ieee.org/author/{{ site.ieee_id }}/", "_blank");
             },
@@ -233,7 +294,7 @@
           {
             id: 'socials-acm-dl',
             title: 'ACM DL',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://dl.acm.org/profile/{{ site.acm_id }}/", "_blank");
             },
@@ -243,7 +304,7 @@
           {
             id: 'socials-scopus',
             title: 'Scopus',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.scopus.com/authid/detail.uri?authorId={{ site.scopus_id }}", "_blank");
             },
@@ -253,7 +314,7 @@
           {
             id: 'socials-github',
             title: 'GitHub',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://github.com/{{ site.github_username }}", "_blank");
             },
@@ -263,7 +324,7 @@
           {
             id: 'socials-linkedin',
             title: 'LinkedIn',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.linkedin.com/in/{{ site.linkedin_username }}", "_blank");
             },
@@ -274,7 +335,7 @@
             id: 'socials-x',
             title: 'X',
             description: 'Twitter',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://twitter.com/{{ site.x_username }}", "_blank");
             },
@@ -284,7 +345,7 @@
           {
             id: 'socials-mastodon',
             title: 'Mastodon',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://{{ site.mastodon_username  }}", "_blank");
             },
@@ -294,7 +355,7 @@
           {
             id: 'socials-medium',
             title: 'Medium',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://medium.com/@{{ site.medium_username }}", "_blank");
             },
@@ -304,7 +365,7 @@
           {
             id: 'socials-quora',
             title: 'Quora',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.quora.com/profile/{{ site.quora_username }}", "_blank");
             },
@@ -314,7 +375,7 @@
           {
             id: 'socials-flickr',
             title: 'Flickr',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.flickr.com/{{ site.flickr_id }}", "_blank");
             },
@@ -324,7 +385,7 @@
           {
             id: 'socials-blogger',
             title: 'Blogger',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("{{ site.blogger_url }}", "_blank");
             },
@@ -334,7 +395,7 @@
           {
             id: 'socials-work',
             title: 'Work',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("{{ site.work_url }}", "_blank");
             },
@@ -344,7 +405,7 @@
           {
             id: 'socials-wikidata',
             title: 'Wikidata',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.wikidata.org/wiki/{{ site.wikidata_id }}", "_blank");
             },
@@ -354,7 +415,7 @@
           {
             id: 'socials-wikipedia',
             title: 'Wikipedia',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://wikipedia.org/wiki/User:{{ site.wikipedia_id }}", "_blank");
             },
@@ -364,7 +425,7 @@
           {
             id: 'socials-strava',
             title: 'Strava',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.strava.com/athletes/{{ site.strava_userid }}", "_blank");
             },
@@ -374,7 +435,7 @@
           {
             id: 'socials-keybase',
             title: 'Keybase',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://keybase.io/{{ site.keybase_username }}", "_blank");
             },
@@ -384,7 +445,7 @@
           {
             id: 'socials-gitlab',
             title: 'GitLab',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://gitlab.com/{{ site.gitlab_username }}", "_blank");
             },
@@ -394,7 +455,7 @@
           {
             id: 'socials-dblp',
             title: 'DBLP',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("{{ site.dblp_url }}", "_blank");
             },
@@ -404,7 +465,7 @@
           {
             id: 'socials-stackoverflow',
             title: 'Stackoverflow',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://stackoverflow.com/users/{{ site.stackoverflow_id }}", "_blank");
             },
@@ -414,7 +475,7 @@
           {
             id: 'socials-kaggle',
             title: 'Kaggle',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.kaggle.com/{{ site.kaggle_id }}", "_blank");
             },
@@ -424,7 +485,7 @@
           {
             id: 'socials-last-fm',
             title: 'Last FM',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.last.fm/user/{{ site.lastfm_id }}", "_blank");
             },
@@ -434,7 +495,7 @@
           {
             id: 'socials-spotify',
             title: 'Spotify',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://open.spotify.com/user/{{ site.spotify_id }}", "_blank");
             },
@@ -444,7 +505,7 @@
           {
             id: 'socials-pinterest',
             title: 'Pinterest',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.pinterest.com/{{ site.pinterest_id }}", "_blank");
             },
@@ -454,7 +515,7 @@
           {
             id: 'socials-unsplash',
             title: 'Unsplash',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://unsplash.com/@{{ site.unsplash_id }}", "_blank");
             },
@@ -464,7 +525,7 @@
           {
             id: 'socials-instagram',
             title: 'Instagram',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://instagram.com/{{ site.instagram_id }}", "_blank");
             },
@@ -474,7 +535,7 @@
           {
             id: 'socials-facebook',
             title: 'Facebook',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://facebook.com/{{ site.facebook_id }}", "_blank");
             },
@@ -484,7 +545,7 @@
           {
             id: 'socials-bluesky',
             title: 'Bluesky',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://bsky.app/profile/{{ site.bluesky_url }}", "_blank");
             },
@@ -494,7 +555,7 @@
           {
             id: 'socials-youtube',
             title: 'YouTube',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://youtube.com/@{{ site.youtube_id }}", "_blank");
             },
@@ -504,7 +565,7 @@
           {
             id: 'socials-discord',
             title: 'Discord',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://discord.com/users/{{ site.discord_id }}", "_blank");
             },
@@ -514,7 +575,7 @@
           {
             id: 'socials-zotero',
             title: 'Zotero',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("https://www.zotero.org/{{ site.zotero_username }}", "_blank");
             },
@@ -524,7 +585,7 @@
           {
             id: 'socials-rss',
             title: 'RSS Feed',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("{{ site.baseurl }}/feed.xml", "_blank");
             },
@@ -536,7 +597,7 @@
           {
             id: 'socials-wechat',
             title: 'WeChat',
-            section: 'Socials',
+            section: '{{ site.data[site.active_lang].strings.search.socials }}',
             handler: () => {
               window.open("", "_blank");
             },
@@ -544,30 +605,53 @@
         {%- endif -%}
         {%- endcomment -%}
       {%- endif -%}
+      {%- for l in site.languages -%}
+        {%- if l != site.active_lang -%}
+          {%- if l == site.default_lang -%}
+            {
+              id: 'lang-{{ l }}',
+              title: '{{ l }}',
+              section: '{{ site.data[site.active_lang].strings.search.languages }}',
+              handler: () => {
+                window.location.href = "{{ site.baseurl }}{{ page.url }}";
+              },
+            },
+          {%- else -%}
+            {
+              id: 'lang-{{ l }}',
+              title: '{{ l }}',
+              section: '{{ site.data[site.active_lang].strings.search.languages }}',
+              handler: () => {
+                window.location.href = "{{ site.baseurl }}/{{ l }}{{ page.url }}";
+              },
+            },
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
       {%- if site.enable_darkmode -%}
         {
           id: 'light-theme',
-          title: 'Change theme to light',
-          description: 'Change the theme of the site to Light',
-          section: 'Theme',
+          title: '{{ site.data[site.active_lang].strings.search.light_theme.title }}',
+          description: '{{ site.data[site.active_lang].strings.search.light_theme.description }}',
+          section: '{{ site.data[site.active_lang].strings.search.theme }}',
           handler: () => {
             setThemeSetting("light");
           },
         },
         {
           id: 'dark-theme',
-          title: 'Change theme to dark',
-          description: 'Change the theme of the site to Dark',
-          section: 'Theme',
+          title: '{{ site.data[site.active_lang].strings.search.dark_theme.title }}',
+          description: '{{ site.data[site.active_lang].strings.search.dark_theme.description }}',
+          section: '{{ site.data[site.active_lang].strings.search.theme }}',
           handler: () => {
             setThemeSetting("dark");
           },
         },
         {
           id: 'system-theme',
-          title: 'Use system default theme',
-          description: 'Change the theme of the site to System Default',
-          section: 'Theme',
+          title: '{{ site.data[site.active_lang].strings.search.system_theme.title }}',
+          description: '{{ site.data[site.active_lang].strings.search.system_theme.description }}',
+          section: '{{ site.data[site.active_lang].strings.search.theme }}',
           handler: () => {
             setThemeSetting("system");
           },
