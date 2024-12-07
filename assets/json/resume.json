@@ -42,7 +42,7 @@
       "location": "Paris, France - Remote",
       "startDate": "2023-03-06",
       "endDate": "Present",
-      "summary": "Detection Engineering, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
+      "summary": "Detection Engineering, Detection as code with gitlab and github, Threat Hunting, DFIR, QRadar Management, Splunk, Crowdstrike, Jira, Resilient, Detect Mitre, Confluence, Playbook Creation, Purple Team exercises with Caldera and Atomic Red team.",
       "highlights": ["False positive rate reduced by 90%"]
     },
     {
