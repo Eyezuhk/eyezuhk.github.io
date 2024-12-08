@@ -8,4 +8,4 @@ category: work
 related_publications: true
 ---
 
-No Projects yet.
+No Projects.

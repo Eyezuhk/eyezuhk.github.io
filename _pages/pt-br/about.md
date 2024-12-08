@@ -1,6 +1,6 @@
 ---
 layout: about
-title: About
+title: Sobre
 permalink: /
 subtitle: <a href='#'>Não quero acreditar. Quero saber.</a>
 
