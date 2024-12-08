@@ -1,7 +1,7 @@
 ---
 layout: page
 permalink: /github-repositories/
-title: Github Repositories
+title: Github Repositórios
 description: Personal projects.
 nav: true
 nav_order: 2
@@ -9,7 +9,7 @@ nav_order: 2
 
 {% if site.data.repositories.github_repos %}
 
-## GitHub Repositories
+## Github Repositórios
 
 <div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
   {% for repo in site.data.repositories.github_repos %}
