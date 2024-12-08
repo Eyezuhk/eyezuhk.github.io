@@ -49,7 +49,7 @@ navbar_fixed: true
 footer_fixed: false
 search_enabled: true
 socials_in_search: true
-bib_search: true
+bib_search: false
 
 # Dimensions
 max_width: 1000px
