@@ -4,7 +4,7 @@ layout: default
 permalink: /blog/
 title: Blog
 blog_name: Eyezuhk
-description: Uma coleção dos meus pensamentos e reflexões sobre cibersegurança, juntamente com opiniões pessoais que abrangem diversos tópicos.
+description: Meu blog
 nav: true
 nav_order: 1
 pagination:
