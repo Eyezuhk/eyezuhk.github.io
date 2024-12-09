@@ -4,7 +4,7 @@ layout: default
 permalink: /blog/
 title: Blog
 blog_name: Eyezuhk
-description: Meu blog
+description: Uma coleção dos meus pensamentos e reflexões sobre cibersegurança, juntamente com opiniões pessoais que abrangem diversos tópicos.
 nav: true
 nav_order: 1
 pagination:
@@ -28,7 +28,7 @@ pagination:
 
   <div class="header-bar">
     <h1>{{ page.blog_name }}</h1>
-    <h2>{{ page.blog_description }}</h2>
+    <h2>{{ page.description }}</h2>
   </div>
   {% endif %}
 
