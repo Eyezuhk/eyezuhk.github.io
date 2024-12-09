@@ -2,8 +2,8 @@ name: Publish posts scheduled for today
 
 on:
   schedule:
-    # Run every day at 23:30 UTC or manually run
-    - cron: "30 23 * * *"
+    # Run every day at 12:00 UTC-3 or manually run
+    - cron: "0 15 * * *"
   workflow_dispatch:
 
 jobs:
@@ -23,12 +23,14 @@ jobs:
         run: |
           echo "Today is $TODAY"
           shopt -s nullglob
-          for file in _scheduled/${TODAY}-*.md; do
-            echo "Found scheduled: $file"
-            mv "$file" "_posts/"
-            echo "Moved $file to _posts/"
+          for lang in en-us pt-br; do
+          
+            for file in _scheduled/${TODAY}-*.md; do
+              echo "Found scheduled: $file"
+              mv "$file" "_posts/"
+              echo "Moved $file to _posts/"
+            done
           done
-
       - name: Commit and push changes
         run: |
           git config user.name "github-actions"
