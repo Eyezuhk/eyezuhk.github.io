@@ -8,7 +8,7 @@ middle_name: Isaac
 last_name: Fernandes
 email: eyezuhk@gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Just a blog.
+  A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics..
 footer_text: >
   Disclaimer. All the opinions and views discussed here are mine and do not necessarily represent the views of my employer. I am not an expert. I am just sharing my views on topics, and I’m open to other perspectives.
 keywords: Cyber, Security, Malware-Analysis, DFIR # add your own keywords or leave empty
@@ -132,10 +132,7 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # -----------------------------------------------------------------------------
 
 blog_name: Eyezuhk Blog # blog_name will be displayed in your blog page
-blog_description:
-  en-us: A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.
-  pt-br: Uma coleção de meus pensamentos e reflexões sobre segurança cibernética, juntamente com opiniões pessoais que abrangem vários tópicos.
-
+blog_description: A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.
 permalink: /blog/:year/:title/
 lsi: true # produce an index for related posts
 

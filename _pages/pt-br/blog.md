@@ -3,7 +3,7 @@ page_id: blog
 layout: default
 permalink: /blog/
 title: Blog
-blog_name: Eyezuhk Blog
+blog_name: Eyezuhk
 description: Uma coleção dos meus pensamentos e reflexões sobre cibersegurança, juntamente com opiniões pessoais que abrangem diversos tópicos.
 nav: true
 nav_order: 1
@@ -27,8 +27,8 @@ pagination:
 {% if blog_name_size > 0 or blog_description_size > 0 %}
 
   <div class="header-bar">
-    <h1>{{ site.blog_name }}</h1>
-    <h2>{{ site.blog_description }}</h2>
+    <h1>{{ page.blog_name }}</h1>
+    <h2>{{ page.blog_description }}</h2>
   </div>
   {% endif %}
 

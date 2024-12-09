@@ -3,7 +3,7 @@ page_id: blog
 layout: default
 permalink: /blog/
 title: Blog
-blog_name: Eyezuhk Blog
+blog_name: Eyezuhk
 description: A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.
 nav: true
 nav_order: 1
@@ -22,13 +22,13 @@ pagination:
 <div class="post">
 
 {% assign blog_name_size = page.blog_name | size %}
-{% assign blog_description_size = site.description | size %}
+{% assign blog_description_size = page.description | size %}
 
 {% if blog_name_size > 0 or blog_description_size > 0 %}
 
   <div class="header-bar">
     <h1>{{ page.blog_name }}</h1>
-    <h2>{{ site.description }}</h2>
+    <h2>{{ page.description }}</h2>
   </div>
   {% endif %}
 
