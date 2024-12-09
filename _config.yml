@@ -132,7 +132,10 @@ bing_site_verification: # out your bing-site-verification ID (Bing Webmaster)
 # -----------------------------------------------------------------------------
 
 blog_name: Eyezuhk Blog # blog_name will be displayed in your blog page
-blog_description: A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.
+blog_description:
+  en-us: A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.
+  pt-br: Uma coleção de meus pensamentos e reflexões sobre segurança cibernética, juntamente com opiniões pessoais que abrangem vários tópicos.
+
 permalink: /blog/:year/:title/
 lsi: true # produce an index for related posts
 
