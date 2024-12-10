@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Passo a passo instalação Apache Guacamole
+title: Passo a passo instalação do Apache Guacamole.
 date: 2022-11-14 12:00:00
 description: Instalação Guacamole
 tags: Guacamole
@@ -65,7 +65,7 @@ docker pull guacamole/guacd
 docker pull guacamole/guacamole
 docker pull mariadb
 ```
-![Docker Images](docker_images.png)
+![Docker Images](assets/img/guacamole/docker_images.png)
 
 Agora que estamos com as imagens baixadas, precisamos iniciar o banco de dados com o comando: 
 
@@ -76,7 +76,7 @@ docker run --rm guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh --mysql 
 
 
 Devemos criar um arquivo `.env` onde colocaremos as credenciais de acesso 
-```
+```js
 MYSQL_ROOT_PASSWORD=SuperSecretP@sswr0rd!@#$%^&*
 MYSQL_DATABASE=guacamole_db
 MYSQL_USER=guacamole_user
@@ -86,7 +86,7 @@ MYSQL_PASSWORD=SecretP@sswr0rd!@#$%^&*
 
 Criaremos o nosso `docker-compose.yml`
 
-```
+```yaml
 version: '3'
 services:
   guacdb:
@@ -105,49 +105,51 @@ volumes:
 ```
 ![docker_compose](docker_compose.png)
 
-Após isso podemos executar 
-```
+Após isso podemos executar:
+```shell
 docker compose up -d
 ```
 
 `docker-compose up -d` se tiver instalado docker-compose ao ínves de  docker-compose-plugin.
 
-
 Em seguida, vamos precisar copiar nosso arquivo sql para dentro do container.
 
-```
+```shell
 docker cp initdb.sql guacamoledb:/initdb.sql
 ```
-Last but not least begin to input it to the DB by running this:
 
 E por último instalaremos o mysql dentro do container.
 
-```
+```shell
 docker exec -it guacamoledb bash
-#if get error due not mysql
-#apt-get update && apt-get install -y default-mysql-client
+```
 
+Teremos que instalar o mysql client dentro do docker guacamoledb.
+
+```shell
+apt-get update && apt-get install -y default-mysql-client
 cat /initdb.sql | mysql -u root -p guacamole_db
 exit
 ```
 
-and now time for your to turn off the DB by running 
+Após isso podemos derrubar o guacamoeldb.
 
-```
+```shell
 docker-compose down
 ```
-Complete the docker-compose.yml with all the necessary image
 
-Now your best practice is to backup your docker-compose files by typing 
+db_down.png
 
-```
+Como boa prática, recomenda-se salvar o arquivo de inicialização do banco.
+
+```shell
 mv docker-compose.yml docker-compose.yml.bak
 ```
 
-Next you will edit and add more detail
+Agora iremos criar o novo dockler-compose.yml com todas as informações necessárias.
 
 nano docker-compose.yml
-```
+```yaml
 version: '3'
 services:
   guacdb:
@@ -156,10 +158,10 @@ services:
     restart: unless-stopped
     user: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 'MariaDBRootPass'
-      MYSQL_DATABASE: 'guacamole_db'
-      MYSQL_USER: 'guacamole_user'
-      MYSQL_PASSWORD: '8uqwSnu9aH6va7F8udxcmGh8YTbSTfV3Q8mDw8QF'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - './db-data:/var/lib/mysql'
   guacd:
@@ -175,55 +177,57 @@ services:
     environment:
       GUACD_HOSTNAME: "guacd"
       MYSQL_HOSTNAME: "guacdb"
-      MYSQL_DATABASE: "guacamole_db"
-      MYSQL_USER: "guacamole_user"
-      MYSQL_PASSWORD: "8uqwSnu9aH6va7F8udxcmGh8YTbSTfV3Q8mDw8QF"
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       TOTP_ENABLED: "true"
     depends_on:
       - guacdb
       - guacd
 volumes:
   db-data:
-
 ```
 
-  
-Now you will be able to run and you should have your Guacamole up and running on your server.
-```
+Agora podemos iniciar nosso serviço guacamole.
+
+```shell
 docker-compose up -d
 ```
+![guacamoelup](guacamoelup.png)
+
+# Acesso ao guacamole
+Devemos acessar usando http://meuip:8080/guacamole
+
+tip, o guacamole não é acessível atráves do diretório, root, devemos adicionar /guacamole.
+
+(printimage.png)
+
+> ##### Dica
+>
+> O Guacamole não é acessível diretamente pela raiz, é necessário adicionar /guacamole ao endereço.
+{: .block-tip }
+
+
+> ##### Perigo
+> As credenciais padrão são guacadmin/guacadmin
+{: .block-danger }
 
 
 
+> ##### Aviso
+> No nosso docker-compose habilitamos o TOTP, assim será necessário um aplicativo como authy, 2fas, google authenticator para iniciar nossas credenciais.
+> Caso deseje, pode remover a linha `TOTP_ENABLED: "true"`
+{: .block-warning }
+block
 
-How do I access Guacamole?
-Very simple just open your browser and put in your Guacamole IP with port 8080
 
-For example: http://mylocalip.home:8080/guacamole <- guacamole cant be access via root directory, so you will have to add /guacamole.
-
-The original username/password are guacadmin/guacadmin
-
-For security reason I include TOTP in my installation guide, so be sure to have your google authenticator ready for scanning. Else make sure you remove TOTP_ENABLED: "true" line from your docker-compose.yml file.
-
+Lembrando de liberar o tráfego de entrada na porta 8080:
 ```
 sudo iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
 sudo apt-get install iptables-persistent
 sudo netfilter-persistent save
 sudo iptables -L
-
 ```
-
-
-
-
-
-
-
-
-
-
-
-
 
 ref:
 https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step
