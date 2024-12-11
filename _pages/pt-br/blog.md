@@ -4,14 +4,14 @@ layout: default
 permalink: /blog/
 title: Blog
 blog_name: Eyezuhk
-description: Uma coleção dos meus pensamentos e reflexões sobre cibersegurança, juntamente com opiniões pessoais que abrangem diversos tópicos.
+description: Uma coleção dos meus pensamentos sobre cibersegurança e opiniões pessoais que abrangem diversos tópicos.
 nav: true
 nav_order: 1
 pagination:
   enabled: true
   collection: posts
   permalink: /page/:num/
-  per_page: 5
+  per_page: 10
   sort_field: date
   sort_reverse: true
   trail:
