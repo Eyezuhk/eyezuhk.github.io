@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Resolução CyberDefenders Qradar101
+title: Resolução CyberDefenders Qradar101.
 date: 2022-02-16 12:00:00
 description: Resolução de CTF
 tags: Qradar, Cyberdefenders, SIEM

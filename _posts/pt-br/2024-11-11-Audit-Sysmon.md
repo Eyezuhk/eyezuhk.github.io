@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Script auditorias windows e Sysmon
+title: Script para habilitar auditorias Windows e Sysmon.
 date: 2024-11-11 12:00:00
-description: S
+description: Auditorias Windows e Sysmon
 tags: Windows-Audit, Sysmon
 categories: Scripts
 thumbnail: https://miro.medium.com/v2/resize:fit:583/1*vVM5hdOGlxqB7tXvxNT0qg.png
