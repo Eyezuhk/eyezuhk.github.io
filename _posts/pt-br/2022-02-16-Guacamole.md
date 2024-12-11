@@ -122,7 +122,7 @@ Após isso podemos iniciar com docker compose:
 docker compose up -d
 ```
 
-`docker-compose up -d` se tiver instalado docker-compose ao ínves de  docker-compose-plugin.
+`docker-compose up -d` se tiver instalado docker-compose ao ínves de docker-compose-plugin.
 
 ![mariadb_up](/assets/img/guacamole/mariadb_up.png)
 
@@ -167,6 +167,7 @@ mv docker-compose.yml docker-compose.yml.bak
 Agora iremos criar o novo docker-compose.yml com todas as informações necessárias.
 
 `nano docker-compose.yml`
+
 ```yaml
 version: "3"
 services:
@@ -214,7 +215,7 @@ docker-compose up -d
 
 ![guacamoelup](guacamoelup.png)
 
-# Acesso ao guacamole
+## Acesso ao guacamole
 
 Devemos acessar usando http://meuip:8080/guacamole
 
@@ -226,16 +227,17 @@ Devemos acessar usando http://meuip:8080/guacamole
 ![login_guacamole](/assets/img/guacamole/login_guacamole.png)
 
 > ##### Perigo
+>
 > As credenciais padrão são guacadmin/guacadmin
-{: .block-danger }
+> {: .block-danger }
 
 > ##### Aviso
+>
 > No nosso docker-compose habilitamos o TOTP, assim será necessário um aplicativo como authy, 2fas, google authenticator para iniciar nossas credenciais.
 > Caso deseje, pode remover a linha `TOTP_ENABLED: "true"`
-{: .block-warning }
+> {: .block-warning }
 
 ![totp](/assets/img/guacamole/totp.png)
-
 
 Lembrando de liberar o tráfego de entrada na porta 8080:
 
