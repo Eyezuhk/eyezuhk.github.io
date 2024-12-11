@@ -218,5 +218,3 @@ Espero que este write-up tenha ajudado. Para dúvidas, entre em contato: [https:
 {% include figure.liquid loading="lazy" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 <br><br>
-
-> ## **Quadro de Comentários**

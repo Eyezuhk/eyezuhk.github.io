@@ -219,5 +219,3 @@ I hope this write-up has helped you. Any questions, feel free to contact me on [
 {% include figure.liquid loading="lazy" path="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" zoomable=true %}
 
 <br><br>
-
-> ## **Comment Board**
