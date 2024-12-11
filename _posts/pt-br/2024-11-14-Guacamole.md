@@ -246,7 +246,7 @@ Devemos acessar usando http://meuip:8080/guacamole
 
 Lembrando de liberar o tráfego de entrada na porta 8080:
 
-```
+```shell
 sudo iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
 sudo apt-get install iptables-persistent
 sudo netfilter-persistent save

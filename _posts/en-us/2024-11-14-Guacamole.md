@@ -247,7 +247,7 @@ Devemos acessar usando http://localhost:8080/guacamole
 
 Allow inbound traffic on port 8080:
 
-```
+```shell
 sudo iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
 sudo apt-get install iptables-persistent
 sudo netfilter-persistent save
