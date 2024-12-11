@@ -8,7 +8,7 @@ categories: Scripts
 thumbnail: https://miro.medium.com/v2/resize:fit:583/1*vVM5hdOGlxqB7tXvxNT0qg.png
 giscus_comments: true
 related_posts: true
-featured: true
+featured: false
 toc:
   sidebar: left
 ---

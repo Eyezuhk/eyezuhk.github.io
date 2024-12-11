@@ -8,7 +8,7 @@ categories: Tools
 thumbnail: https://raw.githubusercontent.com/Eyezuhk/FNLocalCloud/refs/heads/main/Images/FNLocalCloud.png
 giscus_comments: true
 related_posts: true
-featured: true
+featured: false
 toc:
   sidebar: left
 ---
