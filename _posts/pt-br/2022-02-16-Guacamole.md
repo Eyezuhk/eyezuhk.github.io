@@ -19,12 +19,14 @@ O Guacamole é um software de código aberto que permite o acesso remoto a deskt
 
 A opção que achei mais fácil foi usando docker, segue link para [documentação oficial.](https://guacamole.apache.org/doc/gug/guacamole-docker.html)
 
-Os procedimentos a seguir foram executados em um debian. 
+Os procedimentos a seguir foram executados em um debian.
 
 # Install Docker
+
 Documentação [Docker](https://docs.docker.com/engine/install/debian/)
 
 Adicionando repositório Docker
+
 ```shell
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -40,18 +42,21 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 ```
+
 Instalando pacotes docker
 
 ```shell
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
+
 Podemos verificar se a instalação ocorreu com sucesso executando
 
 ```shell
  docker -v
 ```
 
-Adicionaremos o usuário atual aao grupo docker para evitar executar comandos como sudo.
+Adicionaremos o usuário atual ao grupo docker para evitar executar comandos como sudo.
+
 ```shell
 sudo usermod -aG docker $USER
 ```
@@ -65,11 +70,12 @@ docker pull guacamole/guacd
 docker pull guacamole/guacamole
 docker pull mariadb
 ```
+
 Podemos verificar as imagens com o comando `docker images`
 
 ![Docker Images](/assets/img/guacamole/docker_images.png)
 
-Agora que estamos com as imagens baixadas, precisamos iniciar o banco de dados com o comando: 
+Agora que estamos com as imagens baixadas, precisamos iniciar o banco de dados com o comando:
 
 ```shell
 docker run --rm guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
@@ -77,7 +83,7 @@ docker run --rm guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh --mysql 
 
 ![InitDbSql](/assets/img/guacamole/initdb_sql.png)
 
-Devemos criar um arquivo `.env` onde colocaremos as credenciais de acesso 
+Devemos criar um arquivo `.env` onde colocaremos as credenciais de acesso.
 
 ```js
 MYSQL_ROOT_PASSWORD=SuperSecretP@sswr0rd!@#$%^&*
@@ -85,12 +91,13 @@ MYSQL_DATABASE=guacamole_db
 MYSQL_USER=guacamole_user
 MYSQL_PASSWORD=SecretP@sswr0rd!@#$%^&*
 ```
+
 ![Env](/assets/img/guacamole/env.png)
 
 Criaremos o nosso `docker-compose.yml`
 
 ```yaml
-version: '3'
+version: "3"
 services:
   guacdb:
     container_name: guacamoledb
@@ -102,13 +109,15 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - './db-data:/var/lib/mysql'
+      - "./db-data:/var/lib/mysql"
 volumes:
   db-data:
 ```
+
 ![docker_compose](/assets/img/guacamole/docker_compose.png)
 
 Após isso podemos iniciar com docker compose:
+
 ```shell
 docker compose up -d
 ```
@@ -159,7 +168,7 @@ Agora iremos criar o novo docker-compose.yml com todas as informações necessá
 
 `nano docker-compose.yml`
 ```yaml
-version: '3'
+version: "3"
 services:
   guacdb:
     container_name: guacamoledb
@@ -172,7 +181,7 @@ services:
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - './db-data:/var/lib/mysql'
+      - "./db-data:/var/lib/mysql"
   guacd:
     container_name: guacd
     image: guacamole/guacd:latest
@@ -202,9 +211,11 @@ Agora podemos iniciar nosso serviço guacamole.
 ```shell
 docker-compose up -d
 ```
+
 ![guacamoelup](guacamoelup.png)
 
 # Acesso ao guacamole
+
 Devemos acessar usando http://meuip:8080/guacamole
 
 > ##### Dica
@@ -227,6 +238,7 @@ Devemos acessar usando http://meuip:8080/guacamole
 
 
 Lembrando de liberar o tráfego de entrada na porta 8080:
+
 ```
 sudo iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
 sudo apt-get install iptables-persistent
