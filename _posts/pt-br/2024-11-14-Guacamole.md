@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Passo a passo instalação do Apache Guacamole.
-date: 2022-11-14 12:00:00
+date: 2024-11-14 12:00:00
 description: Instalação Guacamole
 tags: Guacamole
 categories: How-To
@@ -227,17 +227,16 @@ Devemos acessar usando http://meuip:8080/guacamole
 ![login_guacamole](/assets/img/guacamole/login_guacamole.png)
 
 > ##### Perigo
->
 > As credenciais padrão são guacadmin/guacadmin
-> {: .block-danger }
+{: .block-danger }
 
 > ##### Aviso
->
 > No nosso docker-compose habilitamos o TOTP, assim será necessário um aplicativo como authy, 2fas, google authenticator para iniciar nossas credenciais.
 > Caso deseje, pode remover a linha `TOTP_ENABLED: "true"`
-> {: .block-warning }
+{: .block-warning }
 
 ![totp](/assets/img/guacamole/totp.png)
+
 
 Lembrando de liberar o tráfego de entrada na porta 8080:
 
