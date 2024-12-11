@@ -166,7 +166,9 @@ mv docker-compose.yml docker-compose.yml.bak
 
 Agora iremos criar o novo docker-compose.yml com todas as informações necessárias.
 
-`nano docker-compose.yml`
+```shell
+nano docker-compose.yml
+```
 
 ```yaml
 version: "3"
