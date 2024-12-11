@@ -227,7 +227,7 @@ docker compose up -d
 
 ## Accessing Guacamole
 
-Devemos acessar usando http://meuip:8080/guacamole
+Devemos acessar usando http://localhost:8080/guacamole
 
 > ##### Tip
 > Guacamole is not directly accessible from the root. Add /guacamole to the address.
