@@ -221,24 +221,25 @@ docker-compose up -d
 
 Devemos acessar usando http://meuip:8080/guacamole
 
-> ##### Dica
+> ##### TIP
 >
 > O Guacamole não é acessível diretamente pela raiz, é necessário adicionar /guacamole ao endereço.
 {: .block-tip }
 
 ![login_guacamole](/assets/img/guacamole/login_guacamole.png)
 
-> ##### Perigo
+> ##### DANGER
+>
 > As credenciais padrão são guacadmin/guacadmin
 {: .block-danger }
 
-> ##### Aviso
+> ##### WARNING
+>
 > No nosso docker-compose habilitamos o TOTP, assim será necessário um aplicativo como authy, 2fas, google authenticator para iniciar nossas credenciais.
 > Caso deseje, pode remover a linha `TOTP_ENABLED: "true"`
 {: .block-warning }
 
 ![totp](/assets/img/guacamole/totp.png)
-
 
 Lembrando de liberar o tráfego de entrada na porta 8080:
 
