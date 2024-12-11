@@ -2,7 +2,7 @@
 layout: post
 title: Step-by-step Apache Guacamole Installation.
 date: 2024-11-14 12:00:00
-description: Instalação Guacamole
+description: Guacamole Instalation
 tags: Guacamole
 categories: How-To
 thumbnail: https://www.pinclipart.com/picdir/big/519-5196913_apache-guacamole-logo-clipart.png
