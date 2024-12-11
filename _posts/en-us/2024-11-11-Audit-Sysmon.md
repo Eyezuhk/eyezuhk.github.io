@@ -13,10 +13,13 @@ toc:
   sidebar: left
 ---
 
+Recently, I needed to reconfigure a machine for my personal lab, and while running the script that automates the setup of some Sysmon audits and configurations, I remembered that, especially for those starting in the field, this process is often done manually. While this is great for learning, it can definitely be automated.
 
+So, I decided to share a PowerShell script that automates the activation of the main auditing features.
 
+If anyone has suggestions for additional audits that might be missing or improvements for the Sysmon configuration file, your contributions would be greatly appreciated!
 
-```Powershell
+```shell
 # This PowerShell script enhances Windows security logging by enabling various event logs and installing Sysmon. 
 # It prompts for admin rights and asks if you want to install Sysmon. If confirmed, it activates logs for user logon events, object access, privilege use, process tracking, and more. It also enables PowerShell script block logging and command line auditing for better visibility into executed commands.
 
