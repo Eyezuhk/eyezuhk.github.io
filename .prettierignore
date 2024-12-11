@@ -9,6 +9,8 @@ assets/plotly/demo.html
 lighthouse_results/**
 _sass/font-awesome/*.scss
 _sass/tabler-icons/*.scss
+_posts/pt-br/2023-10-5-First.md
+_posts/en-us/2023-10-5-First.md
 _posts/pt-br/2024-11-14-Guacamole.md
 _posts/en-us/2024-11-14-Guacamole.md
 _posts/en-us/2024-11-11-Audit-Sysmon.md
