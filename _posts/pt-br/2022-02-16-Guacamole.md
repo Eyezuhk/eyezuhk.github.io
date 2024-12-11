@@ -5,7 +5,7 @@ date: 2022-11-14 12:00:00
 description: Instalação Guacamole
 tags: Guacamole
 categories: How-To
-thumbnail: https://img.stackshare.io/service/12032/qradar.png
+thumbnail: https://www.pinclipart.com/picdir/big/519-5196913_apache-guacamole-logo-clipart.png
 giscus_comments: true
 related_posts: true
 featured: true
@@ -65,24 +65,27 @@ docker pull guacamole/guacd
 docker pull guacamole/guacamole
 docker pull mariadb
 ```
-![Docker Images](assets/img/guacamole/docker_images.png)
+Podemos verificar as imagens com o comando `docker images`
+
+![Docker Images](/assets/img/guacamole/docker_images.png)
 
 Agora que estamos com as imagens baixadas, precisamos iniciar o banco de dados com o comando: 
 
 ```shell
 docker run --rm guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh --mysql > initdb.sql
 ```
-![InitDbSql](initdb_sql.png)
 
+![InitDbSql](/assets/img/guacamole/initdb_sql.png)
 
 Devemos criar um arquivo `.env` onde colocaremos as credenciais de acesso 
+
 ```js
 MYSQL_ROOT_PASSWORD=SuperSecretP@sswr0rd!@#$%^&*
 MYSQL_DATABASE=guacamole_db
 MYSQL_USER=guacamole_user
 MYSQL_PASSWORD=SecretP@sswr0rd!@#$%^&*
 ```
-![Env](env.png)
+![Env](/assets/img/guacamole/env.png)
 
 Criaremos o nosso `docker-compose.yml`
 
@@ -103,14 +106,16 @@ services:
 volumes:
   db-data:
 ```
-![docker_compose](docker_compose.png)
+![docker_compose](/assets/img/guacamole/docker_compose.png)
 
-Após isso podemos executar:
+Após isso podemos iniciar com docker compose:
 ```shell
 docker compose up -d
 ```
 
 `docker-compose up -d` se tiver instalado docker-compose ao ínves de  docker-compose-plugin.
+
+![mariadb_up](/assets/img/guacamole/mariadb_up.png)
 
 Em seguida, vamos precisar copiar nosso arquivo sql para dentro do container.
 
@@ -132,13 +137,15 @@ cat /initdb.sql | mysql -u root -p guacamole_db
 exit
 ```
 
+![dbinit](/assets/img/guacamole/db_init.png)
+
 Após isso podemos derrubar o guacamoeldb.
 
 ```shell
 docker-compose down
 ```
 
-db_down.png
+![db_down](/assets/img/guacamole/db_down.png)
 
 Como boa prática, recomenda-se salvar o arquivo de inicialização do banco.
 
@@ -146,9 +153,11 @@ Como boa prática, recomenda-se salvar o arquivo de inicialização do banco.
 mv docker-compose.yml docker-compose.yml.bak
 ```
 
-Agora iremos criar o novo dockler-compose.yml com todas as informações necessárias.
+![docker-compose-backup](/assets/img/guacamole/docker-compose-backup.png)
 
-nano docker-compose.yml
+Agora iremos criar o novo docker-compose.yml com todas as informações necessárias.
+
+`nano docker-compose.yml`
 ```yaml
 version: '3'
 services:
@@ -198,27 +207,23 @@ docker-compose up -d
 # Acesso ao guacamole
 Devemos acessar usando http://meuip:8080/guacamole
 
-tip, o guacamole não é acessível atráves do diretório, root, devemos adicionar /guacamole.
-
-(printimage.png)
-
 > ##### Dica
 >
 > O Guacamole não é acessível diretamente pela raiz, é necessário adicionar /guacamole ao endereço.
 {: .block-tip }
 
+![login_guacamole](/assets/img/guacamole/login_guacamole.png)
 
 > ##### Perigo
 > As credenciais padrão são guacadmin/guacadmin
 {: .block-danger }
 
-
-
 > ##### Aviso
 > No nosso docker-compose habilitamos o TOTP, assim será necessário um aplicativo como authy, 2fas, google authenticator para iniciar nossas credenciais.
 > Caso deseje, pode remover a linha `TOTP_ENABLED: "true"`
 {: .block-warning }
-block
+
+![totp](/assets/img/guacamole/totp.png)
 
 
 Lembrando de liberar o tráfego de entrada na porta 8080:
@@ -229,5 +234,4 @@ sudo netfilter-persistent save
 sudo iptables -L
 ```
 
-ref:
-https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step
+Referência: https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step
