@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Passo a passo instalação do Apache Guacamole.
+title: Passo a passo instalação Apache Guacamole.
 date: 2024-11-14 12:00:00
 description: Instalação Guacamole
 tags: Guacamole
@@ -13,15 +13,15 @@ toc:
   sidebar: left
 ---
 
-> Recentemente resolvi testar o Apacha Guacamole e resolvi documentar o processo de instalação.
+> Recentemente resolvi testar o Apacha Guacamole e documentar o processo de instalação.
 
 O Guacamole é um software de código aberto que permite o acesso remoto a desktops e servidores através de um navegador web.
 
-A opção que achei mais fácil foi usando docker, segue link para [documentação oficial.](https://guacamole.apache.org/doc/gug/guacamole-docker.html)
+A opção que achei mais fácil foi usando Docker, segue link para [documentação oficial.](https://guacamole.apache.org/doc/gug/guacamole-docker.html)
 
-Os procedimentos a seguir foram executados em um debian.
+Os procedimentos a seguir foram executados em um Debian.
 
-# Install Docker
+## Install Docker
 
 Documentação [Docker](https://docs.docker.com/engine/install/debian/)
 
@@ -43,7 +43,7 @@ echo \
 sudo apt-get update
 ```
 
-Instalando pacotes docker
+Instalando pacotes Docker
 
 ```shell
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -55,7 +55,7 @@ Podemos verificar se a instalação ocorreu com sucesso executando
  docker -v
 ```
 
-Adicionaremos o usuário atual ao grupo docker para evitar executar comandos como sudo.
+Adicionaremos o usuário atual ao grupo Docker para evitar executar comandos como sudo.
 
 ```shell
 sudo usermod -aG docker $USER
@@ -85,6 +85,10 @@ docker run --rm guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh --mysql 
 
 Devemos criar um arquivo `.env` onde colocaremos as credenciais de acesso.
 
+```
+nano .env
+```
+
 ```js
 MYSQL_ROOT_PASSWORD=SuperSecretP@sswr0rd!@#$%^&*
 MYSQL_DATABASE=guacamole_db
@@ -95,6 +99,10 @@ MYSQL_PASSWORD=SecretP@sswr0rd!@#$%^&*
 ![Env](/assets/img/guacamole/env.png)
 
 Criaremos o nosso `docker-compose.yml`
+
+```
+nano docker-compose.yml
+```
 
 ```yaml
 version: "3"
@@ -126,19 +134,17 @@ docker compose up -d
 
 ![mariadb_up](/assets/img/guacamole/mariadb_up.png)
 
-Em seguida, vamos precisar copiar nosso arquivo sql para dentro do container.
+Em seguida, vamos precisar copiar nosso arquivo `initdb.sql` para dentro do container.
 
 ```shell
 docker cp initdb.sql guacamoledb:/initdb.sql
 ```
 
-E por último instalaremos o mysql dentro do container.
+Teremos que instalar o mysql client dentro do docker guacamoledb.
 
 ```shell
 docker exec -it guacamoledb bash
 ```
-
-Teremos que instalar o mysql client dentro do docker guacamoledb.
 
 ```shell
 apt-get update && apt-get install -y default-mysql-client
@@ -148,7 +154,7 @@ exit
 
 ![dbinit](/assets/img/guacamole/db_init.png)
 
-Após isso podemos derrubar o guacamoeldb.
+Após isso podemos derrubar o guacamoledb.
 
 ```shell
 docker-compose down
@@ -164,7 +170,7 @@ mv docker-compose.yml docker-compose.yml.bak
 
 ![docker-compose-backup](/assets/img/guacamole/docker-compose-backup.png)
 
-Agora iremos criar o novo docker-compose.yml com todas as informações necessárias.
+Iremos criar o novo docker-compose.yml com todas as informações necessárias.
 
 ```shell
 nano docker-compose.yml
@@ -209,10 +215,10 @@ volumes:
   db-data:
 ```
 
-Agora podemos iniciar nosso serviço guacamole.
+Agora podemos iniciar nosso serviço Guacamole.
 
 ```shell
-docker-compose up -d
+docker compose up -d
 ```
 
 ![guacamoelup](guacamoelup.png)
@@ -221,20 +227,17 @@ docker-compose up -d
 
 Devemos acessar usando http://meuip:8080/guacamole
 
-> ##### TIP
->
+> ##### Dica
 > O Guacamole não é acessível diretamente pela raiz, é necessário adicionar /guacamole ao endereço.
 {: .block-tip }
 
 ![login_guacamole](/assets/img/guacamole/login_guacamole.png)
 
-> ##### DANGER
->
+> ##### Perigo
 > As credenciais padrão são guacadmin/guacadmin
 {: .block-danger }
 
-> ##### WARNING
->
+> ##### Aviso
 > No nosso docker-compose habilitamos o TOTP, assim será necessário um aplicativo como authy, 2fas, google authenticator para iniciar nossas credenciais.
 > Caso deseje, pode remover a linha `TOTP_ENABLED: "true"`
 {: .block-warning }
@@ -250,4 +253,5 @@ sudo netfilter-persistent save
 sudo iptables -L
 ```
 
-Referência: https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step
+Referência: 
+  https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step
