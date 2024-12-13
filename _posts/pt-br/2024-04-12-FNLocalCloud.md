@@ -13,6 +13,13 @@ toc:
   sidebar: left
 ---
 
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  {% assign repo = "eyezuhk/FNLocalCloud" %}
+  {% include repository/repo.liquid repository=repo %}
+</div>
+
+---
+
 Recentement eu me vi em um cenário onde eu precisava acessar minha máquina via RDP, mas eu não tenho um ip público por conta da escassez de ips, minha provedora utiliza cgnat.
 
 > Lembrei de um passado distante em que tudo o que eu queria era um VPS para expor um servidor de Counter-Strike 1.6 ou Lineage 2 para meus amigos jogarem online. Nem todos os provedores ofereciam IPs públicos, e hoje essa é a regra. 

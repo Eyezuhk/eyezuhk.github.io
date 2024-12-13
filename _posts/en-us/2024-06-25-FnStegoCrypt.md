@@ -13,6 +13,13 @@ toc:
   sidebar: left
 ---
 
+<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
+  {% assign repo = "eyezuhk/FnStegoCrypt" %}
+  {% include repository/repo.liquid repository=repo %}
+</div>
+
+---
+
 ## Main Features
 
 The program offers the following key capabilities:
