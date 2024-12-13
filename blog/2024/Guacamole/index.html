@@ -41,7 +41,10 @@
 </pre></td> <td class="rouge-code"><pre>docker pull guacamole/guacd
 docker pull guacamole/guacamole
 docker pull mariadb
-</pre></td> </tr></tbody></table></code></pre></div></div> <p>Verify the downloaded images with the docker:</p> <p><code class="language-plaintext highlighter-rouge">docker images</code></p> <p><img src="/assets/img/guacamole/docker_images.png" alt="Docker Images"></p> <p>Now, let’s initialize the database with the command:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Verify the downloaded images with the docker:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td> <td class="rouge-code"><pre> docker images
+</pre></td> </tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/docker_images.png" alt="Docker Images"></p> <p>Now, let’s initialize the database with the command:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
 <td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td> <td class="rouge-code"><pre>docker run <span class="nt">--rm</span> guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh <span class="nt">--mysql</span> <span class="o">&gt;</span> initdb.sql
 </pre></td> </tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/initdb_sql.png" alt="InitDbSql"></p> <p>Create an <code class="language-plaintext highlighter-rouge">.env</code> file to store the access credentials:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
@@ -108,7 +111,7 @@ docker pull mariadb
 <span class="nb">exit</span>
 </pre></td> </tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/db_init.png" alt="dbinit"></p> <p>Shut down the database container:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
 <td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td> <td class="rouge-code"><pre>docker-compose down
+</pre></td> <td class="rouge-code"><pre>docker compose down
 </pre></td> </tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/db_down.png" alt="db_down"></p> <p>As a best practice, back up the database initialization file:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
 <td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td> <td class="rouge-code"><pre><span class="nb">mv </span>docker-compose.yml docker-compose.yml.bak
