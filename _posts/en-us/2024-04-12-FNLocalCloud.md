@@ -13,12 +13,6 @@ toc:
   sidebar: left
 ---
 
-<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center">
-    {% include eyezuhk/FNLocalCloud/repo.liquid repository=repo %}
-</div>
-
----
-
 Recently, I found myself in a situation where I needed to access my machine via RDP, but I don't have a public IP due to the scarcity of IPs. My ISP uses CGNAT.
 
 > I remembered a distant past when all I wanted was a VPS to expose a Counter-Strike 1.6 or Lineage 2 server for my friends to play online. Not all providers offered public IPs, and today, that's the rule.
