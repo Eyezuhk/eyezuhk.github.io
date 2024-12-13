@@ -73,7 +73,9 @@ docker pull mariadb
 
 Verify the downloaded images with the docker:
 
- ```docker images```
+ ```shell
+ docker images
+ ```
 
 ![Docker Images](/assets/img/guacamole/docker_images.png)
 
@@ -159,7 +161,7 @@ exit
 Shut down the database container:
 
 ```shell
-docker-compose down
+docker compose down
 ```
 
 ![db_down](/assets/img/guacamole/db_down.png)

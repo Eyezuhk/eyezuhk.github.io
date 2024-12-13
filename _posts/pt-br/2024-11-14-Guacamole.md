@@ -71,7 +71,10 @@ docker pull guacamole/guacamole
 docker pull mariadb
 ```
 
-Podemos verificar as imagens com o comando `docker images`
+Podemos verificar as imagens com o comando
+ ```shell
+ docker images
+ ```
 
 ![Docker Images](/assets/img/guacamole/docker_images.png)
 
@@ -157,7 +160,7 @@ exit
 Após isso podemos derrubar o guacamoledb.
 
 ```shell
-docker-compose down
+docker compose down
 ```
 
 ![db_down](/assets/img/guacamole/db_down.png)
