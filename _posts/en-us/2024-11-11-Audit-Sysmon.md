@@ -19,7 +19,7 @@ So, I decided to share a PowerShell script that automates the activation of the 
 
 If anyone has suggestions for additional audits that might be missing or improvements for the Sysmon configuration file, your contributions would be greatly appreciated!
 
-```shell
+```pwsh
 # This PowerShell script enhances Windows security logging by enabling various event logs and installing Sysmon. 
 # It prompts for admin rights and asks if you want to install Sysmon. If confirmed, it activates logs for user logon events, object access, privilege use, process tracking, and more. It also enables PowerShell script block logging and command line auditing for better visibility into executed commands.
 
