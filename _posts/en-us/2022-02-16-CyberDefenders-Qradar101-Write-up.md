@@ -3,7 +3,7 @@ layout: post
 title: CyberDefenders Qradar101 Write up.
 date: 2022-02-16 12:00:00
 description: Ctf Writeup
-tags: Qradar, Cyberdefenders, SIEM
+tags: Qradar Cyberdefenders SIEM
 categories: Threat-Hunting
 thumbnail: https://img.stackshare.io/service/12032/qradar.png
 giscus_comments: true

@@ -3,7 +3,7 @@ layout: post
 title: Script for enabling Windows Audit and Sysmon.
 date: 2024-11-11 12:00:00
 description: Windows audit and Sysmon
-tags: Windows-Audit, Sysmon
+tags: Windows-Audit Sysmon SIEM
 categories: Scripts
 thumbnail: https://miro.medium.com/v2/resize:fit:583/1*vVM5hdOGlxqB7tXvxNT0qg.png
 giscus_comments: true
