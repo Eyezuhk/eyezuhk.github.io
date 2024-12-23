@@ -4,31 +4,31 @@ layout: default
 
 <style>
     body {
-        max-width: none;
-        margin: 0;
-        padding: 0;
+        max-width: none; /* Remove o limite de largura 100%*/
+        margin: 0; /* Remove margens padrão */
+        padding: 0; /* Remove preenchimento padrão */
     }
     .full-width {
-        max-width: none !important;
+        max-width: none !important; /* Ignora a largura máxima */
     }
     .editor-preview {
         display: flex;
         flex-direction: row;
-        height: calc(100vh - 60px);
-        width: 100%;
+        height: calc(100vh - 60px); /* Ajusta a altura para ocupar a tela */
+        width: 100%; /* Garante que a área de edição use 100% da largura */
     }
     #editor {
-        width: 50%;
+        width: 50%; /* Mantém a divisão em 50% para o editor */
         padding: 10px;
         border-right: 1px solid #ccc;
         overflow-y: auto;
-        white-space: pre-wrap;
-        font-family: monospace;
     }
     #livePreview {
-        width: 50%;
+        width: 50%; /* Mantém a divisão em 50% para a visualização */
         padding: 10px;
         overflow-y: auto;
+        /*background-color: #828282; /* Fundo escuro para a visualização */
+        /*color: #fff;  Texto branco para o modo escuro */
     }
     iframe {
         width: 100%;
@@ -52,8 +52,6 @@ layout: default
 
 <div class="editor-preview">
     <div id="editor" contenteditable="true" placeholder="Coloque seu HTML aqui...">
-        <h1>Hello, World!</h1>
-        <p style="color: #00FF00; font-family: monospace;">Example: <strong>Hello, World!</strong></p>
     </div>
     <div id="livePreview">
         <iframe id="liveFrame"></iframe>
@@ -64,35 +62,26 @@ layout: default
     const editor = document.getElementById('editor');
     const liveFrame = document.getElementById('liveFrame');
 
-    // Função para limpar a indentação mantendo a estrutura do HTML
-    function cleanIndentation(html) {
-        return html.replace(/^\s+/gm, '').trim();
-    }
-
     editor.addEventListener('input', () => {
-        const htmlContent = cleanIndentation(editor.innerText);
+        const htmlContent = editor.textContent;
         liveFrame.srcdoc = htmlContent;
     });
 
-    // Preserva tabs e espaços ao colar código
-    editor.addEventListener('paste', (e) => {
-        e.preventDefault();
-        const text = e.clipboardData.getData('text/plain');
-        document.execCommand('insertText', false, text);
-    });
-
+    // Função para visualizar em uma nova aba
     function previewFullPage() {
-        const htmlContent = cleanIndentation(editor.innerText);
+        const htmlContent = editor.textContent;
         const newWindow = window.open();
         newWindow.document.write(htmlContent);
         newWindow.document.close();
     }
 
+    // Função para limpar o editor
     function clearEditor() {
-        editor.innerText = '';
+        editor.textContent = '';
         liveFrame.srcdoc = '';
     }
 
+    // Função para importar HTML de um arquivo
     function importHTML() {
         const input = document.createElement('input');
         input.type = 'file';
@@ -101,16 +90,17 @@ layout: default
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = event => {
-                editor.innerText = event.target.result;
-                liveFrame.srcdoc = cleanIndentation(event.target.result);
+                editor.textContent = event.target.result;
+                liveFrame.srcdoc = event.target.result;
             };
             reader.readAsText(file);
         };
         input.click();
     }
 
+    // Função para exportar o conteúdo do editor para um arquivo
     function exportHTML() {
-        const htmlContent = editor.innerText;
+        const htmlContent = editor.textContent;
         const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -122,5 +112,6 @@ layout: default
         URL.revokeObjectURL(url);
     }
 
-    liveFrame.srcdoc = cleanIndentation(editor.innerText);
+    // Inicializa a visualização com o conteúdo padrão
+    liveFrame.srcdoc = editor.textContent;
 </script>
