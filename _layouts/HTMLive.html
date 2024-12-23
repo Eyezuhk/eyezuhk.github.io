@@ -20,14 +20,14 @@ layout: default
     #editor {
         width: 50%; /* Mantém a divisão em 50% para o editor */
         padding: 10px;
-        border-right: 1px solid #ccc;
+        border-right: 2px solid #ccc;
         overflow-y: auto;
     }
     #livePreview {
         width: 50%; /* Mantém a divisão em 50% para a visualização */
         padding: 10px;
         overflow-y: auto;
-        background-color: #828282; /* Fundo escuro para a visualização */
+        /*background-color: #828282; /* Fundo escuro para a visualização */
         /*color: #fff;  Texto branco para o modo escuro */
     }
     iframe {
@@ -52,7 +52,8 @@ layout: default
 
 <div class="editor-preview">
     <div id="editor" contenteditable="true" placeholder="Coloque seu HTML aqui...">
-        <p>Exemplo: <strong>Olá, mundo!</strong></p>
+        <h1>Hello, World!</h1>
+        <p style="color: #00FF00; font-family: monospace;">Example: <strong>Hello, World!</strong></p>
     </div>
     <div id="livePreview">
         <iframe id="liveFrame"></iframe>

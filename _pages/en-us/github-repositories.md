@@ -4,7 +4,7 @@ permalink: /github-repositories/
 title: Github Repositories
 description: Personal projects.
 nav: true
-nav_order: 2
+nav_order: 3
 ---
 
 {% if site.data.repositories.github_repos %}
