@@ -4,31 +4,31 @@ layout: default
 
 <style>
     body {
-        max-width: none; /* Remove o limite de largura 100%*/
-        margin: 0; /* Remove margens padrão */
-        padding: 0; /* Remove preenchimento padrão */
+        max-width: none;
+        margin: 0;
+        padding: 0;
     }
     .full-width {
-        max-width: none !important; /* Ignora a largura máxima */
+        max-width: none !important;
     }
     .editor-preview {
         display: flex;
         flex-direction: row;
-        height: calc(100vh - 60px); /* Ajusta a altura para ocupar a tela */
-        width: 100%; /* Garante que a área de edição use 100% da largura */
+        height: calc(100vh - 60px);
+        width: 100%;
     }
     #editor {
-        width: 50%; /* Mantém a divisão em 50% para o editor */
+        width: 50%;
         padding: 10px;
         border-right: 1px solid #ccc;
         overflow-y: auto;
+        white-space: pre-wrap;
+        font-family: monospace;
     }
     #livePreview {
-        width: 50%; /* Mantém a divisão em 50% para a visualização */
+        width: 50%;
         padding: 10px;
         overflow-y: auto;
-        /*background-color: #828282; /* Fundo escuro para a visualização */
-        /*color: #fff;  Texto branco para o modo escuro */
     }
     iframe {
         width: 100%;
@@ -62,26 +62,35 @@ layout: default
     const editor = document.getElementById('editor');
     const liveFrame = document.getElementById('liveFrame');
 
+    // Função para limpar a indentação mantendo a estrutura do HTML
+    function cleanIndentation(html) {
+        return html.replace(/^\s+/gm, '').trim();
+    }
+
     editor.addEventListener('input', () => {
-        const htmlContent = editor.innerText;
+        const htmlContent = cleanIndentation(editor.innerText);
         liveFrame.srcdoc = htmlContent;
     });
 
-    // Função para visualizar em uma nova aba
+    // Preserva tabs e espaços ao colar código
+    editor.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const text = e.clipboardData.getData('text/plain');
+        document.execCommand('insertText', false, text);
+    });
+
     function previewFullPage() {
-        const htmlContent = editor.innerText;
+        const htmlContent = cleanIndentation(editor.innerText);
         const newWindow = window.open();
         newWindow.document.write(htmlContent);
         newWindow.document.close();
     }
 
-    // Função para limpar o editor
     function clearEditor() {
         editor.innerText = '';
         liveFrame.srcdoc = '';
     }
 
-    // Função para importar HTML de um arquivo
     function importHTML() {
         const input = document.createElement('input');
         input.type = 'file';
@@ -91,14 +100,13 @@ layout: default
             const reader = new FileReader();
             reader.onload = event => {
                 editor.innerText = event.target.result;
-                liveFrame.srcdoc = event.target.result;
+                liveFrame.srcdoc = cleanIndentation(event.target.result);
             };
             reader.readAsText(file);
         };
         input.click();
     }
 
-    // Função para exportar o conteúdo do editor para um arquivo
     function exportHTML() {
         const htmlContent = editor.innerText;
         const blob = new Blob([htmlContent], { type: 'text/html' });
@@ -112,6 +120,5 @@ layout: default
         URL.revokeObjectURL(url);
     }
 
-    // Inicializa a visualização com o conteúdo padrão
-    liveFrame.srcdoc = editor.innerText;
+    liveFrame.srcdoc = cleanIndentation(editor.innerText);
 </script>
