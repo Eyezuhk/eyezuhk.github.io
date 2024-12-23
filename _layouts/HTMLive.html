@@ -1,40 +1,15 @@
 ---
 layout: default
 ---
-{% if page._styles %}
-  <!-- Page/Post style -->
-  <style type="text/css">
-    {{ page._styles }}
-  </style>
-{% endif %}
-
-<div class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title }}</h1>
-    <p class="post-description">{{ page.description }}</p>
-  </header>
-
-  <article>
-    {{ content }}
-  </article>
-
-  {% if page.related_publications %}
-    <h2>{{ site.data[site.active_lang].strings.references }}</h2>
-    <div class="publications">
-      {% bibliography --cited_in_order %}
-    </div>
-  {% endif %}
-
-  {% if site.giscus and page.giscus_comments %}
-    {% include giscus.liquid %}
-  {% endif %}
-</div>
 
 <style>
     body {
-        max-width: 100%; /* Remove o limite de largura */
+        max-width: none; /* Remove o limite de largura 100%*/
         margin: 0; /* Remove margens padrão */
         padding: 0; /* Remove preenchimento padrão */
+    }
+    .full-width {
+        max-width: none !important; /* Ignora a largura máxima */
     }
     .editor-preview {
         display: flex;
@@ -45,15 +20,15 @@ layout: default
     #editor {
         width: 50%; /* Mantém a divisão em 50% para o editor */
         padding: 10px;
-        border-right: 1px solid #ccc;
+        /*border-right: 1px solid #ccc;*/
         overflow-y: auto;
     }
     #livePreview {
         width: 50%; /* Mantém a divisão em 50% para a visualização */
         padding: 10px;
         overflow-y: auto;
-        background-color: #444; /* Fundo escuro para a visualização */
-        color: #fff; /* Texto branco para o modo escuro */
+        /*background-color: #444; /* Fundo escuro para a visualização */
+        /*color: #fff; /* Texto branco para o modo escuro */
     }
     iframe {
         width: 100%;
@@ -63,8 +38,8 @@ layout: default
 </style>
 
 <div class="controls">
-    <button class="btn btn-primary" onclick="previewFullPage()">Preview Full Page</button>
     <button class="btn btn-danger" onclick="clearEditor()">Clear</button>
+    <button class="btn btn-primary" onclick="previewFullPage()">Preview Full Page</button>
     <button class="btn btn-info" onclick="importHTML()">Import</button>
     <button class="btn btn-success" onclick="exportHTML()">Export</button>
 </div>
