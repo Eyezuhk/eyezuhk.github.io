@@ -36,98 +36,98 @@ layout: default
     <button class="btn btn-info" onclick="importHTML()">Importar</button>
     <button class="btn btn-success" onclick="exportHTML()">Exportar</button>
     <div class="theme-switch">
-        <label for="theme-switch">Tema:</label>
-        <select id="theme-switch" onchange="changeTheme()">
-            <option value="light">Claro</option>
-            <option value="dark">Escuro</option>
-        </select>
+      <label for="theme-switch">Tema:</label>
+      <select id="theme-switch" onchange="changeTheme()">
+        <option value="light">Claro</option>
+        <option value="dark">Escuro</option>
+      </select>
     </div>
-</div>
-
-<div class="editor-preview">
+  </div>
+  
+  <div class="editor-preview">
     <div id="editor" contenteditable="true" placeholder="Coloque seu HTML aqui...">
-        <p>Exemplo: <strong>Olá, mundo!</strong></p>
+      <p>Exemplo: <strong>Olá, mundo!</strong></p>
     </div>
     <div id="livePreview">
-        <iframe id="liveFrame"></iframe>
+      <iframe id="liveFrame"></iframe>
     </div>
-</div>
-
-<div id="renderedContent" class="rendered-content"></div>
-
-<script>
+  </div>
+  
+  <div id="renderedContent" class="rendered-content"></div>
+  
+  <script>
     const editor = document.getElementById('editor');
     const liveFrame = document.getElementById('liveFrame');
     const themeSwitch = document.getElementById('theme-switch');
-
+  
     editor.addEventListener('input', () => {
-        const htmlContent = editor.innerText;
-        liveFrame.srcdoc = htmlContent;
+      const htmlContent = editor.innerText;
+      liveFrame.srcdoc = htmlContent;
     });
-
+  
     // Função para renderizar o HTML na mesma página
     function renderHTML() {
-        const htmlContent = editor.innerText;
-        document.getElementById('renderedContent').innerHTML = htmlContent;
+      const htmlContent = editor.innerText;
+      document.getElementById('renderedContent').innerHTML = htmlContent;
     }
-
+  
     // Função para limpar o editor
     function clearEditor() {
-        editor.innerText = '';
-        liveFrame.srcdoc = '';
-        document.getElementById('renderedContent').innerHTML = '';
+      editor.innerText = '';
+      liveFrame.srcdoc = '';
+      document.getElementById('renderedContent').innerHTML = '';
     }
-
+  
     // Função para importar HTML de um arquivo
     function importHTML() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = '.html';
-        input.onchange = e => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = event => {
-                editor.innerText = event.target.result;
-                liveFrame.srcdoc = event.target.result;
-            };
-            reader.readAsText(file);
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.html';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          editor.innerText = event.target.result;
+          liveFrame.srcdoc = event.target.result;
         };
-        input.click();
+        reader.readAsText(file);
+      };
+      input.click();
     }
-
+  
     // Função para exportar o conteúdo do editor para um arquivo
     function exportHTML() {
-        const htmlContent = editor.innerText;
-        const blob = new Blob([htmlContent], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'export.html';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+      const htmlContent = editor.innerText;
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'export.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
-
+  
     // Função para mudar o tema
     function changeTheme() {
-        const theme = themeSwitch.value;
-        if (theme === 'dark') {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.remove('dark-mode');
-        }
+      const theme = themeSwitch.value;
+      if (theme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
     }
-
- // Inicializa a visualização com o conteúdo padrão
- liveFrame.srcdoc = editor.innerText;
-</script>
-
-<style>
+  
+    // Inicializa a visualização com o conteúdo padrão
+    liveFrame.srcdoc = editor.innerText;
+  </script>
+  
+  <style>
     .rendered-content {
-        border: 1px solid #ccc;
-        padding: 10px;
-        margin-top: 20px;
-        background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 20px;
+      background-color: #f9f9f9;
     }
-</style>
+  </style>
