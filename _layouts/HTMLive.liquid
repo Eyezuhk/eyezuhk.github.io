@@ -39,13 +39,21 @@ layout: default
     .editor-preview {
         display: flex;
         flex-direction: row;
-        height: calc(100vh - 60px);
+        height: calc(100vh - 60px); /* Ajusta a altura para ocupar a tela */
         width: 100%; /* Garante que a área de edição use 100% da largura */
     }
-    #editor, #livePreview {
-        width: 50%; /* Mantém a divisão em 50% para o editor e visualização */
+    #editor {
+        width: 50%; /* Mantém a divisão em 50% para o editor */
+        padding: 10px;
+        border-right: 1px solid #ccc;
+        overflow-y: auto;
+    }
+    #livePreview {
+        width: 50%; /* Mantém a divisão em 50% para a visualização */
         padding: 10px;
         overflow-y: auto;
+        background-color: #444; /* Fundo escuro para a visualização */
+        color: #fff; /* Texto branco para o modo escuro */
     }
     iframe {
         width: 100%;
