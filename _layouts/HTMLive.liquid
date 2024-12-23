@@ -20,7 +20,7 @@ layout: default
     #editor {
         width: 50%; /* Mantém a divisão em 50% para o editor */
         padding: 10px;
-        border-right: 2px solid #ccc;
+        border-right: 1px solid #ccc;
         overflow-y: auto;
     }
     #livePreview {
@@ -57,6 +57,7 @@ layout: default
     </div>
     <div id="livePreview">
         <iframe id="liveFrame"></iframe>
+        liveFrame.srcdoc = editor.innerHTML;
     </div>
 </div>
 
@@ -115,5 +116,5 @@ layout: default
     }
 
     // Inicializa a visualização com o conteúdo padrão
-    liveFrame.srcdoc = editor.innerHTML;
+    liveFrame.srcdoc = editor.innerText;
 </script>
