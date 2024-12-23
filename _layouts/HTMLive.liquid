@@ -52,6 +52,8 @@ layout: default
 
 <div class="editor-preview">
     <div id="editor" contenteditable="true" placeholder="Coloque seu HTML aqui...">
+		<h1>Hello, World!</h1>
+        <p style="color: #00FF00; font-family: monospace;">Example: <strong>Hello, World!</strong></p>
     </div>
     <div id="livePreview">
         <iframe id="liveFrame"></iframe>
@@ -69,7 +71,7 @@ layout: default
 
     // Função para visualizar em uma nova aba
     function previewFullPage() {
-        const htmlContent = editor.textContent;
+        const htmlContent = editor.innerText;
         const newWindow = window.open();
         newWindow.document.write(htmlContent);
         newWindow.document.close();
@@ -77,7 +79,7 @@ layout: default
 
     // Função para limpar o editor
     function clearEditor() {
-        editor.textContent = '';
+        editor.innerText = '';
         liveFrame.srcdoc = '';
     }
 
@@ -90,7 +92,7 @@ layout: default
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = event => {
-                editor.textContent = event.target.result;
+                editor.innerText = event.target.result;
                 liveFrame.srcdoc = event.target.result;
             };
             reader.readAsText(file);
@@ -100,7 +102,7 @@ layout: default
 
     // Função para exportar o conteúdo do editor para um arquivo
     function exportHTML() {
-        const htmlContent = editor.textContent;
+        const htmlContent = editor.innerText;
         const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -113,5 +115,5 @@ layout: default
     }
 
     // Inicializa a visualização com o conteúdo padrão
-    liveFrame.srcdoc = editor.textContent;
+    liveFrame.srcdoc = editor.innerText;
 </script>
