@@ -5,4 +5,5 @@ permalink: /HTMLive/
 title: HTMLive
 nav: true
 nav_order: 2
+theme: light
 ---
