@@ -35,13 +35,6 @@ layout: default
     <button class="btn btn-danger" onclick="clearEditor()">Limpar</button>
     <button class="btn btn-info" onclick="importHTML()">Importar</button>
     <button class="btn btn-success" onclick="exportHTML()">Exportar</button>
-    <div class="theme-switch">
-      <label for="theme-switch">Tema:</label>
-      <select id="theme-switch" onchange="changeTheme()">
-        <option value="light">Claro</option>
-        <option value="dark">Escuro</option>
-      </select>
-    </div>
   </div>
   
   <div class="editor-preview">
@@ -58,8 +51,7 @@ layout: default
   <script>
     const editor = document.getElementById('editor');
     const liveFrame = document.getElementById('liveFrame');
-    const themeSwitch = document.getElementById('theme-switch');
-  
+
     editor.addEventListener('input', () => {
       const htmlContent = editor.innerText;
       liveFrame.srcdoc = htmlContent;
@@ -107,16 +99,6 @@ layout: default
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    }
-  
-    // Função para mudar o tema
-    function changeTheme() {
-      const theme = themeSwitch.value;
-      if (theme === 'dark') {
-        document.body.classList.add('dark-mode');
-      } else {
-        document.body.classList.remove('dark-mode');
-      }
     }
   
     // Inicializa a visualização com o conteúdo padrão
