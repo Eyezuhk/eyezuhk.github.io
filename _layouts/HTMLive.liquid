@@ -45,6 +45,7 @@ layout: default
 
 <div class="controls">
     <button class="btn btn-danger" onclick="clearEditor()">Clear</button>
+    <button class="btn btn-warning" onclick="removeIndentation()">Remove Indentation</button> 
     <button class="btn btn-primary" onclick="previewFullPage()">Preview Full Page</button>
     <button class="btn btn-info" onclick="importHTML()">Import</button>
     <button class="btn btn-success" onclick="exportHTML()">Export</button>
@@ -98,6 +99,19 @@ layout: default
             reader.readAsText(file);
         };
         input.click();
+    }
+
+    // Função para remover a indentação do conteúdo do editor
+    function removeIndentation() {
+        // Captura o conteúdo atual do editor
+        const htmlContent = editor.innerHTML;
+
+        // Remove a indentação (espaços em branco no início de cada linha)
+        const cleanedContent = htmlContent.split('\n').map(line => line.trim()).join('\n');
+
+        // Atualiza o editor e o iframe com o conteúdo limpo
+        editor.innerHTML = cleanedContent;
+        liveFrame.srcdoc = cleanedContent;
     }
 
     // Função para exportar o conteúdo do editor para um arquivo
