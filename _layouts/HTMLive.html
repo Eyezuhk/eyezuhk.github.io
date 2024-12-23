@@ -65,13 +65,13 @@ layout: default
     const liveFrame = document.getElementById('liveFrame');
 
     editor.addEventListener('input', () => {
-        const htmlContent = editor.innerText;
+        const htmlContent = editor.innerHTML; // Usar innerHTML para renderizar HTML
         liveFrame.srcdoc = htmlContent;
     });
 
     // Função para visualizar em uma nova aba
     function previewFullPage() {
-        const htmlContent = editor.innerText;
+        const htmlContent = editor.innerHTML; // Usar innerHTML para exportar HTML completo
         const newWindow = window.open();
         newWindow.document.write(htmlContent);
         newWindow.document.close();
@@ -79,7 +79,7 @@ layout: default
 
     // Função para limpar o editor
     function clearEditor() {
-        editor.innerText = '';
+        editor.innerHTML = ''; // Limpa usando innerHTML
         liveFrame.srcdoc = '';
     }
 
@@ -92,7 +92,7 @@ layout: default
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = event => {
-                editor.innerText = event.target.result;
+                editor.innerHTML = event.target.result; // Atualiza usando innerHTML
                 liveFrame.srcdoc = event.target.result;
             };
             reader.readAsText(file);
@@ -102,7 +102,7 @@ layout: default
 
     // Função para exportar o conteúdo do editor para um arquivo
     function exportHTML() {
-        const htmlContent = editor.innerText;
+        const htmlContent = editor.innerHTML; // Exportar usando innerHTML
         const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -115,5 +115,5 @@ layout: default
     }
 
     // Inicializa a visualização com o conteúdo padrão
-    liveFrame.srcdoc = editor.innerText;
+    liveFrame.srcdoc = editor.innerHTML; // Configurar usando innerHTML
 </script>
