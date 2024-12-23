@@ -65,7 +65,7 @@ layout: default
     const liveFrame = document.getElementById('liveFrame');
 
     editor.addEventListener('input', () => {
-        const htmlContent = editor.textContent;
+        const htmlContent = editor.innerHTML;
         liveFrame.srcdoc = htmlContent;
     });
 
