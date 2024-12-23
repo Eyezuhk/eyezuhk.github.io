@@ -22,8 +22,6 @@ layout: default
         padding: 10px;
         border-right: 1px solid #ccc;
         overflow-y: auto;
-        white-space: pre-wrap;
-        font-family: monospace;
     }
     #livePreview {
         width: 50%;
@@ -38,13 +36,8 @@ layout: default
     .container {
         max-width: none;
     }
-    .controls {
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .btn {
-        margin-right: 5px;
+    body {
+        max-width: 100%;
     }
 </style>
 
@@ -53,10 +46,11 @@ layout: default
     <button class="btn btn-primary" onclick="previewFullPage()">Preview Full Page</button>
     <button class="btn btn-info" onclick="importHTML()">Import</button>
     <button class="btn btn-success" onclick="exportHTML()">Export</button>
+    <button class="btn btn-warning" onclick="removeIndentation()">Remove Indentation</button>
 </div>
 
 <div class="editor-preview">
-    <div id="editor" contenteditable="true" spellcheck="true" placeholder="Coloque seu HTML aqui...">
+    <div id="editor" contenteditable="true" placeholder="Coloque seu HTML aqui...">
         <h1>Hello, World!</h1>
         <p style="color: #00FF00; font-family: monospace;">Example: <strong>Hello, World!</strong></p>
     </div>
@@ -69,38 +63,32 @@ layout: default
     const editor = document.getElementById('editor');
     const liveFrame = document.getElementById('liveFrame');
 
-    // Função para processar o HTML antes de renderizar
-    function processHTML(html) {
-        // Remove espaços extras no início e fim
-        return html.trim();
+    editor.addEventListener('input', () => {
+        const htmlContent = editor.innerText;
+        liveFrame.srcdoc = htmlContent;
+    });
+
+    // Nova função para remover indentação
+    function removeIndentation() {
+        let content = editor.innerText;
+        // Remove espaços e tabs no início de cada linha
+        content = content.split('\n').map(line => line.trim()).join('\n');
+        editor.innerText = content;
+        liveFrame.srcdoc = content;
     }
 
-    // Função para atualizar o preview
-    function updatePreview() {
-        const htmlContent = editor.innerHTML;
-        const processedHTML = processHTML(htmlContent);
-        liveFrame.srcdoc = processedHTML;
-    }
-
-    // Listener para mudanças no editor
-    editor.addEventListener('input', updatePreview);
-
-    // Função para visualizar em uma nova aba
     function previewFullPage() {
-        const htmlContent = editor.innerHTML;
-        const processedHTML = processHTML(htmlContent);
+        const htmlContent = editor.innerText;
         const newWindow = window.open();
-        newWindow.document.write(processedHTML);
+        newWindow.document.write(htmlContent);
         newWindow.document.close();
     }
 
-    // Função para limpar o editor
     function clearEditor() {
-        editor.innerHTML = '';
+        editor.innerText = '';
         liveFrame.srcdoc = '';
     }
 
-    // Função para importar HTML de um arquivo
     function importHTML() {
         const input = document.createElement('input');
         input.type = 'file';
@@ -109,19 +97,17 @@ layout: default
             const file = e.target.files[0];
             const reader = new FileReader();
             reader.onload = event => {
-                editor.innerHTML = event.target.result;
-                updatePreview();
+                editor.innerText = event.target.result;
+                liveFrame.srcdoc = event.target.result;
             };
             reader.readAsText(file);
         };
         input.click();
     }
 
-    // Função para exportar o conteúdo do editor para um arquivo
     function exportHTML() {
-        const htmlContent = editor.innerHTML;
-        const processedHTML = processHTML(htmlContent);
-        const blob = new Blob([processedHTML], { type: 'text/html' });
+        const htmlContent = editor.innerText;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -132,6 +118,5 @@ layout: default
         URL.revokeObjectURL(url);
     }
 
-    // Inicializa a visualização com o conteúdo padrão
-    updatePreview();
+    liveFrame.srcdoc = editor.innerText;
 </script>
