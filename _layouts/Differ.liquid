@@ -228,9 +228,7 @@ layout: default
 </head>
 <body>
     <div class="controls">
-        <button class="btn btn-primary" onclick="compareDiff()">Compare</button>
-        <button class="btn btn-success" onclick="exportDiff()">Export Diff</button>
-        <button class="btn btn-theme" onclick="toggleTheme()">Toggle Theme</button>
+        <button class="btn btn-success" onclick="compareDiff()">Compare</button>
     </div>
 
     <div class="editor-preview">
@@ -287,10 +285,6 @@ layout: default
         {% raw %}
         let currentTheme = 'light';
 
-        function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        }
 
         function copyToClipboard(elementId) {
             const textElement = document.getElementById(elementId);
@@ -486,32 +480,6 @@ layout: default
             });
         }
 
-        function exportDiff() {
-            const original = document.getElementById('originalEditor').value;
-            const modified = document.getElementById('modifiedEditor').value;
-            const diffs = computeDiff(original.split('\n'), modified.split('\n'));
-            
-            let diffText = '';
-            diffs.forEach((diff, index) => {
-                if (diff.type === 'equal') {
-                    diffText += ' ' + diff.value + '\n';
-                } else if (diff.type === 'delete') {
-                    diffText += '-' + diff.value + '\n';
-                } else if (diff.type === 'insert') {
-                    diffText += '+' + diff.value + '\n';
-                }
-            });
-            
-            const blob = new Blob([diffText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'diff.txt';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
         {% endraw %}
     </script>
 </body>
