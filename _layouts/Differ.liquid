@@ -25,6 +25,7 @@ layout: default
             position: sticky;
             top: 0;
             z-index: 100;
+            justify-content: center; /* Centraliza os botões na parte superior */
         }
         .btn {
             padding: 8px 16px;
@@ -55,10 +56,32 @@ layout: default
             border-right: 1px solid #dee2e6;
         }
         .editor-label {
-            padding: 10px;
+             padding: 10px;
             background: #f8f9fa;
             border-bottom: 1px solid #dee2e6;
             font-weight: bold;
+            display: flex; /* Alinha label e botão de import */
+            align-items: center;
+            justify-content: space-between; /* Espaço entre label e botão */
+        }
+        .import-controls {
+            display: flex;
+            gap: 5px; /* Espaço entre o botão de import e o botão de copiar */
+            align-items: center;
+        }
+        .copy-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            transition: all 0.2s;
+            font-size: 0.8em;
+        }
+        .copy-btn:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
         .editor {
             flex: 1;
@@ -105,24 +128,45 @@ layout: default
         .hidden {
             display: none;
         }
+        .compare-container{
+            position: relative;
+            width: 100%;
+        }
+        .compare-btn{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+        }
     </style>
 </head>
 <body>
     <div class="controls">
-        <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
-        <button class="btn btn-primary" onclick="compareDiff()">Compare</button>
-        <button class="btn btn-info" onclick="importFile('original')">Import Original</button>
-        <button class="btn btn-info" onclick="importFile('modified')">Import Modified</button>
+       <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
+       <div class="compare-container">
+         <button class="btn btn-primary compare-btn" onclick="compareDiff()">Compare</button>
+       </div>
         <button class="btn btn-success" onclick="exportDiff()">Export Diff</button>
     </div>
 
     <div class="editor-preview">
         <div class="editor-container">
-            <div class="editor-label">Original Text</div>
+            <div class="editor-label">
+                Original Text
+                <div class="import-controls">
+                   <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                   <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
+                </div>
+            </div>
             <textarea id="originalEditor" class="editor" placeholder="Paste original text here..."></textarea>
         </div>
         <div class="editor-container">
-            <div class="editor-label">Modified Text</div>
+            <div class="editor-label">
+                Modified Text
+                <div class="import-controls">
+                  <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                   <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
+               </div>
+            </div>
             <textarea id="modifiedEditor" class="editor" placeholder="Paste modified text here..."></textarea>
         </div>
     </div>
@@ -135,6 +179,12 @@ layout: default
     <input type="file" id="fileInput" accept=".txt,.md,.html" class="hidden">
 
     <script>
+         function copyToClipboard(elementId) {
+            const textElement = document.getElementById(elementId);
+            textElement.select();
+            document.execCommand('copy');
+        }
+
         function clearAll() {
             document.getElementById('originalEditor').value = '';
             document.getElementById('modifiedEditor').value = '';
