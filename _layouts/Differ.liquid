@@ -2,6 +2,7 @@
 layout: default
 ---
 
+      
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -474,12 +475,13 @@ layout: default
                     rightDiff.appendChild(createDiffLine(diff.value, null, rightLineNum++));
                 } else if (diff.type === 'delete') {
                     const correspondingInsert = diffs.find(d => d.type === 'insert' && d.index === diff.index);
-                    leftDiff.appendChild(createDiffLine(diff.value, correspondingInsert?.value, leftLineNum++, 'delete'));
+                    leftDiff.appendChild(createDiffLine(diff.value, correspondingInsert && correspondingInsert.value, leftLineNum++, 'delete'));
+
                     rightDiff.appendChild(createDiffLine('', null, null));
                 } else if (diff.type === 'insert') {
                     const correspondingDelete = diffs.find(d => d.type === 'delete' && d.index === diff.index);
                     leftDiff.appendChild(createDiffLine('', null, null));
-                    rightDiff.appendChild(createDiffLine(diff.value, correspondingDelete?.value, rightLineNum++, 'insert'));
+                    rightDiff.appendChild(createDiffLine(diff.value, correspondingDelete && correspondingDelete.value, rightLineNum++, 'insert'));
                 }
             });
         }
@@ -514,3 +516,5 @@ layout: default
     </script>
 </body>
 </html>
+
+    
