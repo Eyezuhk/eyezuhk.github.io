@@ -14,14 +14,12 @@ layout: default
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             height: 100vh;
-            overflow: hidden;
-            background-color: var(--bg-color, #fff); /* Usar var para temas */
-            color: var(--text-color, #000); /* Alterar conforme o tema */
+            overflow: auto;
         }
         .controls {
             padding: 10px;
-            background: var(--control-bg, #f8f9fa); /* Cor de fundo dos controles */
-            border-bottom: 1px solid var(--border-color, #dee2e6);
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
             display: flex;
             gap: 10px;
             position: sticky;
@@ -46,34 +44,22 @@ layout: default
         .btn-success { background-color: #198754; color: white; }
         .btn-info { background-color: #0dcaf0; color: white; }
 
-        .compare-container{
-            position: relative;
-            width: 100%;
-        }
-        .compare-btn{
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            background-color: var(--btn-bg, #0d6efd); /* Cor do botão */
-            color: var(--btn-color, white);
-        }
-
         .editor-preview {
             display: flex;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 120px); /* Ajusta para permitir rolagem */
             width: 100%;
-            background-color: var(--editor-bg, #fff); /* Cor de fundo das áreas de edição */
+            overflow: auto;
         }
         .editor-container {
             width: 50%;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid var(--border-color, #dee2e6);
+            border-right: 1px solid #dee2e6;
         }
         .editor-label {
             padding: 10px;
-            background: var(--editor-label-bg, #f8f9fa);
-            border-bottom: 1px solid var(--border-color, #dee2e6);
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -81,7 +67,7 @@ layout: default
         }
         .import-controls {
             display: flex;
-            gap: 5px; /* Espaço entre o botão de import e o botão de copiar */
+            gap: 5px;
             align-items: center;
         }
         .copy-btn {
@@ -107,11 +93,10 @@ layout: default
             font-size: 14px;
             line-height: 1.5;
             overflow-y: auto;
-            background-color: var(--textarea-bg, #fff); /* Cor do fundo do textarea */
-            color: var(--textarea-text-color, #000);
+            min-height: 100px; /* Mantém as caixas de texto visíveis ao colar ou escrever */
         }
         .diff-output {
-            width: 50%;
+            width: 100%;
             overflow-y: auto;
             display: flex;
         }
@@ -130,12 +115,12 @@ layout: default
             border-radius: 2px;
         }
         .diff-line.insert {
-            background-color: var(--insert-bg, #e6ffec);
-            color: var(--insert-text-color, #24292f);
+            background-color: #e6ffec;
+            color: #24292f;
         }
         .diff-line.delete {
-            background-color: var(--delete-bg, #ffebe9);
-            color: var(--delete-text-color, #24292f);
+            background-color: #ffebe9;
+            color: #24292f;
         }
         .diff-line-number {
             color: #6e7781;
@@ -145,23 +130,22 @@ layout: default
         .hidden {
             display: none;
         }
+        .compare-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        .compare-btn {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+        }
 
-        /* Tema escuro */
-        body[data-theme="dark"] {
-            --bg-color: #181818;
-            --text-color: #fff;
-            --control-bg: #333;
-            --border-color: #444;
-            --editor-bg: #2d2d2d;
-            --editor-label-bg: #3a3a3a;
-            --textarea-bg: #3a3a3a;
-            --textarea-text-color: #fff;
-            --btn-bg: #4e8a8b;
-            --btn-color: white;
-            --insert-bg: #008e33;
-            --insert-text-color: #fff;
-            --delete-bg: #e60000;
-            --delete-text-color: #fff;
+        /* Ajuste no estilo dos botões para o alinhamento */
+        .controls .btn {
+            padding: 6px 12px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -179,8 +163,8 @@ layout: default
             <div class="editor-label">
                 Original Text
                 <div class="import-controls">
-                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
-                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
+                   <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                   <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
                 </div>
             </div>
             <textarea id="originalEditor" class="editor" placeholder="Paste original text here..."></textarea>
@@ -189,9 +173,9 @@ layout: default
             <div class="editor-label">
                 Modified Text
                 <div class="import-controls">
-                    <button class="btn btn-info" onclick="importFile('modified')">Import</button>
-                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
-                </div>
+                  <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                   <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
+               </div>
             </div>
             <textarea id="modifiedEditor" class="editor" placeholder="Paste modified text here..."></textarea>
         </div>
@@ -235,7 +219,7 @@ layout: default
             const original = document.getElementById('originalEditor').value;
             const modified = document.getElementById('modifiedEditor').value;
             const diff = generateDiffText(original, modified);
-
+            
             const blob = new Blob([diff], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -250,22 +234,22 @@ layout: default
         function compareDiff() {
             const original = document.getElementById('originalEditor').value;
             const modified = document.getElementById('modifiedEditor').value;
-
+            
             document.querySelector('.editor-preview').classList.add('hidden');
             const diffOutput = document.getElementById('diffOutput');
             diffOutput.classList.remove('hidden');
-
+            
             const leftDiff = document.getElementById('leftDiff');
             const rightDiff = document.getElementById('rightDiff');
-
+            
             const diffs = computeDiff(original.split('\n'), modified.split('\n'));
-
+            
             leftDiff.innerHTML = '';
             rightDiff.innerHTML = '';
-
+            
             let leftLineNum = 1;
             let rightLineNum = 1;
-
+            
             diffs.forEach(diff => {
                 if (diff.type === 'equal') {
                     leftDiff.appendChild(createDiffLine(diff.value, leftLineNum++));
@@ -283,18 +267,18 @@ layout: default
         function createDiffLine(text, lineNum, type = null) {
             const line = document.createElement('div');
             line.className = 'diff-line' + (type ? ' ' + type : '');
-
+            
             if (lineNum !== null) {
                 const lineNumSpan = document.createElement('span');
                 lineNumSpan.className = 'diff-line-number';
                 lineNumSpan.textContent = lineNum;
                 line.appendChild(lineNumSpan);
             }
-
+            
             const content = document.createElement('span');
             content.textContent = text;
             line.appendChild(content);
-
+            
             return line;
         }
 
@@ -302,7 +286,7 @@ layout: default
             const diffs = [];
             let i = 0;
             let j = 0;
-
+            
             while (i < original.length || j < modified.length) {
                 if (i < original.length && j < modified.length && original[i] === modified[j]) {
                     diffs.push({ type: 'equal', value: original[i] });
@@ -316,7 +300,7 @@ layout: default
                     i++;
                 }
             }
-
+            
             return diffs;
         }
 
