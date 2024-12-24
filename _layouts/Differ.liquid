@@ -8,6 +8,10 @@ layout: default
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Diff Viewer</title>
+
+    <!-- Estilos do diff2html -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/diff2html/3.0.0/diff2html.min.css">
+
     <style>
         body {
             margin: 0;
@@ -17,7 +21,7 @@ layout: default
             overflow: auto;
         }
         .full-width {
-        max-width: none !important; /* Ignora a largura máxima */
+            max-width: none !important;
         }
         .controls {
             padding: 10px;
@@ -49,7 +53,7 @@ layout: default
 
         .editor-preview {
             display: flex;
-            height: calc(100vh - 120px); /* Ajusta para permitir rolagem */
+            height: calc(100vh - 120px); 
             width: 100%;
             overflow: auto;
         }
@@ -96,62 +100,29 @@ layout: default
             font-size: 14px;
             line-height: 1.5;
             overflow-y: auto;
-            min-height: 100px; /* Mantém as caixas de texto visíveis ao colar ou escrever */
-        }
-        .diff-output {
-            width: 100%;
-            overflow-y: auto;
-            display: flex;
-        }
-        .diff-column {
-            flex: 1;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            background: #fff;
-        }
-        .diff-line {
-            padding: 2px 4px;
-            margin: 1px 0;
-            border-radius: 2px;
-        }
-        .diff-line.insert {
-            background-color: #e6ffec;
-            color: #24292f;
-        }
-        .diff-line.delete {
-            background-color: #ffebe9;
-            color: #24292f;
-        }
-        .diff-line-number {
-            color: #6e7781;
-            margin-right: 8px;
-            user-select: none;
-        }
-        .hidden {
-            display: none;
-        }
-        .compare-container {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        .compare-btn {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
+            min-height: 100px;
         }
 
-        /* Ajuste no estilo dos botões para o alinhamento */
-        .controls .btn {
-            /*padding: 6px 12px;*/
-            /*font-size: 14px;*/
-            position: relative;
-            display: flex;
-            justify-content: center
+        /* Adaptação para temas light/dark */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Para temas escuros */
+        .dark-mode body {
+            --bg-color: #2c2c2c;
+            --text-color: #e0e0e0;
+        }
+
+        /* Para temas claros */
+        .light-mode body {
+            --bg-color: #ffffff;
+            --text-color: #24292f;
+        }
+
+        .diff-output {
+            display: block;
         }
     </style>
 </head>
@@ -187,11 +158,12 @@ layout: default
     </div>
 
     <div id="diffOutput" class="diff-output hidden">
-        <div id="leftDiff" class="diff-column"></div>
-        <div id="rightDiff" class="diff-column"></div>
+        <div id="diff"></div>
     </div>
 
     <input type="file" id="fileInput" class="hidden">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/diff2html/3.0.0/diff2html.min.js"></script>
 
     <script>
         function copyToClipboard(elementId) {
@@ -203,7 +175,6 @@ layout: default
         function clear(id) {
             document.getElementById(id).value = '';
             document.getElementById('diffOutput').classList.add('hidden');
-            document.querySelector('.editor-preview').classList.remove('hidden');
         }
 
         function importFile(target) {
@@ -238,74 +209,12 @@ layout: default
         function compareDiff() {
             const original = document.getElementById('originalEditor').value;
             const modified = document.getElementById('modifiedEditor').value;
-            
-            document.querySelector('.editor-preview').classList.add('hidden');
-            const diffOutput = document.getElementById('diffOutput');
-            diffOutput.classList.remove('hidden');
-            
-            const leftDiff = document.getElementById('leftDiff');
-            const rightDiff = document.getElementById('rightDiff');
-            
-            const diffs = computeDiff(original.split('\n'), modified.split('\n'));
-            
-            leftDiff.innerHTML = '';
-            rightDiff.innerHTML = '';
-            
-            let leftLineNum = 1;
-            let rightLineNum = 1;
-            
-            diffs.forEach(diff => {
-                if (diff.type === 'equal') {
-                    leftDiff.appendChild(createDiffLine(diff.value, leftLineNum++));
-                    rightDiff.appendChild(createDiffLine(diff.value, rightLineNum++));
-                } else if (diff.type === 'delete') {
-                    leftDiff.appendChild(createDiffLine(diff.value, leftLineNum++, 'delete'));
-                    rightDiff.appendChild(createDiffLine('', null));
-                } else if (diff.type === 'insert') {
-                    leftDiff.appendChild(createDiffLine('', null));
-                    rightDiff.appendChild(createDiffLine(diff.value, rightLineNum++, 'insert'));
-                }
-            });
-        }
 
-        function createDiffLine(text, lineNum, type = null) {
-            const line = document.createElement('div');
-            line.className = 'diff-line' + (type ? ' ' + type : '');
-            
-            if (lineNum !== null) {
-                const lineNumSpan = document.createElement('span');
-                lineNumSpan.className = 'diff-line-number';
-                lineNumSpan.textContent = lineNum;
-                line.appendChild(lineNumSpan);
-            }
-            
-            const content = document.createElement('span');
-            content.textContent = text;
-            line.appendChild(content);
-            
-            return line;
-        }
+            document.getElementById('diffOutput').classList.remove('hidden');
+            const diffOutput = document.getElementById('diff');
 
-        function computeDiff(original, modified) {
-            const diffs = [];
-            let i = 0;
-            let j = 0;
-            
-            while (i < original.length || j < modified.length) {
-                if (i < original.length && j < modified.length && original[i] === modified[j]) {
-                    diffs.push({ type: 'equal', value: original[i] });
-                    i++;
-                    j++;
-                } else if (j < modified.length) {
-                    diffs.push({ type: 'insert', value: modified[j] });
-                    j++;
-                } else if (i < original.length) {
-                    diffs.push({ type: 'delete', value: original[i] });
-                    i++;
-                }
-            }
-            
-            return diffs;
+            const diff = Diff2Html.getPrettyHtml(Diff2Html.diff(original, modified), { inputFormat: 'diff', showFiles: true });
+            diffOutput.innerHTML = diff;
         }
 
         function generateDiffText(original, modified) {
