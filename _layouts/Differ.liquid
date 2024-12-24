@@ -1,7 +1,3 @@
----
-layout: default
----
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,221 +5,221 @@ layout: default
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enhanced Text Diff Viewer</title>
     <style>
-        :root {
-            --background-color: #ffffff;
-            --text-color: #24292f;
-            --border-color: #dee2e6;
-            --control-bg: #f8f9fa;
-            --btn-danger: #dc3545;
-            --btn-primary: #0d6efd;
-            --btn-success: #198754;
-            --btn-info: #0dcaf0;
-            --btn-text: white;
-            --insert-bg: #e6ffec;
-            --delete-bg: #ffebe9;
-            --line-number-color: #6e7781;
-            --editor-bg: #ffffff;
-            --char-delete-bg: #ffdce0;
-            --char-insert-bg: #ccffd8;
-            --char-delete-text: #b31d28;
-            --char-insert-text: #27792f;
-        }
+    :root {
+        --background-color: #ffffff;
+        --text-color: #24292f;
+        --border-color: #dee2e6;
+        --control-bg: #f8f9fa;
+        --btn-danger: #dc3545;
+        --btn-primary: #0d6efd;
+        --btn-success: #198754;
+        --btn-info: #0dcaf0;
+        --btn-text: white;
+        --insert-bg: #e6ffec;
+        --delete-bg: #ffebe9;
+        --line-number-color: #6e7781;
+        --editor-bg: #ffffff;
+        --char-delete-bg: #ffdce0;
+        --char-insert-bg: #ccffd8;
+        --char-delete-text: #b31d28;
+        --char-insert-text: #27792f;
+    }
 
-        [data-theme="dark"] {
-            --background-color: #0d1117;
-            --text-color: #c9d1d9;
-            --border-color: #30363d;
-            --control-bg: #161b22;
-            --btn-danger: #a12d3a;
-            --btn-primary: #1a5fb4;
-            --btn-success: #26a269;
-            --btn-info: #1c71d8;
-            --btn-text: #ffffff;
-            --insert-bg: #1a4721;
-            --delete-bg: #4a1c1c;
-            --line-number-color: #8b949e;
-            --editor-bg: #1e1e1e;
-            --char-delete-bg: #67060c;
-            --char-insert-bg: #1a4721;
-            --char-delete-text: #ffdce0;
-            --char-insert-text: #ccffd8;
-        }
+    [data-theme="dark"] {
+        --background-color: #0d1117;
+        --text-color: #c9d1d9;
+        --border-color: #30363d;
+        --control-bg: #161b22;
+        --btn-danger: #a12d3a;
+        --btn-primary: #1a5fb4;
+        --btn-success: #26a269;
+        --btn-info: #1c71d8;
+        --btn-text: #ffffff;
+        --insert-bg: #1a4721;
+        --delete-bg: #4a1c1c;
+        --line-number-color: #8b949e;
+        --editor-bg: #1e1e1e;
+        --char-delete-bg: #67060c;
+        --char-insert-bg: #1a4721;
+        --char-delete-text: #ffdce0;
+        --char-insert-text: #ccffd8;
+    }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            height: 100vh;
-            overflow: auto;
-        }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        height: 100vh;
+        overflow: auto;
+    }
 
-        .controls {
-            padding: 10px;
-            background: var(--control-bg);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            gap: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            justify-content: center;
-        }
+    .controls {
+        padding: 10px;
+        background: var(--control-bg);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        gap: 10px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        justify-content: center;
+    }
 
-        .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            color: var(--btn-text);
-        }
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        color: var(--btn-text);
+    }
 
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-        .btn-danger { background-color: var(--btn-danger); }
-        .btn-primary { background-color: var(--btn-primary); }
-        .btn-success { background-color: var(--btn-success); }
-        .btn-info { background-color: var(--btn-info); }
+    .btn-danger { background-color: var(--btn-danger); }
+    .btn-primary { background-color: var(--btn-primary); }
+    .btn-success { background-color: var(--btn-success); }
+    .btn-info { background-color: var(--btn-info); }
 
-        .editor-preview {
-            display: flex;
-            height: calc(100vh - 120px);
-            width: 100%;
-            overflow: auto;
-        }
+    .editor-preview {
+        display: flex;
+        height: calc(100vh - 120px);
+        width: 100%;
+        overflow: auto;
+    }
 
-        .editor-container {
-            width: 50%;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid var(--border-color);
-        }
+    .editor-container {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--border-color);
+    }
 
-        .editor-label {
-            padding: 10px;
-            background: var(--control-bg);
-            border-bottom: 1px solid var(--border-color);
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: var(--text-color);
-        }
+    .editor-label {
+        padding: 10px;
+        background: var(--control-bg);
+        border-bottom: 1px solid var(--border-color);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-color);
+    }
 
-        .import-controls {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
+    .import-controls {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+    }
 
-        .copy-btn {
-            padding: 6px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            background-color: var(--control-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            transition: all 0.2s;
-            font-size: 0.8em;
-        }
+    .copy-btn {
+        padding: 6px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: var(--control-bg);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        transition: all 0.2s;
+        font-size: 0.8em;
+    }
 
-        .copy-btn:hover {
-            background-color: var(--border-color);
-            transform: translateY(-1px);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
+    .copy-btn:hover {
+        background-color: var(--border-color);
+        transform: translateY(-1px);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
 
-        .editor {
-            flex: 1;
-            padding: 10px;
-            resize: none;
-            border: none;
-            font-family: monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            background-color: var(--editor-bg);
-            color: var(--text-color);
-            min-height: 100px;
-        }
+    .editor {
+        flex: 1;
+        padding: 10px;
+        resize: none;
+        border: none;
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        background-color: var(--editor-bg);
+        color: var(--text-color);
+        min-height: 100px;
+    }
 
-        .diff-output {
-            width: 100%;
-            overflow-y: auto;
-            display: flex;
-        }
+    .diff-output {
+        width: 100%;
+        overflow-y: auto;
+        display: flex;
+    }
 
-        .diff-column {
-            flex: 1;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            background: var(--editor-bg);
-        }
+    .diff-column {
+        flex: 1;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        background: var(--editor-bg);
+    }
 
-        .diff-line {
-            padding: 2px 4px;
-            margin: 1px 0;
-            border-radius: 2px;
-            display: flex;
-        }
+    .diff-line {
+        padding: 2px 4px;
+        margin: 1px 0;
+        border-radius: 2px;
+        display: flex;
+    }
 
-        .diff-line.insert {
-            background-color: var(--insert-bg);
-            color: var(--text-color);
-        }
+    .diff-line.insert {
+        background-color: var(--insert-bg);
+        color: var(--text-color);
+    }
 
-        .diff-line.delete {
-            background-color: var(--delete-bg);
-            color: var(--text-color);
-        }
+    .diff-line.delete {
+        background-color: var(--delete-bg);
+        color: var(--text-color);
+    }
 
-        .char-delete {
-            background-color: var(--char-delete-bg);
-            color: var(--char-delete-text);
-            text-decoration: line-through;
-        }
+    .char-delete {
+        background-color: var(--char-delete-bg);
+        color: var(--char-delete-text);
+        text-decoration: line-through;
+    }
 
-        .char-insert {
-            background-color: var(--char-insert-bg);
-            color: var(--char-insert-text);
-        }
+    .char-insert {
+        background-color: var(--char-insert-bg);
+        color: var(--char-insert-text);
+    }
 
-        .diff-line-number {
-            color: var(--line-number-color);
-            margin-right: 8px;
-            user-select: none;
-            min-width: 3em;
-            text-align: right;
-            padding-right: 1em;
-            border-right: 1px solid var(--border-color);
-        }
+    .diff-line-number {
+        color: var(--line-number-color);
+        margin-right: 8px;
+        user-select: none;
+        min-width: 3em;
+        text-align: right;
+        padding-right: 1em;
+        border-right: 1px solid var(--border-color);
+    }
 
-        .hidden {
-            display: none;
-        }
+    .hidden {
+        display: none;
+    }
 
-        .diff-controls {
-            background: var(--control-bg);
-            padding: 10px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
+    .diff-controls {
+        background: var(--control-bg);
+        padding: 10px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
 
-        .file-input {
-            display: none;
-        }
-    </style>
+    .file-input {
+        display: none;
+    }
+</style>
 </head>
 <body>
     <div class="controls">
@@ -283,6 +279,7 @@ layout: default
     <input type="file" id="fileInput" class="hidden">
 
     <script>
+        {% raw %}
         let currentTheme = 'light';
 
         function toggleTheme() {
@@ -509,6 +506,7 @@ layout: default
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
+        {% endraw %}
     </script>
 </body>
 </html>
