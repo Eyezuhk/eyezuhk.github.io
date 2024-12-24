@@ -1,8 +1,8 @@
 ---
 page_id: Differ
-layout: Difer
+layout: Differ
 permalink: /Differ/
 title: Differ
 nav: true
-nav_order: 3
+nav_order: 2
 ---
