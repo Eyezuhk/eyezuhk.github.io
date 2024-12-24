@@ -144,17 +144,17 @@ layout: default
 
         /* Ajuste no estilo dos botões para o alinhamento */
         .controls .btn {
-            padding: 6px 12px;
-            font-size: 14px;
+            /*padding: 6px 12px;*/
+            /*font-size: 14px;*/
+            position: relative;
+            display: flex;
+            justify-content: center
         }
     </style>
 </head>
 <body>
     <div class="controls">
-        <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
-        <div class="compare-container">
-            <button class="btn btn-primary compare-btn" onclick="compareDiff()">Compare</button>
-        </div>
+        <button class="btn btn-primary compare-btn" onclick="compareDiff()">Compare</button>
         <button class="btn btn-success" onclick="exportDiff()">Export Diff</button>
     </div>
 
@@ -164,6 +164,7 @@ layout: default
                 Original Text
                 <div class="import-controls">
                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                   <button class="btn btn-danger" onclick="clearAll(originalEditor)">Clear All</button>
                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
                 </div>
             </div>
@@ -174,6 +175,7 @@ layout: default
                 Modified Text
                 <div class="import-controls">
                   <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                  <button class="btn btn-danger" onclick="clearAll(modifiedEditor)">Clear All</button>
                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
                </div>
             </div>
