@@ -16,6 +16,9 @@ layout: default
             height: 100vh;
             overflow: auto;
         }
+        .full-width {
+        max-width: none !important; /* Ignora a largura máxima */
+        }
         .controls {
             padding: 10px;
             background: #f8f9fa;
@@ -164,7 +167,7 @@ layout: default
                 Original Text
                 <div class="import-controls">
                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
-                   <button class="btn btn-danger" onclick="clearAll(originalEditor)">Clear All</button>
+                   <button class="btn btn-danger" onclick="clear(originalEditor)">Clear</button>
                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
                 </div>
             </div>
@@ -175,7 +178,7 @@ layout: default
                 Modified Text
                 <div class="import-controls">
                   <button class="btn btn-info" onclick="importFile('modified')">Import</button>
-                  <button class="btn btn-danger" onclick="clearAll(modifiedEditor)">Clear All</button>
+                  <button class="btn btn-danger" onclick="clear(modifiedEditor)">Clear</button>
                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
                </div>
             </div>
@@ -188,7 +191,7 @@ layout: default
         <div id="rightDiff" class="diff-column"></div>
     </div>
 
-    <input type="file" id="fileInput" accept=".txt,.md,.html" class="hidden">
+    <input type="file" id="fileInput" class="hidden">
 
     <script>
         function copyToClipboard(elementId) {
@@ -197,9 +200,8 @@ layout: default
             document.execCommand('copy');
         }
 
-        function clearAll() {
-            document.getElementById('originalEditor').value = '';
-            document.getElementById('modifiedEditor').value = '';
+        function clear(id) {
+            document.getElementById(id).value = '';
             document.getElementById('diffOutput').classList.add('hidden');
             document.querySelector('.editor-preview').classList.remove('hidden');
         }
