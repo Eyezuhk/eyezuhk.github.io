@@ -110,7 +110,7 @@ layout: default
         const cleanedContent = htmlContent.split('\n').map(line => line.trim()).join('\n');
 
         // Atualiza o editor e o iframe com o conteúdo limpo
-        editor.innerHTML = cleanedContent;
+        editor.innerText = cleanedContent;
         liveFrame.srcdoc = cleanedContent;
     }
 
