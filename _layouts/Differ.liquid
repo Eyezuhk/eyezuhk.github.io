@@ -7,26 +7,62 @@ layout: default
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Diff Viewer</title>
-
-    <!-- Estilos do diff2html -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/diff2html/3.0.0/diff2html.min.css">
-
+    <title>Enhanced Text Diff Viewer</title>
     <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #24292f;
+            --border-color: #dee2e6;
+            --control-bg: #f8f9fa;
+            --btn-danger: #dc3545;
+            --btn-primary: #0d6efd;
+            --btn-success: #198754;
+            --btn-info: #0dcaf0;
+            --btn-text: white;
+            --insert-bg: #e6ffec;
+            --delete-bg: #ffebe9;
+            --line-number-color: #6e7781;
+            --editor-bg: #ffffff;
+            --char-delete-bg: #ffdce0;
+            --char-insert-bg: #ccffd8;
+            --char-delete-text: #b31d28;
+            --char-insert-text: #27792f;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #0d1117;
+            --text-color: #c9d1d9;
+            --border-color: #30363d;
+            --control-bg: #161b22;
+            --btn-danger: #a12d3a;
+            --btn-primary: #1a5fb4;
+            --btn-success: #26a269;
+            --btn-info: #1c71d8;
+            --btn-text: #ffffff;
+            --insert-bg: #1a4721;
+            --delete-bg: #4a1c1c;
+            --line-number-color: #8b949e;
+            --editor-bg: #1e1e1e;
+            --char-delete-bg: #67060c;
+            --char-insert-bg: #1a4721;
+            --char-delete-text: #ffdce0;
+            --char-insert-text: #ccffd8;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
             height: 100vh;
             overflow: auto;
         }
-        .full-width {
-            max-width: none !important;
-        }
+
         .controls {
             padding: 10px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
+            background: var(--control-bg);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             gap: 10px;
             position: sticky;
@@ -34,6 +70,7 @@ layout: default
             z-index: 100;
             justify-content: center;
         }
+
         .btn {
             padding: 8px 16px;
             border: none;
@@ -41,56 +78,68 @@ layout: default
             cursor: pointer;
             font-weight: 500;
             transition: all 0.2s;
+            color: var(--btn-text);
         }
+
         .btn:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .btn-danger { background-color: #dc3545; color: white; }
-        .btn-primary { background-color: #0d6efd; color: white; }
-        .btn-success { background-color: #198754; color: white; }
-        .btn-info { background-color: #0dcaf0; color: white; }
+
+        .btn-danger { background-color: var(--btn-danger); }
+        .btn-primary { background-color: var(--btn-primary); }
+        .btn-success { background-color: var(--btn-success); }
+        .btn-info { background-color: var(--btn-info); }
 
         .editor-preview {
             display: flex;
-            height: calc(100vh - 120px); 
+            height: calc(100vh - 120px);
             width: 100%;
             overflow: auto;
         }
+
         .editor-container {
             width: 50%;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #dee2e6;
+            border-right: 1px solid var(--border-color);
         }
+
         .editor-label {
             padding: 10px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
+            background: var(--control-bg);
+            border-bottom: 1px solid var(--border-color);
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            color: var(--text-color);
         }
+
         .import-controls {
             display: flex;
             gap: 5px;
             align-items: center;
         }
+
         .copy-btn {
             padding: 6px 10px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            background-color: #e0e0e0;
+            background-color: var(--control-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
             transition: all 0.2s;
             font-size: 0.8em;
         }
+
         .copy-btn:hover {
-            background-color: #d0d0d0;
+            background-color: var(--border-color);
             transform: translateY(-1px);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         }
+
         .editor {
             flex: 1;
             padding: 10px;
@@ -99,30 +148,80 @@ layout: default
             font-family: monospace;
             font-size: 14px;
             line-height: 1.5;
-            overflow-y: auto;
+            background-color: var(--editor-bg);
+            color: var(--text-color);
             min-height: 100px;
         }
 
-        /* Adaptação para temas light/dark */
-        body {
-            background-color: var(--bg-color);
+        .diff-output {
+            width: 100%;
+            overflow-y: auto;
+            display: flex;
+        }
+
+        .diff-column {
+            flex: 1;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            background: var(--editor-bg);
+        }
+
+        .diff-line {
+            padding: 2px 4px;
+            margin: 1px 0;
+            border-radius: 2px;
+            display: flex;
+        }
+
+        .diff-line.insert {
+            background-color: var(--insert-bg);
             color: var(--text-color);
         }
 
-        /* Para temas escuros */
-        .dark-mode body {
-            --bg-color: #2c2c2c;
-            --text-color: #e0e0e0;
+        .diff-line.delete {
+            background-color: var(--delete-bg);
+            color: var(--text-color);
         }
 
-        /* Para temas claros */
-        .light-mode body {
-            --bg-color: #ffffff;
-            --text-color: #24292f;
+        .char-delete {
+            background-color: var(--char-delete-bg);
+            color: var(--char-delete-text);
+            text-decoration: line-through;
         }
 
-        .diff-output {
-            display: block;
+        .char-insert {
+            background-color: var(--char-insert-bg);
+            color: var(--char-insert-text);
+        }
+
+        .diff-line-number {
+            color: var(--line-number-color);
+            margin-right: 8px;
+            user-select: none;
+            min-width: 3em;
+            text-align: right;
+            padding-right: 1em;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .diff-controls {
+            background: var(--control-bg);
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .file-input {
+            display: none;
         }
     </style>
 </head>
@@ -130,6 +229,7 @@ layout: default
     <div class="controls">
         <button class="btn btn-primary" onclick="compareDiff()">Compare</button>
         <button class="btn btn-success" onclick="exportDiff()">Export Diff</button>
+        <button class="btn btn-theme" onclick="toggleTheme()">Toggle Theme</button>
     </div>
 
     <div class="editor-preview">
@@ -137,9 +237,9 @@ layout: default
             <div class="editor-label">
                 Original Text
                 <div class="import-controls">
-                   <button class="btn btn-info" onclick="importFile('original')">Import</button>
-                   <button class="btn btn-danger" onclick="clear(originalEditor)">Clear</button>
-                   <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
+                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('originalEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
                 </div>
             </div>
             <textarea id="originalEditor" class="editor" placeholder="Paste original text here..."></textarea>
@@ -148,33 +248,58 @@ layout: default
             <div class="editor-label">
                 Modified Text
                 <div class="import-controls">
-                  <button class="btn btn-info" onclick="importFile('modified')">Import</button>
-                  <button class="btn btn-danger" onclick="clear(modifiedEditor)">Clear</button>
-                   <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
-               </div>
+                    <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('modifiedEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
+                </div>
             </div>
             <textarea id="modifiedEditor" class="editor" placeholder="Paste modified text here..."></textarea>
         </div>
     </div>
 
     <div id="diffOutput" class="diff-output hidden">
-        <div id="diff"></div>
+        <div id="leftDiff" class="diff-column">
+            <div class="editor-label">
+                Original Text
+                <div class="import-controls">
+                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('originalEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
+                </div>
+            </div>
+        </div>
+        <div id="rightDiff" class="diff-column">
+            <div class="editor-label">
+                Modified Text
+                <div class="import-controls">
+                    <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('modifiedEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <input type="file" id="fileInput" class="hidden">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/diff2html/3.0.0/diff2html.min.js"></script>
-
     <script>
+        let currentTheme = 'light';
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
         function copyToClipboard(elementId) {
             const textElement = document.getElementById(elementId);
             textElement.select();
             document.execCommand('copy');
         }
 
-        function clear(id) {
+        function clearEditor(id) {
             document.getElementById(id).value = '';
             document.getElementById('diffOutput').classList.add('hidden');
+            document.querySelector('.editor-preview').classList.remove('hidden');
         }
 
         function importFile(target) {
@@ -190,12 +315,191 @@ layout: default
             fileInput.click();
         }
 
+        function computeDiff(original, modified) {
+            const diffs = [];
+            const matrix = Array(original.length + 1).fill().map(() => 
+                Array(modified.length + 1).fill(0)
+            );
+            
+            // Fill the matrix
+            for (let i = 0; i <= original.length; i++) matrix[i][0] = i;
+            for (let j = 0; j <= modified.length; j++) matrix[0][j] = j;
+            
+            for (let i = 1; i <= original.length; i++) {
+                for (let j = 1; j <= modified.length; j++) {
+                    if (original[i - 1] === modified[j - 1]) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j] + 1, // deletion
+                            matrix[i][j - 1] + 1, // insertion
+                            matrix[i - 1][j - 1] + 1 // substitution
+                        );
+                    }
+                }
+            }
+            
+            // Backtrack to find the differences
+            let i = original.length;
+            let j = modified.length;
+            
+            while (i > 0 || j > 0) {
+                if (i > 0 && j > 0 && original[i - 1] === modified[j - 1]) {
+                    diffs.unshift({ type: 'equal', value: original[i - 1], index: i - 1 });
+                    i--;
+                    j--;
+                } else if (j > 0 && (i === 0 || matrix[i][j - 1] <= matrix[i - 1][j])) {
+                    diffs.unshift({ type: 'insert', value: modified[j - 1], index: j - 1 });
+                    j--;
+                } else if (i > 0 && (j === 0 || matrix[i][j - 1] > matrix[i - 1][j])) {
+                    diffs.unshift({ type: 'delete', value: original[i - 1], index: i - 1 });
+                    i--;
+                }
+            }
+            
+            return diffs;
+        }
+
+        function escapeHTML(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function highlightCharDiff(str1, str2) {
+            if (!str1 || !str2) return escapeHTML(str1 || '');
+            
+            let result = '';
+            const maxLength = Math.max(str1.length, str2.length);
+            
+            // Find longest common subsequence
+            const lcs = computeLCS(str1, str2);
+            let lcsIndex = 0;
+            let str1Index = 0;
+            
+            while (str1Index < str1.length) {
+                if (lcsIndex < lcs.length && str1[str1Index] === lcs[lcsIndex]) {
+                    result += escapeHTML(str1[str1Index]);
+                    lcsIndex++;
+                } else {
+                    result += `<span class="char-delete">${escapeHTML(str1[str1Index])}</span>`;
+                }
+                str1Index++;
+            }
+            
+            return result;
+        }
+
+        function computeLCS(str1, str2) {
+            const matrix = Array(str1.length + 1).fill().map(() => 
+                Array(str2.length + 1).fill(0)
+            );
+            
+            for (let i = 1; i <= str1.length; i++) {
+                for (let j = 1; j <= str2.length; j++) {
+                    if (str1[i - 1] === str2[j - 1]) {
+                        matrix[i][j] = matrix[i - 1][j - 1] + 1;
+                    } else {
+                        matrix[i][j] = Math.max(matrix[i - 1][j], matrix[i][j - 1]);
+                    }
+                }
+            }
+            
+            // Backtrack to find the LCS
+            let lcs = '';
+            let i = str1.length;
+            let j = str2.length;
+            
+            while (i > 0 && j > 0) {
+                if (str1[i - 1] === str2[j - 1]) {
+                    lcs = str1[i - 1] + lcs;
+                    i--;
+                    j--;
+                } else if (matrix[i - 1][j] > matrix[i][j - 1]) {
+                    i--;
+                } else {
+                    j--;
+                }
+            }
+            
+            return lcs;
+        }
+
+        function createDiffLine(text, compareText, lineNum, type = null) {
+            const line = document.createElement('div');
+            line.className = 'diff-line' + (type ? ' ' + type : '');
+            
+            const lineNumSpan = document.createElement('span');
+            lineNumSpan.className = 'diff-line-number';
+            lineNumSpan.textContent = lineNum !== null ? lineNum : '';
+            line.appendChild(lineNumSpan);
+            
+            const content = document.createElement('span');
+            if (type && compareText !== undefined) {
+                content.innerHTML = highlightCharDiff(text, compareText);
+            } else {
+                content.textContent = text;
+            }
+            line.appendChild(content);
+            
+            return line;
+        }
+
+        function compareDiff() {
+            const original = document.getElementById('originalEditor').value;
+            const modified = document.getElementById('modifiedEditor').value;
+            
+            document.querySelector('.editor-preview').classList.add('hidden');
+            const diffOutput = document.getElementById('diffOutput');
+            diffOutput.classList.remove('hidden');
+            
+            const leftDiff = document.getElementById('leftDiff');
+            const rightDiff = document.getElementById('rightDiff');
+            
+            const diffs = computeDiff(original.split('\n'), modified.split('\n'));
+            
+            // Clear previous content but keep the headers
+            const leftContent = leftDiff.querySelector('.editor-label').outerHTML;
+            const rightContent = rightDiff.querySelector('.editor-label').outerHTML;
+            leftDiff.innerHTML = leftContent;
+            rightDiff.innerHTML = rightContent;
+            
+            let leftLineNum = 1;
+            let rightLineNum = 1;
+            
+            diffs.forEach(diff => {
+                if (diff.type === 'equal') {
+                    leftDiff.appendChild(createDiffLine(diff.value, null, leftLineNum++));
+                    rightDiff.appendChild(createDiffLine(diff.value, null, rightLineNum++));
+                } else if (diff.type === 'delete') {
+                    const correspondingInsert = diffs.find(d => d.type === 'insert' && d.index === diff.index);
+                    leftDiff.appendChild(createDiffLine(diff.value, correspondingInsert?.value, leftLineNum++, 'delete'));
+                    rightDiff.appendChild(createDiffLine('', null, null));
+                } else if (diff.type === 'insert') {
+                    const correspondingDelete = diffs.find(d => d.type === 'delete' && d.index === diff.index);
+                    leftDiff.appendChild(createDiffLine('', null, null));
+                    rightDiff.appendChild(createDiffLine(diff.value, correspondingDelete?.value, rightLineNum++, 'insert'));
+                }
+            });
+        }
+
         function exportDiff() {
             const original = document.getElementById('originalEditor').value;
             const modified = document.getElementById('modifiedEditor').value;
-            const diff = generateDiffText(original, modified);
+            const diffs = computeDiff(original.split('\n'), modified.split('\n'));
             
-            const blob = new Blob([diff], { type: 'text/plain' });
+            let diffText = '';
+            diffs.forEach((diff, index) => {
+                if (diff.type === 'equal') {
+                    diffText += ' ' + diff.value + '\n';
+                } else if (diff.type === 'delete') {
+                    diffText += '-' + diff.value + '\n';
+                } else if (diff.type === 'insert') {
+                    diffText += '+' + diff.value + '\n';
+                }
+            });
+            
+            const blob = new Blob([diffText], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -204,25 +508,6 @@ layout: default
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-        }
-
-        function compareDiff() {
-            const original = document.getElementById('originalEditor').value;
-            const modified = document.getElementById('modifiedEditor').value;
-
-            document.getElementById('diffOutput').classList.remove('hidden');
-            const diffOutput = document.getElementById('diff');
-
-            const diff = Diff2Html.getPrettyHtml(Diff2Html.diff(original, modified), { inputFormat: 'diff', showFiles: true });
-            diffOutput.innerHTML = diff;
-        }
-
-        function generateDiffText(original, modified) {
-            const diffs = computeDiff(original.split('\n'), modified.split('\n'));
-            return diffs.map(diff => {
-                const prefix = diff.type === 'equal' ? ' ' : diff.type === 'delete' ? '-' : '+';
-                return prefix + ' ' + diff.value;
-            }).join('\n');
         }
     </script>
 </body>
