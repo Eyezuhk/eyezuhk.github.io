@@ -1,0 +1,541 @@
+---
+layout: default
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Differ</title>
+    <style>
+        :root {
+            --background-color: #ffffff;
+            --text-color: #24292f;
+            --border-color: #dee2e6;
+            --control-bg: #f8f9fa;
+            --btn-danger: #dc3545;
+            --btn-primary: #0d6efd;
+            --btn-success: #198754;
+            --btn-info: #0dcaf0;
+            --btn-text: white;
+            --insert-bg: #e6ffec;
+            --delete-bg: #ffebe9;
+            --line-number-color: #6e7781;
+            --editor-bg: #ffffff;
+            --char-delete-bg: #ffdce0;
+            --char-insert-bg: #ccffd8;
+            --char-delete-text: #b31d28;
+            --char-insert-text: #27792f;
+        }
+
+        [data-theme="dark"] {
+            --background-color: #0d1117;
+            --text-color: #c9d1d9;
+            --border-color: #30363d;
+            --control-bg: #161b22;
+            --btn-danger: #a12d3a;
+            --btn-primary: #1a5fb4;
+            --btn-success: #26a269;
+            --btn-info: #1c71d8;
+            --btn-text: #ffffff;
+            --insert-bg: #1a4721;
+            --delete-bg: #4a1c1c;
+            --line-number-color: #8b949e;
+            --editor-bg: #1e1e1e;
+            --char-delete-bg: #67060c;
+            --char-insert-bg: #1a4721;
+            --char-delete-text: #ffdce0;
+            --char-insert-text: #ccffd8;
+        }
+
+        /* Override Jekyll width limitation */
+        .wrapper, .container {
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            height: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .controls {
+            background: var(--control-bg);
+            padding: 2px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            position: relative;
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: var(--btn-text);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn-danger { background-color: var(--btn-danger); }
+        .btn-primary { background-color: var(--btn-primary); }
+        .btn-success { background-color: var(--btn-success); }
+        .btn-info { background-color: var(--btn-info); }
+
+        .editor-preview, .diff-output {
+            display: flex;
+            width: 100%;
+            height: calc(100vh - 120px);
+            overflow: hidden;
+        }
+
+        .editor-container, .diff-column {
+            width: 50% !important;
+            flex: 0 0 50% !important;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .editor-label {
+            padding: 2px;
+            background: var(--control-bg);
+            border-bottom: 1px solid var(--border-color);
+            font-weight: bold;
+            display: flex;
+            position: relative;
+            z-index: 100;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+         .editor-label .label-text {
+            flex-grow: 1;
+            text-align: center;
+         }
+
+        .import-controls {
+            display: flex;
+            gap: 12px;
+            padding: 0px 12px;
+            align-items: center;
+        }
+
+        .copy-btn {
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+			gap: 5px;
+            cursor: pointer;
+            background-color: var(--control-bg);
+            color: var(--text-color);
+            transition: all 0.2s;
+            font-size: 0.8em;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .editor {
+            flex: 1;
+            padding: 10px;
+            resize: none;
+            border: none;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            background-color: var(--editor-bg);
+            color: var(--text-color);
+            overflow-y: auto;
+        }
+
+        .diff-column {
+            overflow: auto;
+			display: flex;
+			flex-direction: column;
+        }
+		
+		.diff-content {
+			flex: 1;
+			overflow-y: auto;
+			scrollbar-gutter: stable;
+		}
+
+		.editor-label {
+			position: sticky;
+			top: 0;
+			background: var(--control-bg);
+			z-index: 10;
+		}
+
+        .diff-line {
+            padding: 2px 4px;
+            border-radius: 2px;
+            display: flex;
+            line-height: 1.5;
+        }
+
+        .diff-line.insert { background-color: var(--insert-bg); }
+        .diff-line.delete { background-color: var(--delete-bg); }
+
+        .char-delete {
+            background-color: var(--char-delete-bg);
+            color: var(--char-delete-text);
+            text-decoration: line-through;
+        }
+
+        .char-insert {
+            background-color: var(--char-insert-bg);
+            color: var(--char-insert-text);
+        }
+
+        .diff-line-number {
+            color: var(--line-number-color);
+            margin-right: 8px;
+            user-select: none;
+            min-width: 3em;
+            text-align: right;
+            padding-right: 1em;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .hidden { display: none; }
+        .file-input { display: none; }
+        
+        .diff-summary {
+            margin-top: 10px;
+            font-size: 0.9em;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px
+        }
+        
+        .diff-summary span {
+            display: inline-block;
+            padding: 8px 10px;
+            border-radius: 12px;
+            background-color: var(--control-bg);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="btn btn-success" onclick="compareDiff()">Compare</button>
+    </div>
+
+    <div class="editor-preview">
+        <div class="editor-container">
+            <div class="editor-label">
+                <span class="label-text">Original</span>
+                <div class="import-controls">
+                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('originalEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
+                </div>
+            </div>
+            <textarea id="originalEditor" class="editor" placeholder="Paste original text here..."></textarea>
+        </div>
+        <div class="editor-container">
+            <div class="editor-label">
+                 <span class="label-text">Modified</span>
+                <div class="import-controls">
+                    <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('modifiedEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
+                </div>
+            </div>
+            <textarea id="modifiedEditor" class="editor" placeholder="Paste modified text here..."></textarea>
+        </div>
+    </div>
+
+    <div id="diffOutput" class="diff-output hidden">
+        <div id="leftDiff" class="diff-column">
+            <div class="editor-label">
+                 <span class="label-text">Original</span>
+                <div class="import-controls">
+                    <button class="btn btn-info" onclick="importFile('original')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('originalEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('originalEditor')">Copy</button>
+                </div>
+            </div>
+			<div class="diff-content"></div>
+        </div>
+        <div id="rightDiff" class="diff-column">
+            <div class="editor-label">
+                 <span class="label-text">Modified</span>
+                <div class="import-controls">
+                    <button class="btn btn-info" onclick="importFile('modified')">Import</button>
+                    <button class="btn btn-danger" onclick="clearEditor('modifiedEditor')">Clear</button>
+                    <button class="copy-btn" onclick="copyToClipboard('modifiedEditor')">Copy</button>
+                </div>
+            </div>
+			<div class="diff-content"></div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" class="hidden">
+
+    <script>
+		{% raw %}
+        let currentTheme = 'light';
+
+
+        function copyToClipboard(elementId) {
+            const editorElement = document.getElementById(elementId);
+            let textToCopy = '';
+    
+            if (editorElement && !editorElement.classList.contains('hidden')) {
+            // Copia diretamente do editor se visível
+            textToCopy = editorElement.value;
+         } else {
+            // Copia o conteúdo visível na tela de comparação
+            const diffContent = document.querySelector(`#${elementId.replace('Editor', 'Diff')} .diff-content`);
+            if (diffContent) {
+                textToCopy = Array.from(diffContent.querySelectorAll('.diff-line'))
+                .map(line => {
+                    // Remove o número da linha e espaços extras
+                    const lineText = line.textContent
+                        .replace(/^\s*\d*\s*/, '') 
+                        // Remove números da linha no início
+                        .trim();
+                    return lineText;
+                    })
+
+                    .filter(line => line !== '') // Remove linhas vazias
+                    .join('\n');
+             }
+         }
+    
+         if (textToCopy) {
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    // Feedback visual mais sutil
+                    const button = document.querySelector(`button[onclick="copyToClipboard('${elementId}')"]`);
+                    if (button) {
+                        const originalText = button.textContent;
+                        button.textContent = 'Copied!';
+                        setTimeout(() => {
+                        button.textContent = originalText;
+                        }, 2000);
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert('Failed to copy text to clipboard');
+                  });
+            }
+        }
+
+        function clearEditor(id) {
+            document.getElementById(id).value = '';
+            document.getElementById('diffOutput').classList.add('hidden');
+            document.querySelector('.editor-preview').classList.remove('hidden');
+        }
+
+        function importFile(target) {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById(target + 'Editor').value = event.target.result;
+                };
+                reader.readAsText(file);
+            };
+            fileInput.click();
+        }
+
+        function computeDiff(original, modified) {
+            const diffs = [];
+            const matrix = Array(original.length + 1).fill().map(() => 
+                Array(modified.length + 1).fill(0)
+            );
+            
+            for (let i = 0; i <= original.length; i++) matrix[i][0] = i;
+            for (let j = 0; j <= modified.length; j++) matrix[0][j] = j;
+            
+            for (let i = 1; i <= original.length; i++) {
+                for (let j = 1; j <= modified.length; j++) {
+                    if (original[i - 1] === modified[j - 1]) {
+                        matrix[i][j] = matrix[i - 1][j - 1];
+                    } else {
+                        matrix[i][j] = Math.min(
+                            matrix[i - 1][j] + 1,
+                            matrix[i][j - 1] + 1,
+                            matrix[i - 1][j - 1] + 1
+                        );
+                    }
+                }
+            }
+            
+            let i = original.length;
+            let j = modified.length;
+            
+            while (i > 0 || j > 0) {
+                if (i > 0 && j > 0 && original[i - 1] === modified[j - 1]) {
+                    diffs.unshift({ type: 'equal', value: original[i - 1], index: i - 1 });
+                    i--;
+                    j--;
+                } else if (j > 0 && (i === 0 || matrix[i][j - 1] <= matrix[i - 1][j])) {
+                    diffs.unshift({ type: 'insert', value: modified[j - 1], index: j - 1 });
+                    j--;
+                } else if (i > 0 && (j === 0 || matrix[i][j - 1] > matrix[i - 1][j])) {
+                    diffs.unshift({ type: 'delete', value: original[i - 1], index: i - 1 });
+                    i--;
+                }
+            }
+            
+            return diffs;
+        }
+
+        function escapeHTML(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function highlightCharDiff(str1, str2) {
+            if (!str1 || !str2) return escapeHTML(str1 || '');
+            
+            let result = '';
+            const lcs = computeLCS(str1, str2);
+            let lcsIndex = 0;
+            let str1Index = 0;
+            
+            while (str1Index < str1.length) {
+                if (lcsIndex < lcs.length && str1[str1Index] === lcs[lcsIndex]) {
+                    result += escapeHTML(str1[str1Index]);
+                    lcsIndex++;
+                } else {
+                    result += `<span class="char-delete">${escapeHTML(str1[str1Index])}</span>`;
+                }
+                str1Index++;
+            }
+            
+            return result;
+        }
+
+        function computeLCS(str1, str2) {
+            const matrix = Array(str1.length + 1).fill().map(() => 
+                Array(str2.length + 1).fill(0)
+            );
+            
+            for (let i = 1; i <= str1.length; i++) {
+                for (let j = 1; j <= str2.length; j++) {
+                    if (str1[i - 1] === str2[j - 1]) {
+                        matrix[i][j] = matrix[i - 1][j - 1] + 1;
+                    } else {
+                        matrix[i][j] = Math.max(matrix[i - 1][j], matrix[i][j - 1]);
+                    }
+                }
+            }
+            
+            let lcs = '';
+            let i = str1.length;
+            let j = str2.length;
+            
+            while (i > 0 && j > 0) {
+                if (str1[i - 1] === str2[j - 1]) {
+                    lcs = str1[i - 1] + lcs;
+                    i--;
+                    j--;
+                } else if (matrix[i][j - 1] > matrix[i - 1][j]) {
+                    j--;
+                } else {
+                    i--;
+                }
+            }
+            
+            return lcs;
+        }
+
+        function createDiffLine(text, compareText, lineNum, type = null) {
+            const line = document.createElement('div');
+            line.className = 'diff-line' + (type ? ' ' + type : '');
+            
+            const lineNumSpan = document.createElement('span');
+            lineNumSpan.className = 'diff-line-number';
+            lineNumSpan.textContent = lineNum !== null ? lineNum : '';
+            line.appendChild(lineNumSpan);
+            
+            const content = document.createElement('span');
+            if (type && compareText !== undefined) {
+                content.innerHTML = highlightCharDiff(text, compareText);
+            } else {
+                content.textContent = text;
+            }
+            line.appendChild(content);
+            
+            return line;
+        }
+
+        function compareDiff() {
+            const original = document.getElementById('originalEditor').value;
+            const modified = document.getElementById('modifiedEditor').value;
+            
+            document.querySelector('.editor-preview').classList.add('hidden');
+            const diffOutput = document.getElementById('diffOutput');
+            diffOutput.classList.remove('hidden');
+            
+            const leftDiff = document.getElementById('leftDiff');
+            const rightDiff = document.getElementById('rightDiff');
+            
+            const diffs = computeDiff(original.split('\n'), modified.split('\n'));
+            
+            const leftContent = leftDiff.querySelector('.editor-label').outerHTML;
+            const rightContent = rightDiff.querySelector('.editor-label').outerHTML;
+            leftDiff.innerHTML = leftContent;
+            rightDiff.innerHTML = rightContent;
+            
+            let leftLineNum = 1;
+            let rightLineNum = 1;
+            
+            diffs.forEach(diff => {
+                if (diff.type === 'equal') {
+                    leftDiff.appendChild(createDiffLine(diff.value, null, leftLineNum++));
+                    rightDiff.appendChild(createDiffLine(diff.value, null, rightLineNum++));
+                } else if (diff.type === 'delete') {
+                    const correspondingInsert = diffs.find(d => d.type === 'insert' && d.index === diff.index);
+                    leftDiff.appendChild(createDiffLine(diff.value, correspondingInsert && correspondingInsert.value, leftLineNum++, 'delete'));
+                    rightDiff.appendChild(createDiffLine('', null, null));
+                } else if (diff.type === 'insert') {
+                    const correspondingDelete = diffs.find(d => d.type === 'delete' && d.index === diff.index);
+                    leftDiff.appendChild(createDiffLine('', null, null));
+                    rightDiff.appendChild(createDiffLine(diff.value, correspondingDelete && correspondingDelete.value, rightLineNum++, 'insert'));
+                }
+            });
+        }
+
+        // Sync scroll between diff columns
+        document.querySelectorAll('.diff-column').forEach(column => {
+            column.addEventListener('scroll', (e) => {
+                const otherColumn = e.target.id === 'leftDiff' 
+                    ? document.getElementById('rightDiff')
+                    : document.getElementById('leftDiff');
+                otherColumn.scrollTop = e.target.scrollTop;
+            });
+        });
+	{% endraw %}
+    </script>
+</body>
+</html>

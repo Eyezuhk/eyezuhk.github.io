@@ -1,0 +1,12 @@
+github_users:
+  - eyezuhk
+
+repo_description_lines_max: 3
+
+github_repos:
+  - eyezuhk/FNLocalCloud
+  - eyezuhk/FnStegoCrypt
+  - eyezuhk/Differ
+  - eyezuhk/HTMLive
+  - eyezuhk/Tools
+  - eyezuhk/InfoSec-Misc
