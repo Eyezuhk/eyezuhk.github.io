@@ -1,0 +1,681 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://eyezuhk.github.io/feed.xml" rel="self" type="application/atom+xml"/><link href="https://eyezuhk.github.io/" rel="alternate" type="text/html" hreflang="en"/><updated>2024-12-31T17:37:38+00:00</updated><id>https://eyezuhk.github.io/feed.xml</id><title type="html">blank</title><subtitle>A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.. </subtitle><entry><title type="html">Detection CVE-2024-35250</title><link href="https://eyezuhk.github.io/blog/2024/CVE-2024-35250/" rel="alternate" type="text/html" title="Detection CVE-2024-35250"/><published>2024-12-19T12:00:00+00:00</published><updated>2024-12-19T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/CVE-2024-35250</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/CVE-2024-35250/"><![CDATA[<p>The U.S. Cybersecurity and Infrastructure Security Agency (CISA) added a security flaw to its Known Exploited Vulnerabilities (KEV) catalog on December 16th, citing evidence of active exploitation in the wild.</p> <p>I’ve verified that a Proof of Concept (PoC) is already available, and due to the high-risk nature of this vulnerability, I decided to share this detection.</p> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+</pre></td><td class="rouge-code"><pre><span class="na">title</span><span class="pi">:</span> <span class="s">Privilege Escalation via CVE-2024-35250</span>
+<span class="na">id</span><span class="pi">:</span> <span class="s">17ce9373e-2163-4a2c-90ba-f91e9ef7a8c1</span>
+<span class="na">status</span><span class="pi">:</span> <span class="s">experimental</span>
+<span class="na">description</span><span class="pi">:</span> <span class="s">Detects when cmd.exe with system privileges is executed after a process loads 'ksproxy.ax' and 'ksuser.dll', indicating potential exploitation of CVE-2024-35250.</span>
+<span class="na">references</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">https://thehackernews.com/2024/12/cisa-and-fbi-raise-alerts-on-exploited.html</span>
+    <span class="pi">-</span> <span class="s">https://github.com/varwara/CVE-2024-35250</span>
+    <span class="pi">-</span> <span class="s">https://devco.re/blog/2024/08/23/streaming-vulnerabilities-from-windows-kernel-proxying-to-kernel-part1-en/</span>
+    <span class="pi">-</span> <span class="s">https://www.cisa.gov/known-exploited-vulnerabilities-catalog</span>
+<span class="na">author</span><span class="pi">:</span> <span class="s1">'</span><span class="s">@eyezuhk</span><span class="nv"> </span><span class="s">Isaac</span><span class="nv"> </span><span class="s">Fernandes</span><span class="nv"> </span><span class="s">'</span>
+<span class="na">date</span><span class="pi">:</span> <span class="s">2024-12-19</span>
+<span class="na">tags</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">attack.t1068</span>
+    <span class="pi">-</span> <span class="s">attack.exploitation_for_privilege_escalation</span>
+    <span class="pi">-</span> <span class="s">cve.2024.35250</span>
+<span class="na">logsource</span><span class="pi">:</span>
+    <span class="na">product</span><span class="pi">:</span> <span class="s">windows</span>
+    <span class="na">service</span><span class="pi">:</span> <span class="s">sysmon</span>
+    <span class="na">category</span><span class="pi">:</span> <span class="s">process</span>
+    <span class="na">definition</span><span class="pi">:</span> <span class="s1">'</span><span class="s">Sysmon</span><span class="nv"> </span><span class="s">event</span><span class="nv"> </span><span class="s">logs</span><span class="nv"> </span><span class="s">capturing</span><span class="nv"> </span><span class="s">process</span><span class="nv"> </span><span class="s">image</span><span class="nv"> </span><span class="s">loads</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">registry</span><span class="nv"> </span><span class="s">modifications'</span>
+    <span class="na">eventid</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="m">7</span> <span class="c1"># Image Loaded</span>
+      <span class="pi">-</span> <span class="m">13</span> <span class="c1"># Registry event</span>
+<span class="na">detection</span><span class="pi">:</span>
+    <span class="na">selection_imgload</span><span class="pi">:</span>
+        <span class="na">EventID</span><span class="pi">:</span> <span class="m">7</span>
+        <span class="na">ImageLoaded|endswith</span><span class="pi">:</span>
+          <span class="pi">-</span> <span class="s2">"</span><span class="s">ksproxy.ax"</span>
+          <span class="pi">-</span> <span class="s2">"</span><span class="s">ksuser.dll"</span>
+        <span class="na">User</span><span class="pi">:</span> <span class="s">not "NT AUTHORITY\\SYSTEM"</span>
+    <span class="na">selection_registry</span><span class="pi">:</span>
+        <span class="na">EventID</span><span class="pi">:</span> <span class="m">13</span>
+        <span class="na">TargetObject|contains</span><span class="pi">:</span> <span class="s2">"</span><span class="s">HKLM</span><span class="se">\\</span><span class="s">System</span><span class="se">\\</span><span class="s">CurrentControlSet</span><span class="se">\\</span><span class="s">Services</span><span class="se">\\</span><span class="s">bam</span><span class="se">\\</span><span class="s">State</span><span class="se">\\</span><span class="s">UserSettings</span><span class="se">\\</span><span class="s">S-1-5-18</span><span class="se">\\</span><span class="s">Device</span><span class="se">\\</span><span class="s">HarddiskVolume*</span><span class="se">\\</span><span class="s">Windows</span><span class="se">\\</span><span class="s">System32</span><span class="se">\\</span><span class="s">cmd.exe"</span>
+        <span class="na">User</span><span class="pi">:</span> <span class="s2">"</span><span class="s">NT</span><span class="nv"> </span><span class="s">AUTHORITY</span><span class="se">\\</span><span class="s">SYSTEM"</span>
+    <span class="na">condition</span><span class="pi">:</span> <span class="s">selection_imgload and selection_registry</span>
+<span class="na">falsepositives</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">Legitimate system processes that load ksproxy.ax and ksuser.dll may trigger this rule.</span>
+<span class="na">level</span><span class="pi">:</span> <span class="s">high</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <div class="row mt-3"> <div class="col-sm mt-3 mt-md-0"> <figure> <video src="/assets/videos/CVE-2024-35250/CVE-2024-35250.mp4" class="img-fluid rounded z-depth-1" width="auto" height="auto" autoplay="" controls=""/> </figure> </div> </div> <div class="caption"> Exploration demo video. </div> <h3 id="example-log-event">Example Log Event</h3> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+</pre></td><td class="rouge-code"><pre><span class="s">Event </span><span class="m">7</span>
+
+<span class="na">Image loaded</span><span class="pi">:</span>
+<span class="na">RuleName</span><span class="pi">:</span> <span class="s">-</span>
+<span class="na">UtcTime</span><span class="pi">:</span> <span class="s">2024-12-19 23:56:09.689</span>
+<span class="na">ProcessGuid</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">cc3062fa-b299-6764-cd01-000000000500</span><span class="pi">}</span>
+<span class="na">ProcessId</span><span class="pi">:</span> <span class="m">4220</span>
+<span class="na">Image</span><span class="pi">:</span> <span class="s">C:\Users\eyezuhk\Desktop\CVE-2024-35250.exe</span>
+<span class="na">ImageLoaded</span><span class="pi">:</span> <span class="s">C:\Windows\System32\ksproxy.ax</span>
+<span class="na">FileVersion</span><span class="pi">:</span> <span class="s">10.0.22621.1 (WinBuild.160101.0800)</span>
+<span class="na">Description</span><span class="pi">:</span> <span class="s">WDM Streaming ActiveMovie Proxy</span>
+<span class="na">Product</span><span class="pi">:</span> <span class="s">Microsoft® Windows® Operating System</span>
+<span class="na">Company</span><span class="pi">:</span> <span class="s">Microsoft Corporation</span>
+<span class="na">OriginalFileName</span><span class="pi">:</span> <span class="s">ksproxy.ax</span>
+<span class="na">Hashes</span><span class="pi">:</span> <span class="s">SHA1=46B1CC076C1AE967416E9EA18E5B95A48493B029,MD5=EC540CDBEBC7584F562944CD28C115FB,SHA256=598A3C648DE2B983CFDB2AC599B1254D77FEC868282083E03D65FDCF24847719,IMPHASH=BC80C0BAA52122435D413CD1EAC2C285</span>
+<span class="na">Signed</span><span class="pi">:</span> <span class="kc">true</span>
+<span class="na">Signature</span><span class="pi">:</span> <span class="s">Microsoft Windows</span>
+<span class="na">SignatureStatus</span><span class="pi">:</span> <span class="s">Valid</span>
+<span class="na">User</span><span class="pi">:</span> <span class="s">ISAACFN\eyezuhk</span>
+
+<span class="na">Image loaded</span><span class="pi">:</span>
+<span class="na">RuleName</span><span class="pi">:</span> <span class="s">-</span>
+<span class="na">UtcTime</span><span class="pi">:</span> <span class="s">2024-12-19 23:56:09.718</span>
+<span class="na">ProcessGuid</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">cc3062fa-b299-6764-cd01-000000000500</span><span class="pi">}</span>
+<span class="na">ProcessId</span><span class="pi">:</span> <span class="m">4220</span>
+<span class="na">Image</span><span class="pi">:</span> <span class="s">C:\Users\eyezuhk\Desktop\CVE-2024-35250.exe</span>
+<span class="na">ImageLoaded</span><span class="pi">:</span> <span class="s">C:\Windows\System32\ksuser.dll</span>
+<span class="na">FileVersion</span><span class="pi">:</span> <span class="s">10.0.22621.1 (WinBuild.160101.0800)</span>
+<span class="na">Description</span><span class="pi">:</span> <span class="s">User CSA Library</span>
+<span class="na">Product</span><span class="pi">:</span> <span class="s">Microsoft® Windows® Operating System</span>
+<span class="na">Company</span><span class="pi">:</span> <span class="s">Microsoft Corporation</span>
+<span class="na">OriginalFileName</span><span class="pi">:</span> <span class="s">ksuser.dll</span>
+<span class="na">Hashes</span><span class="pi">:</span> <span class="s">SHA1=EF8A8E9BB22E736095904876A8F1BB776BB72063,MD5=46B06DAB488A1E7339898EC4A9AC66C8,SHA256=3F28C73A70527247E64479197C93EF6732EEF6021860037163C7C479AD3CF2FB,IMPHASH=B1B9119A4C6D367DD41A0820244C09EB</span>
+<span class="na">Signed</span><span class="pi">:</span> <span class="kc">true</span>
+<span class="na">Signature</span><span class="pi">:</span> <span class="s">Microsoft Windows</span>
+<span class="na">SignatureStatus</span><span class="pi">:</span> <span class="s">Valid</span>
+<span class="na">User</span><span class="pi">:</span> <span class="s">ISAACFN\eyezuhk</span>
+
+<span class="s">Event </span><span class="m">13</span>
+
+<span class="na">Registry value set</span><span class="pi">:</span>
+<span class="na">RuleName</span><span class="pi">:</span> <span class="s">-</span>
+<span class="na">EventType</span><span class="pi">:</span> <span class="s">SetValue</span>
+<span class="na">UtcTime</span><span class="pi">:</span> <span class="s">2024-12-19 23:56:09.808</span>
+<span class="na">ProcessGuid</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">cc3062fa-b299-6764-cd01-000000000500</span><span class="pi">}</span>
+<span class="na">ProcessId</span><span class="pi">:</span> <span class="m">4220</span>
+<span class="na">Image</span><span class="pi">:</span> <span class="s">C:\Users\eyezuhk\Desktop\CVE-2024-35250.exe</span>
+<span class="na">TargetObject</span><span class="pi">:</span> <span class="s">HKLM\System\CurrentControlSet\Services\bam\State\UserSettings\S-1-5-18\Device\HarddiskVolume4\Windows\System32\cmd.exe</span>
+<span class="na">Details</span><span class="pi">:</span> <span class="s">Binary Data</span>
+<span class="na">User</span><span class="pi">:</span> <span class="s">NT AUTHORITY\SYSTEM</span>
+</pre></td></tr></tbody></table></code></pre></div></div>]]></content><author><name></name></author><category term="Detection-Engineering"/><category term="SIEM"/><category term="SIGMA"/><summary type="html"><![CDATA[Detects when cmd.exe with system privileges is executed after a process loads 'ksproxy.ax' and 'ksuser.dll', indicating potential exploitation of CVE-2024-35250.]]></summary></entry><entry><title type="html">APTs or UAPs?</title><link href="https://eyezuhk.github.io/blog/2024/APT-UAP/" rel="alternate" type="text/html" title="APTs or UAPs?"/><published>2024-12-12T12:00:00+00:00</published><updated>2024-12-12T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/APT-UAP</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/APT-UAP/"><![CDATA[<blockquote> <p>First of all, I want to make it clear that I consider myself a skeptic. I’m not saying that hackers are aliens (laughs). In fact, although I believe that intelligent life may exist outside of Earth, I also believe that we are isolated due to the vast interstellar distances.</p> </blockquote> <p>Since I was a child, I have always been curious about the topic, and with UAPs (Unidentified Aerial Phenomena) being discussed in the U.S. Senate and the New Jersey drones making headlines in the media, I realized that many anomalous phenomena — whether in the sky or in your environment — are the result of a lack of knowledge or a lack of data about the event. People end up ignoring the principle of Occam’s Razor and believe they are being hacked or even seeing aliens (laughs).</p> <p>I’ve worked in SOCs (Security Operations Centers) for several years, moving from N1 to detection engineering for SIEMs (Security Information and Event Management systems), and I’ve grown tired of seeing cases where tools that are supposed to detect anomalies end up identifying normal events as potential threats. In fact, this is the most common scenario when you enable everything that comes by default in the tools (perhaps even helping to get to know the environment and discover shadow IT…), which leads to a SIEM full of alerts, overwhelming SOC teams with false positives, resulting in the infamous alert fatigue and memes like:</p> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/APT-UAP/false-positive-generator-480.webp 480w,/assets/img/APT-UAP/false-positive-generator-800.webp 800w,/assets/img/APT-UAP/false-positive-generator-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/APT-UAP/false-positive-generator.png" class="img-fluid rounded z-depth-1" width="70%" height="70%" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>But this also creates a second scenario, where, due to the lack of knowledge of those at N1, many security events are wrongly evaluated as incidents and escalated, simply because they do not understand the information they are analyzing. So, in reality, that supposed midnight incident that triggered a war room is just a false positive. And that UAP is just a balloon.</p> <p>Another point is that often it is difficult to have good data about the event. Even with today’s technology, UAP footage remains poor, and SIEMs, working with logs (poorly parsed, to make matters worse), are unable to provide the certainty needed to confirm that a phenomenon is not an extraterrestrial visit or an APT (Advanced Persistent Threat).</p>]]></content><author><name></name></author><category term="CyberSecurity"/><category term="SIEM"/><summary type="html"><![CDATA[How Anomalous Phenomena Are Similar to Cyber Threats.]]></summary></entry><entry><title type="html">Step-by-step Apache Guacamole Installation.</title><link href="https://eyezuhk.github.io/blog/2024/Guacamole/" rel="alternate" type="text/html" title="Step-by-step Apache Guacamole Installation."/><published>2024-11-14T12:00:00+00:00</published><updated>2024-11-14T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/Guacamole</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/Guacamole/"><![CDATA[<blockquote> <p>Recently, I decided to test Apache Guacamole and document the installation process.</p> </blockquote> <p>Guacamole is an open-source software that enables remote access to desktops and servers via a web browser.</p> <p>The easiest option I found was using Docker. Here’s the link to the <a href="https://guacamole.apache.org/doc/gug/guacamole-docker.html">official documentation.</a></p> <p>The steps below were performed on a Debian system.</p> <h2 id="install-docker">Install Docker</h2> <p><a href="https://docs.docker.com/engine/install/debian/">Docker documentation</a></p> <p>Adding the Docker repository:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="c"># Add Docker's official GPG key:</span>
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>ca-certificates curl
+<span class="nb">sudo install</span> <span class="nt">-m</span> 0755 <span class="nt">-d</span> /etc/apt/keyrings
+<span class="nb">sudo </span>curl <span class="nt">-fsSL</span> https://download.docker.com/linux/debian/gpg <span class="nt">-o</span> /etc/apt/keyrings/docker.asc
+<span class="nb">sudo chmod </span>a+r /etc/apt/keyrings/docker.asc
+
+<span class="c"># Add the repository to Apt sources:</span>
+<span class="nb">echo</span> <span class="se">\</span>
+  <span class="s2">"deb [arch=</span><span class="si">$(</span>dpkg <span class="nt">--print-architecture</span><span class="si">)</span><span class="s2"> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian </span><span class="se">\</span><span class="s2">
+  </span><span class="si">$(</span><span class="nb">.</span> /etc/os-release <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$VERSION_CODENAME</span><span class="s2">"</span><span class="si">)</span><span class="s2"> stable"</span> | <span class="se">\</span>
+  <span class="nb">sudo tee</span> /etc/apt/sources.list.d/docker.list <span class="o">&gt;</span> /dev/null
+<span class="nb">sudo </span>apt-get update
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Installing Docker packages:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>apt-get <span class="nb">install </span>docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Verify the installation by running:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre> docker <span class="nt">-v</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Add the current user to the Docker group to avoid using sudo with commands:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>usermod <span class="nt">-aG</span> docker <span class="nv">$USER</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p>For this installation, I’m using the latest images, but for production use, it is recommended to use a specific version tag to avoid compatibility issues during upgrades or migrations.</p> <p>Check out the available images on <a href="https://hub.docker.com/u/guacamole">DockerHub Guacamole</a></p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>docker pull guacamole/guacd
+docker pull guacamole/guacamole
+docker pull mariadb
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Verify the downloaded images with the docker:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre> docker images
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/docker_images.png" alt="Docker Images"/></p> <p>Now, let’s initialize the database with the command:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>docker run <span class="nt">--rm</span> guacamole/guacamole:latest /opt/guacamole/bin/initdb.sh <span class="nt">--mysql</span> <span class="o">&gt;</span> initdb.sql
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/initdb_sql.png" alt="InitDbSql"/></p> <p>Create an <code class="language-plaintext highlighter-rouge">.env</code> file to store the access credentials:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>nano .env
+</pre></td></tr></tbody></table></code></pre></div></div> <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nx">MYSQL_ROOT_PASSWORD</span><span class="o">=</span><span class="nx">SuperSecretP</span><span class="p">@</span><span class="nd">sswr0rd</span><span class="o">!</span><span class="p">@</span><span class="err">#</span><span class="nx">$</span><span class="o">%^&amp;*</span>
+<span class="nx">MYSQL_DATABASE</span><span class="o">=</span><span class="nx">guacamole_db</span>
+<span class="nx">MYSQL_USER</span><span class="o">=</span><span class="nx">guacamole_user</span>
+<span class="nx">MYSQL_PASSWORD</span><span class="o">=</span><span class="nx">SecretP</span><span class="p">@</span><span class="nd">sswr0rd</span><span class="o">!</span><span class="p">@</span><span class="err">#</span><span class="nx">$</span><span class="o">%^&amp;*</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/env.png" alt="Env"/></p> <p>Create the <code class="language-plaintext highlighter-rouge">docker-compose.yml</code> file:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>nano docker-compose.yml
+</pre></td></tr></tbody></table></code></pre></div></div> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">guacdb</span><span class="pi">:</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">guacamoledb</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">mariadb:latest</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">MYSQL_ROOT_PASSWORD</span><span class="pi">:</span> <span class="s">${MYSQL_ROOT_PASSWORD}</span>
+      <span class="na">MYSQL_DATABASE</span><span class="pi">:</span> <span class="s">${MYSQL_DATABASE}</span>
+      <span class="na">MYSQL_USER</span><span class="pi">:</span> <span class="s">${MYSQL_USER}</span>
+      <span class="na">MYSQL_PASSWORD</span><span class="pi">:</span> <span class="s">${MYSQL_PASSWORD}</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">./db-data:/var/lib/mysql"</span>
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">db-data</span><span class="pi">:</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/docker_compose.png" alt="docker_compose"/></p> <p>Start the database with:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>docker compose up <span class="nt">-d</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p>For systems with docker-compose installed instead of the plugin, use <code class="language-plaintext highlighter-rouge">docker-compose up -d</code>.</p> <p><img src="/assets/img/guacamole/mariadb_up.png" alt="mariadb_up"/></p> <p>Next, copy the <code class="language-plaintext highlighter-rouge">initdb.sql</code> file into the container:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>docker <span class="nb">cp </span>initdb.sql guacamoledb:/initdb.sql
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Within the container, install MySQL client and initialize the database:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>docker <span class="nb">exec</span> <span class="nt">-it</span> guacamoledb bash
+</pre></td></tr></tbody></table></code></pre></div></div> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>apt-get update <span class="o">&amp;&amp;</span> apt-get <span class="nb">install</span> <span class="nt">-y</span> default-mysql-client
+<span class="nb">cat</span> /initdb.sql | mysql <span class="nt">-u</span> root <span class="nt">-p</span> guacamole_db
+<span class="nb">exit</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/db_init.png" alt="dbinit"/></p> <p>Shut down the database container:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>docker compose down
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/db_down.png" alt="db_down"/></p> <p>As a best practice, back up the database initialization file:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">mv </span>docker-compose.yml docker-compose.yml.bak
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="/assets/img/guacamole/docker-compose-backup.png" alt="docker-compose-backup"/></p> <p>Create a new docker-compose.yml with all necessary configurations:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>nano docker-compose.yml
+</pre></td></tr></tbody></table></code></pre></div></div> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre></td><td class="rouge-code"><pre><span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">3"</span>
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">guacdb</span><span class="pi">:</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">guacamoledb</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">mariadb:latest</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+    <span class="na">user</span><span class="pi">:</span> <span class="s">mysql</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">MYSQL_ROOT_PASSWORD</span><span class="pi">:</span> <span class="s">${MYSQL_ROOT_PASSWORD}</span>
+      <span class="na">MYSQL_DATABASE</span><span class="pi">:</span> <span class="s">${MYSQL_DATABASE}</span>
+      <span class="na">MYSQL_USER</span><span class="pi">:</span> <span class="s">${MYSQL_USER}</span>
+      <span class="na">MYSQL_PASSWORD</span><span class="pi">:</span> <span class="s">${MYSQL_PASSWORD}</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">./db-data:/var/lib/mysql"</span>
+  <span class="na">guacd</span><span class="pi">:</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">guacd</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">guacamole/guacd:latest</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+  <span class="na">guacamole</span><span class="pi">:</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">guacamole</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">guacamole/guacamole:latest</span>
+    <span class="na">restart</span><span class="pi">:</span> <span class="s">unless-stopped</span>
+    <span class="na">ports</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">8080:8080</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">GUACD_HOSTNAME</span><span class="pi">:</span> <span class="s2">"</span><span class="s">guacd"</span>
+      <span class="na">MYSQL_HOSTNAME</span><span class="pi">:</span> <span class="s2">"</span><span class="s">guacdb"</span>
+      <span class="na">MYSQL_DATABASE</span><span class="pi">:</span> <span class="s">${MYSQL_DATABASE}</span>
+      <span class="na">MYSQL_USER</span><span class="pi">:</span> <span class="s">${MYSQL_USER}</span>
+      <span class="na">MYSQL_PASSWORD</span><span class="pi">:</span> <span class="s">${MYSQL_PASSWORD}</span>
+      <span class="na">TOTP_ENABLED</span><span class="pi">:</span> <span class="s2">"</span><span class="s">true"</span>
+    <span class="na">depends_on</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">guacdb</span>
+      <span class="pi">-</span> <span class="s">guacd</span>
+<span class="na">volumes</span><span class="pi">:</span>
+  <span class="na">db-data</span><span class="pi">:</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Start the Guacamole service:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>docker compose up <span class="nt">-d</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p><img src="guacamoelup.png" alt="guacamoelup"/></p> <h2 id="accessing-guacamole">Accessing Guacamole</h2> <p>Devemos acessar usando http://localhost:8080/guacamole</p> <blockquote class="block-tip"> <h5 id="tip">Tip</h5> <p>Guacamole is not directly accessible from the root. Add /guacamole to the address.</p> </blockquote> <p><img src="/assets/img/guacamole/login_guacamole.png" alt="login_guacamole"/></p> <blockquote class="block-danger"> <h5 id="danger">Danger</h5> <p>The default credentials are guacadmin/guacadmin</p> </blockquote> <blockquote class="block-warning"> <h5 id="warning">Warning</h5> <p>In our docker-compose, we enabled TOTP. This requires an app like Authy, 2FAS, or Google Authenticator for login. To disable this, remove the line <code class="language-plaintext highlighter-rouge">TOTP_ENABLED: "true"</code>.</p> </blockquote> <p><img src="/assets/img/guacamole/totp.png" alt="totp"/></p> <p>Allow inbound traffic on port 8080:</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>iptables <span class="nt">-A</span> INPUT <span class="nt">-p</span> tcp <span class="nt">--dport</span> 8080 <span class="nt">-j</span> ACCEPT
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>iptables-persistent
+<span class="nb">sudo </span>netfilter-persistent save
+<span class="nb">sudo </span>iptables <span class="nt">-L</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Reference:</p> <ul> <li><a href="https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step">https://krdesigns.com/articles/how-to-install-guacamole-using-docker-step-by-step</a></li> </ul>]]></content><author><name></name></author><category term="How-To"/><category term="Guacamole"/><summary type="html"><![CDATA[Guacamole Instalation]]></summary></entry><entry><title type="html">Script for enabling Windows Audit and Sysmon.</title><link href="https://eyezuhk.github.io/blog/2024/Audit-Sysmon/" rel="alternate" type="text/html" title="Script for enabling Windows Audit and Sysmon."/><published>2024-11-11T12:00:00+00:00</published><updated>2024-11-11T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/Audit-Sysmon</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/Audit-Sysmon/"><![CDATA[<p>Recently, I needed to reconfigure a machine for my personal lab, and while running the script that automates the setup of some Sysmon audits and configurations, I remembered that, especially for those starting in the field, this process is often done manually. While this is great for learning, it can definitely be automated.</p> <p>So, I decided to share a PowerShell script that automates the activation of the main auditing features.</p> <p>If anyone has suggestions for additional audits that might be missing or improvements for the Sysmon configuration file, your contributions would be greatly appreciated!</p> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Set-ExecutionPolicy <span class="nt">-Scope</span> Process <span class="nt">-ExecutionPolicy</span> Bypass <span class="nt">-Force</span>
+</pre></td></tr></tbody></table></code></pre></div></div> <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+</pre></td><td class="rouge-code"><pre><span class="c"># This PowerShell script enhances Windows security logging by enabling various event logs and installing Sysmon. </span>
+<span class="c"># It prompts for admin rights and asks if you want to install Sysmon. If confirmed, it activates logs for user logon events, object access, privilege use, process tracking, and more. It also enables PowerShell script block logging and command line auditing for better visibility into executed commands.</span>
+
+<span class="c">#powershell.exe -ExecutionPolicy Bypass -File .\Sysmon.ps1</span>
+
+<span class="c"># Security Logs:</span>
+<span class="c"># Logon/Logoff Events: Events related to user logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).</span>
+<span class="c"># Object Access: Events related to accessing objects such as files, directories, and registry keys (Event IDs: 4656, 4663, etc.).</span>
+<span class="c"># Privilege Use: Events related to the use of sensitive privileges (Event IDs: 4672, 4673, etc.).</span>
+<span class="c"># Process Tracking: Events related to the creation, termination, and access of processes (Event IDs: 4688, 4689, etc.).</span>
+<span class="c"># Account Logon: Events related to account logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).</span>
+<span class="c"># Account Management: Events related to the creation, modification, and deletion of user accounts (Event IDs: 4720, 4722, 4724, etc.).</span>
+<span class="c"># Policy Changes: Events related to changes in security policies (Event IDs: 4670, 4719, etc.).</span>
+<span class="c"># System Events: Events related to system changes, such as updates, drivers, etc. (Event IDs: 4610, 4615, etc.).</span>
+<span class="c"># Group Membership: Events related to adding and removing users from groups (Event IDs: 4728, 4732, 4756, etc.).</span>
+<span class="c"># Sensitive Privilege Use: Events related to the use of sensitive privileges, such as the ability to debug processes (Event IDs: 4672, 4673, etc.).</span>
+
+<span class="c"># PowerShell Script Log: The script activates PowerShell script block logging, allowing auditing of scripts executed on the system.</span>
+<span class="c"># Command Line Log: The script activates auditing of Event 4688, which records the full command line used to create new processes.</span>
+
+<span class="c"># Additional Security Logs:</span>
+<span class="c"># Remote Desktop Services: Events related to the use of Remote Desktop Services (RDP).</span>
+<span class="c"># Local Session Manager of Terminal Services: Events related to local terminal sessions.</span>
+<span class="c"># Remote Connection Manager of Terminal Services: Events related to remote terminal connections.</span>
+<span class="c"># SMB Client: Events related to the use of the SMB (Server Message Block) client for file sharing.</span>
+<span class="c"># SMB Server: Events related to the SMB (Server Message Block) server for file sharing.</span>
+<span class="c"># Application Log: The script activates the application log, which records events related to applications and services running on the system.</span>
+<span class="c"># System Log: The script activates the system log, which records events related to the Windows kernel and drivers.</span>
+
+
+<span class="c"># Check if the user has elevated permissions (Administrator)</span>
+<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">([</span>Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent<span class="o">())</span>.IsInRole<span class="o">([</span>Security.Principal.WindowsBuiltInRole] <span class="s2">"Administrator"</span><span class="o">))</span> <span class="o">{</span>
+    Write-Warning <span class="s2">"This script requires administrative privileges. Please run it as an administrator."</span>
+    Exit
+<span class="o">}</span>
+
+<span class="c"># Prompt user to install Sysmon</span>
+<span class="nv">$InstallSysmon</span> <span class="o">=</span> Read-Host <span class="s2">"Do you want to install Sysmon? (Y/N)"</span>
+<span class="nv">$InstallSysmon</span> <span class="o">=</span> <span class="nv">$InstallSysmon</span>.ToLower<span class="o">()</span>
+
+<span class="c"># Enable Security Event Log</span>
+<span class="nv">$SecurityLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span>
+<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SecurityLogPath</span><span class="o">))</span> <span class="o">{</span>
+    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$SecurityLogPath</span><span class="s2">"</span>
+    New-Item <span class="nt">-Path</span> <span class="nv">$SecurityLogPath</span> <span class="nt">-Force</span> | Out-Null
+<span class="o">}</span>
+
+Write-Output <span class="s2">"Enabling Security Event Log settings"</span>
+<span class="nv">$SecuritySettings</span> <span class="o">=</span> @<span class="o">{</span>
+    AuditLogonEvents <span class="o">=</span> 3
+    AuditObjectAccess <span class="o">=</span> 3
+    AuditPrivilegeUse <span class="o">=</span> 3
+    AuditProcessTracking <span class="o">=</span> 3
+    AuditAccountLogon <span class="o">=</span> 3
+    AuditAccountManagement <span class="o">=</span> 3
+    AuditPolicyChange <span class="o">=</span> 3
+    AuditSystemEvents <span class="o">=</span> 3
+    AuditGroupMembership <span class="o">=</span> 3
+    AuditSensitivePrivilegeUse <span class="o">=</span> 3
+<span class="o">}</span>
+<span class="nv">$SecuritySettings</span>.GetEnumerator<span class="o">()</span> | ForEach-Object <span class="o">{</span>
+    Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$SecurityLogPath</span> <span class="nt">-Name</span> <span class="nv">$_</span>.Key <span class="nt">-Value</span> <span class="nv">$_</span>.Value <span class="nt">-Force</span>
+<span class="o">}</span>
+
+<span class="c"># Enable PowerShell Logging with Script Block</span>
+<span class="nv">$RegistryPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\S</span><span class="s2">criptBlockLogging"</span>
+<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$RegistryPath</span><span class="o">))</span> <span class="o">{</span>
+    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$RegistryPath</span><span class="s2">"</span>
+    New-Item <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Force</span> | Out-Null
+<span class="o">}</span>
+Write-Output <span class="s2">"Enabling PowerShell Script Block Logging"</span>
+Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"EnableScriptBlockLogging"</span> <span class="nt">-Value</span> 1 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
+
+<span class="c"># Enable Command Line Audit Event 4688</span>
+<span class="nv">$RegistryPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span>
+<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$RegistryPath</span><span class="o">))</span> <span class="o">{</span>
+    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$RegistryPath</span><span class="s2">"</span>
+    New-Item <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Force</span> | Out-Null
+<span class="o">}</span>
+Write-Output <span class="s2">"Enabling Command Line Audit Event 4688"</span>
+Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"AuditProcessCreation"</span> <span class="nt">-Value</span> 3 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
+Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"ProcessCreationIncludeCmdLine_Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
+
+<span class="c"># Enable Additional Security Logs</span>
+<span class="nv">$SecurityLogPaths</span> <span class="o">=</span> @<span class="o">(</span>
+    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational"</span>,
+    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-TerminalServices-LocalSessionManager/Operational"</span>,
+    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-TerminalServices-RemoteConnectionManager/Operational"</span>,
+    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-SmbClient/Security"</span>,
+    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-SMBServer/Security"</span>
+<span class="o">)</span>
+
+foreach <span class="o">(</span><span class="nv">$LogPath</span> <span class="k">in</span> <span class="nv">$SecurityLogPaths</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$LogPath</span><span class="o">))</span> <span class="o">{</span>
+        Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$LogPath</span><span class="s2">"</span>
+        New-Item <span class="nt">-Path</span> <span class="nv">$LogPath</span> <span class="nt">-Force</span> | Out-Null
+    <span class="o">}</span>
+    Write-Output <span class="s2">"Enabling </span><span class="si">$(</span><span class="nv">$LogPath</span>.Split<span class="o">(</span><span class="s1">'\\'</span><span class="o">)[</span><span class="nt">-1</span><span class="o">]</span><span class="si">)</span><span class="s2"> log"</span>
+    New-ItemProperty <span class="nt">-Path</span> <span class="nv">$LogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
+<span class="o">}</span>
+
+<span class="c"># Enable Application Event Log</span>
+<span class="nv">$ApplicationLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-Application-Experience/Analytic"</span>
+<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$ApplicationLogPath</span><span class="o">))</span> <span class="o">{</span>
+    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$ApplicationLogPath</span><span class="s2">"</span>
+    New-Item <span class="nt">-Path</span> <span class="nv">$ApplicationLogPath</span> <span class="nt">-Force</span> | Out-Null
+<span class="o">}</span>
+Write-Output <span class="s2">"Enabling Application Event Log"</span>
+New-ItemProperty <span class="nt">-Path</span> <span class="nv">$ApplicationLogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
+
+<span class="c"># Enable System Event Log</span>
+<span class="nv">$SystemLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-Kernel-General/Analytic"</span>
+<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SystemLogPath</span><span class="o">))</span> <span class="o">{</span>
+    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$SystemLogPath</span><span class="s2">"</span>
+    New-Item <span class="nt">-Path</span> <span class="nv">$SystemLogPath</span> <span class="nt">-Force</span> | Out-Null
+<span class="o">}</span>
+Write-Output <span class="s2">"Enabling System Event Log"</span>
+New-ItemProperty <span class="nt">-Path</span> <span class="nv">$SystemLogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
+
+<span class="c"># Check if Sysmon is installed</span>
+<span class="nv">$SysmonInstalled</span> <span class="o">=</span> Test-Path <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span>
+
+<span class="c"># Uninstall Sysmon if it's already installed</span>
+<span class="k">if</span> <span class="o">(</span><span class="nv">$InstallSysmon</span> <span class="nt">-eq</span> <span class="s2">"y"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">$SysmonPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon.zip"</span>
+    <span class="nv">$SysmonUrl</span> <span class="o">=</span> <span class="s2">"https://download.sysinternals.com/files/Sysmon.zip"</span>
+    <span class="nv">$SysmonConfigUrl</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/Eyezuhk/InfoSec-Misc/refs/heads/main/Sysmon/sysmonconfig-export.xml"</span>
+    <span class="nv">$SysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
+
+    <span class="c"># Verify and create the Sysmon directory if it doesn't exist</span>
+    <span class="nv">$SysmonDir</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span>
+    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SysmonDir</span><span class="o">))</span> <span class="o">{</span>
+        Write-Output <span class="s2">"Creating Sysmon directory: </span><span class="nv">$SysmonDir</span><span class="s2">"</span>
+        New-Item <span class="nt">-ItemType</span> Directory <span class="nt">-Path</span> <span class="nv">$SysmonDir</span> | Out-Null
+    <span class="o">}</span>
+
+    <span class="c"># Download files using .NET WebClient</span>
+    <span class="nv">$WebClient</span> <span class="o">=</span> New-Object System.Net.WebClient
+    
+    <span class="c"># Set TLS 1.2 as the default protocol for WebClient</span>
+    <span class="o">[</span>System.Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>System.Net.SecurityProtocolType]::Tls12
+    
+    Write-Output <span class="s2">"Downloading Sysmon archive..."</span>
+    <span class="nv">$WebClient</span>.DownloadFile<span class="o">(</span><span class="nv">$SysmonUrl</span>, <span class="nv">$SysmonPath</span><span class="o">)</span>
+    Write-Output <span class="s2">"Downloading Sysmon configuration..."</span>
+    <span class="nv">$WebClient</span>.DownloadFile<span class="o">(</span><span class="nv">$SysmonConfigUrl</span>, <span class="nv">$SysmonConfigPath</span><span class="o">)</span>
+
+    Write-Output <span class="s2">"Expanding Sysmon archive to </span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span>
+    Expand-Archive <span class="nt">-Path</span> <span class="nv">$SysmonPath</span> <span class="nt">-DestinationPath</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Force</span>
+
+    Write-Output <span class="s2">"Installing and enabling Sysmon with configuration: </span><span class="nv">$SysmonConfigPath</span><span class="s2">"</span>
+    &amp; <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-accepteula</span> <span class="nt">-i</span> <span class="nv">$SysmonConfigPath</span>
+
+    Remove-Item <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Confirm</span>:<span class="nv">$false</span>
+<span class="o">}</span>
+
+Prompt user to press a key before exiting
+Write-Host <span class="s2">"Press any key to exit..."</span>
+<span class="nv">$null</span> <span class="o">=</span> <span class="nv">$Host</span>.UI.RawUI.ReadKey<span class="o">(</span><span class="s2">"NoEcho,IncludeKeyDown"</span><span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>]]></content><author><name></name></author><category term="Scripts"/><category term="Windows-Audit"/><category term="Sysmon"/><category term="SIEM"/><summary type="html"><![CDATA[Windows audit and Sysmon]]></summary></entry><entry><title type="html">FnStegoCrypt - Encrypted Data in Images</title><link href="https://eyezuhk.github.io/blog/2024/FnStegoCrypt/" rel="alternate" type="text/html" title="FnStegoCrypt - Encrypted Data in Images"/><published>2024-06-25T12:00:00+00:00</published><updated>2024-06-25T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/FnStegoCrypt</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/FnStegoCrypt/"><![CDATA[<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/eyezuhk/FnStegoCrypt"> <img class="repo-img-light w-100" alt="eyezuhk/FnStegoCrypt" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FnStegoCrypt&amp;theme=default&amp;show_owner=false&amp;description_lines_count=3"/> <img class="repo-img-dark w-100" alt="eyezuhk/FnStegoCrypt" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FnStegoCrypt&amp;theme=dark&amp;show_owner=false&amp;description_lines_count=3"/> </a> </div> </div> <hr/> <h2 id="main-features">Main Features</h2> <p>The program offers the following key capabilities:</p> <ol> <li><strong>Salt Generation and Key Derivation</strong>: <ul> <li>Combines PBKDF2-HMAC with SHA-256 to derive a secure key from a provided password.</li> <li>Generates a random <em>salt</em> to enhance key derivation security.</li> </ul> </li> <li><strong>AES-GCM Encryption</strong>: <ul> <li>Encrypts data using the AES-GCM algorithm, providing both confidentiality and integrated data authentication.</li> </ul> </li> <li><strong>Data Hiding in Images</strong>: <ul> <li>Uses the least significant bits (LSBs) of pixels to store information without compromising the visible quality of the image.</li> </ul> </li> <li><strong>Integrity Verification</strong>: <ul> <li>Generates a SHA-256 hash of the original data and embeds it along with the encrypted data, allowing verification of data integrity.</li> </ul> </li> <li><strong>Support for Multiple Image Formats</strong>: <ul> <li>Supports common formats such as PNG and JPEG, as well as HEIF and HEIC images.</li> </ul> </li> <li><strong>Batch Processing</strong>: <ul> <li>Allows efficient processing of multiple images in a directory using threads.</li> </ul> </li> </ol> <hr/> <div class="row mt-3"> <div class="col-sm mt-3 mt-md-0"> <figure> <video src="/assets/videos/FnStegoCrypt/FnStegoCrypt.mp4" class="img-fluid rounded z-depth-1" width="auto" height="auto" autoplay="" controls=""/> </figure> </div> </div> <div class="caption"> Example video of FnStegoCrypt. </div> <h2 id="program-structure">Program Structure</h2> <h3 id="improvedsteganography-class"><code class="language-plaintext highlighter-rouge">ImprovedSteganography</code> Class</h3> <p>This class is the core of the program, containing methods for all steganography and encryption operations:</p> <ul> <li><strong><code class="language-plaintext highlighter-rouge">generate_salt</code></strong>: Generates a random <em>salt</em>.</li> <li><strong><code class="language-plaintext highlighter-rouge">_derive_key</code></strong>: Derives a secure key from a password using PBKDF2.</li> <li><strong><code class="language-plaintext highlighter-rouge">encrypt_data</code> and <code class="language-plaintext highlighter-rouge">decrypt_data</code></strong>: Encrypt and decrypt data using AES-GCM.</li> <li><strong><code class="language-plaintext highlighter-rouge">hash_data</code></strong>: Calculates the SHA-256 hash of data to ensure integrity.</li> <li><strong><code class="language-plaintext highlighter-rouge">check_image_capacity</code></strong>: Checks if the image has sufficient capacity to store the data.</li> <li><strong><code class="language-plaintext highlighter-rouge">hide_data_in_image</code></strong>: Embeds encrypted data into the image.</li> <li><strong><code class="language-plaintext highlighter-rouge">extract_data_from_image</code></strong>: Extracts hidden data from the image.</li> </ul> <h3 id="program-workflow">Program Workflow</h3> <ol> <li><strong>Write Mode (Hiding Data)</strong>: <ul> <li>The user selects an image file or directory.</li> <li>Reads data from a text file and encrypts it.</li> <li>Embeds the encrypted data into the image and saves a new version of the image.</li> </ul> </li> <li><strong>Read Mode (Extracting Data)</strong>: <ul> <li>The user provides an image with hidden data and the corresponding password.</li> <li>The program extracts and verifies the encrypted data, decrypts it, and returns it to the user.</li> </ul> </li> </ol> <hr/> <h2 id="key-technologies-used">Key Technologies Used</h2> <ul> <li><strong><code class="language-plaintext highlighter-rouge">cryptography</code> Library</strong>: <ul> <li>Used for encryption and key derivation.</li> </ul> </li> <li><strong><code class="language-plaintext highlighter-rouge">Pillow</code> Library</strong>: <ul> <li>Used for image manipulation.</li> </ul> </li> <li><strong><code class="language-plaintext highlighter-rouge">NumPy</code></strong>: <ul> <li>Provides efficient operations for handling pixel arrays.</li> </ul> </li> <li><strong><code class="language-plaintext highlighter-rouge">concurrent.futures</code></strong>: <ul> <li>Enables parallel processing for batch operations.</li> </ul> </li> </ul> <hr/> <h2 id="usage-examples">Usage Examples</h2> <h3 id="hiding-data-in-an-image">Hiding Data in an Image</h3> <ol> <li>The program prompts for a password, an image path, and a text file path.</li> <li>Encrypts the text file content with the provided password.</li> <li>Hides the encrypted data in the image and saves the resulting image to an output directory.</li> </ol> <h3 id="extracting-data-from-an-image">Extracting Data from an Image</h3> <ol> <li>The user provides the steganographed image and the password.</li> <li>The program verifies the integrity of the data and decrypts it.</li> <li>Returns the data to the user, who can choose to view or save it to a file.</li> </ol> <hr/> <h2 id="final-considerations">Final Considerations</h2> <p><strong>FnStegoCrypt</strong> is a powerful tool for applications requiring discretion and security in data transmission. Its use of cutting-edge algorithms like AES-GCM and SHA-256, combined with the ability to work with multiple image formats, makes it ideal for scenarios where data protection is critical.</p> <p>If you’re interested in contributing to improvements, feel free to explore the code and adapt it to your needs.</p>]]></content><author><name></name></author><category term="Tools"/><category term="FnStegoCrypt"/><summary type="html"><![CDATA[A program that encrypts data using AES-GCM and embeds it into images with LSB.]]></summary></entry><entry><title type="html">Exposing Local Applications with FNLocalCloud.</title><link href="https://eyezuhk.github.io/blog/2024/FNLocalCloud/" rel="alternate" type="text/html" title="Exposing Local Applications with FNLocalCloud."/><published>2024-04-12T12:00:00+00:00</published><updated>2024-04-12T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/FNLocalCloud</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/FNLocalCloud/"><![CDATA[<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/eyezuhk/FNLocalCloud"> <img class="repo-img-light w-100" alt="eyezuhk/FNLocalCloud" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FNLocalCloud&amp;theme=default&amp;show_owner=false&amp;description_lines_count=3"/> <img class="repo-img-dark w-100" alt="eyezuhk/FNLocalCloud" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FNLocalCloud&amp;theme=dark&amp;show_owner=false&amp;description_lines_count=3"/> </a> </div> </div> <hr/> <p>Recently, I found myself in a situation where I needed to access my machine via RDP, but I don’t have a public IP due to the scarcity of IPs. My ISP uses CGNAT.</p> <blockquote> <p>I remembered a distant past when all I wanted was a VPS to expose a Counter-Strike 1.6 or Lineage 2 server for my friends to play online. Not all providers offered public IPs, and today, that’s the rule.</p> </blockquote> <p>A common solution for this scenario is using ngrok, and it worked well, but the added delay left me dissatisfied with the usability.</p> <p>The same happened when I created an SSH tunnel to a free tier machine I have on Oracle, so I decided to try creating a solution in Python with the help of LLMs, since for this purpose, it greatly accelerates the creation process.</p> <h4 id="reasons-for-the-absence-of-public-ips">Reasons for the Absence of Public IPs:</h4> <p>IPv4 Scarcity: With the increased demand for public IPs, we’ve ended up resorting to techniques like CGNAT, where multiple users share the same public IPv4 address.</p> <p>Costs and Security: Renting a block of public IPs can be expensive, and CGNAT offers an extra layer of security by hiding our internal IP addresses.</p> <h4 id="challenges-of-cgnat">Challenges of CGNAT:</h4> <p>Exposing Local Services: With CGNAT, we face difficulties in exposing our local services, since all internal devices share the same public IPv4 address.</p> <p>Configuration Complexity: Configuring port forwarding and dealing with CGNAT restrictions can be complicated, especially for those who are not very technical.</p> <h4 id="challenges-in-adopting-ipv6">Challenges in Adopting IPv6:</h4> <p>Lack of Incentive: Many internet providers have not yet adopted IPv6, which hinders our journey to expose local services.</p> <h3 id="solution">Solution</h3> <p>So, if you need to expose any local service with a reverse TCP proxy, check out the tool I created on GitHub!</p> <p>Link: <a href="https://github.com/Eyezuhk/FNLocalCloud">https://github.com/Eyezuhk/FNLocalCloud</a></p> <div class="row mt-3"> <div class="col-sm mt-3 mt-md-0"> <figure> <video src="/assets/videos/FNLocalCloud/FNLocalCloud.mp4" class="img-fluid rounded z-depth-1" width="auto" height="auto" autoplay="" controls=""/> </figure> </div> </div> <div class="caption"> Example video of FNLocalCloud. </div>]]></content><author><name></name></author><category term="Tools"/><category term="FNLocalCloud"/><summary type="html"><![CDATA[An agent-server based program to expose local network services on the internet, bypassing CGNAT.]]></summary></entry><entry><title type="html">FIRST Fortaleza 2023.</title><link href="https://eyezuhk.github.io/blog/2023/First/" rel="alternate" type="text/html" title="FIRST Fortaleza 2023."/><published>2023-10-05T12:00:00+00:00</published><updated>2023-10-05T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2023/First</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2023/First/"><![CDATA[<p>I’m sharing my recent participation in the FIRST (Forum of Incident Response and Security Teams) Regional Symposium Latin America &amp; Caribbean, hosted by LACNIC, which took place on October 4th and 5th in Fortaleza, Brazil.</p> <p>This event was a true immersion in cybersecurity, a forum for sharing information about vulnerabilities, incidents, tools, and all other issues that affect the operation of security and incident response teams, providing two days of intense and inspiring learning.</p> <p>I participated in an Incident Response (IR) training for Ransomware, where our task was to protect a machine against ransomware attacks and keep its services running.</p> <p>Each team received a Linux virtual machine for simulation. During the lab, we faced several challenging situations and participated in heated discussions. However, with limited time to protect the machine, our VM was eventually compromised, and our web services became unavailable. (This part was expected in the lab).</p> <p>It was a critical moment, but the training scenario evolved, and now we faced the challenge of recovering the encrypted files. Through the analysis of logs, we managed to identify the possible perpetrator of the attack. We discovered that the compromised user had executed a binary, and this binary was still present on the machine.</p> <p>After several attempts, a surprising suggestion arose: check the binary’s manual. To our surprise, we found that the same program responsible for encrypting the files also contained a decryption function.</p> <p>We successfully decrypted the files and restored the services. In the second part of the lab, we had to write a comprehensive public report about the events.</p> <p>The experience was remarkably realistic, as we received the machine without any prior information, except that we would be dealing with a ransomware incident. Although our team was formed on the spot, we quickly managed to divide the roles. While one part focused on hardening, the other actively looked for potential indicators of compromise.</p> <p>We deepened our analysis beyond the challenge’s expectations and identified that the tool used in the exercise was <a href="https://github.com/hazcod/ransomwhere">https://github.com/hazcod/ransomwhere</a>, a Ransomware Proof of Concept.</p> <p>In the end, we not only recovered the compromised machine but also produced a comprehensive report documenting all the actions taken, the lessons learned, and the strategies implemented. This experience highlighted the importance of preparedness and effective collaboration in cybersecurity situations.</p> <swiper-container keyboard="true" navigation="true" pagination="true" pagination-clickable="true" pagination-dynamic-bullets="true" rewind="true"> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/First/First_1-480.webp 480w,/assets/img/First/First_1-800.webp 800w,/assets/img/First/First_1-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/First/First_1.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> </swiper-slide> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/First/First_2-480.webp 480w,/assets/img/First/First_2-800.webp 800w,/assets/img/First/First_2-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/First/First_2.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> </swiper-slide> </swiper-container>]]></content><author><name></name></author><category term="Events"/><category term="First"/><summary type="html"><![CDATA[FIRST (Forum of Incident Response and Security Teams)]]></summary></entry><entry><title type="html">CyberDefenders Qradar101 Write up.</title><link href="https://eyezuhk.github.io/blog/2022/CyberDefenders-Qradar101-Write-up/" rel="alternate" type="text/html" title="CyberDefenders Qradar101 Write up."/><published>2022-02-16T12:00:00+00:00</published><updated>2022-02-16T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2022/CyberDefenders-Qradar101-Write-up</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2022/CyberDefenders-Qradar101-Write-up/"><![CDATA[<p>Originally published by me on Medium <a href="https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c">InfosecWriteups CyberDefenders QRadar101</a></p> <p>This was the first write-up for this CTF.</p> <p>Looking back, I realize it would have been much easier if I had known then what I know now. Still, I’m proud to have been the first!</p> <hr/> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p><strong>This write-up is based on Cyberdefenders Qradar101 challenge from Ali Alwashali.</strong></p> <p>You can check on <a href="https://cyberdefenders.org/blueteam-ctf-challenges/39">https://cyberdefenders.org/blueteam-ctf-challenges/39</a></p> <hr/> <p>First of all, let’s start looking for offenses.</p> <p>We can see 26 offenses between Oct 17 and Nov 8 of 2020.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p><em>Despite this, the logs are between 10/11/2020 10:00 PM and 10/11/2020 3:00 PM</em></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <h2 id="questions"><strong>Questions</strong></h2> <blockquote> <h3 id="how-many-log-sources-available"><strong>How many log sources available?</strong></h3> </blockquote> <p>We can find this information going to Admin &gt; ### Log Sources.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A-480.webp 480w,https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A-800.webp 800w,https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-ids-software-used-to-monitor-the-network"><strong>What is the IDS software used to monitor the network?</strong></h3> </blockquote> <p>We can see in figure 3 the IDS is one of the log sources.</p> <blockquote> <h3 id="what-is-the-domain-name-used-in-the-network"><strong>What is the domain name used in the network?</strong></h3> </blockquote> <p>We can find this information looking for payload events related to hosts as an example: Success Audit: A Kerberos service ticket was granted.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="multiple-ips-were-communicating-with-the-malicious-server-one-of-them-ends-with-20-provide-the-full-ip"><strong>Multiple IPs were communicating with the malicious server. One of them ends with “20”. Provide the full IP.</strong></h3> </blockquote> <p>We can display log Activity by Source IP to see what IPs generated more communication.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-sid-of-the-most-frequent-alert-rule-in-the-dataset"><strong>What is the SID of the most frequent alert rule in the dataset?</strong></h3> </blockquote> <p>We can look for sid: in the payload with regular expression.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>We will find 110 logs from SO-Suricata where 72 are for the rule sid:</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-attackers-ip-address"><strong>What is the attacker’s IP address?</strong></h3> </blockquote> <p>In closed offenses, we can see a suspicious public IP.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="the-attacker-was-searching-for-data-belonging-to-one-of-the-companys-projects-can-you-find-the-name-of-the-project"><strong>The attacker was searching for data belonging to one of the company’s projects, can you find the name of the project?</strong></h3> </blockquote> <p>We can search for project with regular expression.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww-480.webp 480w,https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww-800.webp 800w,https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>We will find 4 events, then we will read the payload.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-ip-address-of-the-first-infected-machine"><strong>What is the IP address of the first infected machine?</strong></h3> </blockquote> <p>We can order the events by increasing time. We can see a suspicious event.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-username-of-the-infected-employee-using-1921681015"><strong>What is the username of the infected employee using 192.168.10.15?</strong></h3> </blockquote> <p>Adding a filter where Source IP is 192.168.10.15 we can find the first username that logged in.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="hackers-do-not-like-logging-what-logging-was-the-attacker-checking-to-see-if-enabled"><strong>Hackers do not like logging, what logging was the attacker checking to see if enabled?</strong></h3> </blockquote> <p>Let’s look for the first events that the attacker generated. We can observe a tool widely used in attacks.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>We can also see that the attacker is using PowerShell to find project48.</p> <blockquote> <h3 id="name-of-the-second-system-the-attacker-targeted-to-cover-up-the-employee"><strong>Name of the second system the attacker targeted to cover up the employee?</strong></h3> </blockquote> <p>We can search for deleted files.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w-480.webp 480w,https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w-800.webp 800w,https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="when-was-the-first-malicious-connection-to-the-domain-controller-log-start-time--hhmmss"><strong>When was the first malicious connection to the domain controller (log start time — hh:mm:ss)?</strong></h3> </blockquote> <p>We can look for detected network connections by looking at the payloads, we can see that the first event is for a connection to the attacker’s server 192.20.80.25. And by a process that should not be making this connection.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-md5-hash-of-the-malicious-file"><strong>What is the md5 hash of the malicious file?</strong></h3> </blockquote> <p>Filtering by hash, we find 10 events, when we look at the first one from the infected machine 192.168.10.15 we can find the .docx file with malicious hash.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-mitre-persistence-technique-id-used-by-the-attacker"><strong>What is the MITRE persistence technique ID used by the attacker?</strong></h3> </blockquote> <p>By looking up persistence techniques in <a href="https://attack.mitre.org/tactics/TA0003/"><strong><em>mitre</em></strong></a>, we can search for logs about which techniques the attacker may have used.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A-480.webp 480w,https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A-800.webp 800w,https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-protocol-is-used-to-perform-host-discovery"><strong>What protocol is used to perform host discovery?</strong></h3> </blockquote> <p>We can discover this information by analyzing the outgoing traffic from the first compromised host.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-email-service-used-by-the-companyone-word"><strong>What is the email service used by the company?(one word)</strong></h3> </blockquote> <p>We can look for traffic directed to the standard ports of the IP’s services, in this case, we had no success so let’s look at HTTPS traffic port 443 We checked on <a href="https://viewdns.info">https://viewdns.info</a> that most IP’s belong to Microsoft and so we found our answer.</p> <blockquote> <h3 id="what-is-the-name-of-the-malicious-file-used-for-the-initial-infection"><strong>What is the name of the malicious file used for the initial infection?</strong></h3> </blockquote> <p>We found the file with the md5 hash.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-name-of-the-new-account-added-by-the-attacker"><strong>What is the name of the new account added by the attacker?</strong></h3> </blockquote> <p>We can search for Event id 4720 A user account was created.</p> <p><a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4720">Ref: ultimatewindowssecurity EVENT 4720</a></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw-480.webp 480w,https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw-800.webp 800w,https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-pid-of-the-process-that-performed-injection"><strong>What is the PID of the process that performed injection?</strong></h3> </blockquote> <p>We can look for process creation on the infected host.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig-480.webp 480w,https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig-800.webp 800w,https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-name-of-the-tool-used-for-lateral-movement"><strong>What is the name of the tool used for lateral movement?</strong></h3> </blockquote> <p>I didn’t know about this tool and couldn’t find anything in the logs, I needed to use the tip, so searching on google I found <a href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="attacker-exfiltrated-one-file-what-is-the-name-of-the-tool-used-for-exfiltration"><strong>Attacker exfiltrated one file, what is the name of the tool used for exfiltration?</strong></h3> </blockquote> <p>Searching for the events where there was communication with the attacker.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="who-is-the-other-legitimate-domain-admin-other-than-the-administrator"><strong>Who is the other legitimate domain admin other than the administrator?</strong></h3> </blockquote> <p>We can see a list of users grouped by username and search for event <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4672"><strong><em>4672</em></strong></a><strong><em>.</em></strong></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w-480.webp 480w,https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w-800.webp 800w,https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA-480.webp 480w,https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA-800.webp 800w,https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="the-attacker-used-the-host-discovery-technique-to-know-how-many-hosts-available-in-a-certain-network-what-is-the-network-the-hacker-scanned-from-the-host-ip-1-to-30"><strong>The attacker used the host discovery technique to know how many hosts available in a certain network, what is the network the hacker scanned from the host IP 1 to 30?</strong></h3> </blockquote> <p>We can check if the first compromised machine scanned the network.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q-480.webp 480w,https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q-800.webp 800w,https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="what-is-the-name-of-the-employee-who-hired-the-attacker"><strong>What is the name of the employee who hired the attacker?</strong></h3> </blockquote> <p>While searching for which tool the attacker was performing data exfiltration we noticed a suspicious .xlsx spreadsheet.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>I hope this write-up has helped you. Any questions, feel free to contact me on <a href="https://www.linkedin.com/in/isaacfn/">https://www.linkedin.com/in/isaacfn/</a></p> <p><br/></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p><br/><br/></p>]]></content><author><name></name></author><category term="Threat-Hunting"/><category term="Qradar"/><category term="Cyberdefenders"/><category term="SIEM"/><summary type="html"><![CDATA[Ctf Writeup]]></summary></entry></feed>
