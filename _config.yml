@@ -11,7 +11,7 @@ description: > # the ">" symbol means to ignore newlines until "footer_text:"
   A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics..
 footer_text: >
   Disclaimer. All the opinions and views discussed here are mine and do not necessarily represent the views of my employer. I am not an expert. I am just sharing my views on topics, and I’m open to other perspectives.
-keywords: Cyber, Security, Malware-Analysis, DFIR # add your own keywords or leave empty
+keywords: CyberSecurity, Malware-Analysis, DFIR, SIEM # add your own keywords or leave empty
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
 icon: ♠️ # the emoji used as the favicon (alternatively, provide image name in /assets/img/)
 
