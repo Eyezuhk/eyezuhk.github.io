@@ -150,7 +150,7 @@ $SysmonInstalled = Test-Path "C:\Windows\SysmonDrv.sys"
 if ($InstallSysmon -eq "y") {
     $SysmonPath = "$env:TEMP\Sysmon.zip"
     $SysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
-    $SysmonConfigUrl = "https://raw.githubusercontent.com/Eyezuhk/InfoSec-Misc/refs/heads/main/Sysmon/sysmonconfig-export.xml"
+    $SysmonConfigUrl = "https://raw.githubusercontent.com/Eyezuhk/InfoSec-Misc/refs/heads/main/Sysmon/sysmonconfig-excludes-only.xml"
     $SysmonConfigPath = "$env:ProgramData\Sysmon\config.xml"
 
     # Verify and create the Sysmon directory if it doesn't exist
