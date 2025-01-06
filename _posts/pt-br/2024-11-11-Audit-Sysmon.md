@@ -24,163 +24,259 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
 ```
 
 ```shell
-# This PowerShell script enhances Windows security logging by enabling various event logs and installing Sysmon. 
-# It prompts for admin rights and asks if you want to install Sysmon. If confirmed, it activates logs for user logon events, object access, privilege use, process tracking, and more. It also enables PowerShell script block logging and command line auditing for better visibility into executed commands.
+#Requires -RunAsAdministrator
 
 #powershell.exe -ExecutionPolicy Bypass -File .\Sysmon.ps1
 
-# Security Logs:
-# Logon/Logoff Events: Events related to user logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).
-# Object Access: Events related to accessing objects such as files, directories, and registry keys (Event IDs: 4656, 4663, etc.).
-# Privilege Use: Events related to the use of sensitive privileges (Event IDs: 4672, 4673, etc.).
-# Process Tracking: Events related to the creation, termination, and access of processes (Event IDs: 4688, 4689, etc.).
-# Account Logon: Events related to account logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).
-# Account Management: Events related to the creation, modification, and deletion of user accounts (Event IDs: 4720, 4722, 4724, etc.).
-# Policy Changes: Events related to changes in security policies (Event IDs: 4670, 4719, etc.).
-# System Events: Events related to system changes, such as updates, drivers, etc. (Event IDs: 4610, 4615, etc.).
-# Group Membership: Events related to adding and removing users from groups (Event IDs: 4728, 4732, 4756, etc.).
-# Sensitive Privilege Use: Events related to the use of sensitive privileges, such as the ability to debug processes (Event IDs: 4672, 4673, etc.).
-
-# PowerShell Script Log: The script activates PowerShell script block logging, allowing auditing of scripts executed on the system.
-# Command Line Log: The script activates auditing of Event 4688, which records the full command line used to create new processes.
-
-# Additional Security Logs:
-# Remote Desktop Services: Events related to the use of Remote Desktop Services (RDP).
-# Local Session Manager of Terminal Services: Events related to local terminal sessions.
-# Remote Connection Manager of Terminal Services: Events related to remote terminal connections.
-# SMB Client: Events related to the use of the SMB (Server Message Block) client for file sharing.
-# SMB Server: Events related to the SMB (Server Message Block) server for file sharing.
-# Application Log: The script activates the application log, which records events related to applications and services running on the system.
-# System Log: The script activates the system log, which records events related to the Windows kernel and drivers.
-
-
-# Check if the user has elevated permissions (Administrator)
-if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Warning "This script requires administrative privileges. Please run it as an administrator."
-    Exit
-}
-
-# Prompt user to install Sysmon
-$InstallSysmon = Read-Host "Do you want to install Sysmon? (Y/N)"
-$InstallSysmon = $InstallSysmon.ToLower()
-
-# Enable Security Event Log
-$SecurityLogPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"
-if (-not (Test-Path $SecurityLogPath)) {
-    Write-Output "Creating registry key: $SecurityLogPath"
-    New-Item -Path $SecurityLogPath -Force | Out-Null
-}
-
-Write-Output "Enabling Security Event Log settings"
-$SecuritySettings = @{
-    AuditLogonEvents = 3
-    AuditObjectAccess = 3
-    AuditPrivilegeUse = 3
-    AuditProcessTracking = 3
-    AuditAccountLogon = 3
-    AuditAccountManagement = 3
-    AuditPolicyChange = 3
-    AuditSystemEvents = 3
-    AuditGroupMembership = 3
-    AuditSensitivePrivilegeUse = 3
-}
-$SecuritySettings.GetEnumerator() | ForEach-Object {
-    Set-ItemProperty -Path $SecurityLogPath -Name $_.Key -Value $_.Value -Force
-}
-
-# Enable PowerShell Logging with Script Block
-$RegistryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging"
-if (-not (Test-Path $RegistryPath)) {
-    Write-Output "Creating registry key: $RegistryPath"
-    New-Item -Path $RegistryPath -Force | Out-Null
-}
-Write-Output "Enabling PowerShell Script Block Logging"
-Set-ItemProperty -Path $RegistryPath -Name "EnableScriptBlockLogging" -Value 1 -Type DWord -Force
-
-# Enable Command Line Audit Event 4688
-$RegistryPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit"
-if (-not (Test-Path $RegistryPath)) {
-    Write-Output "Creating registry key: $RegistryPath"
-    New-Item -Path $RegistryPath -Force | Out-Null
-}
-Write-Output "Enabling Command Line Audit Event 4688"
-Set-ItemProperty -Path $RegistryPath -Name "AuditProcessCreation" -Value 3 -Type DWord -Force
-Set-ItemProperty -Path $RegistryPath -Name "ProcessCreationIncludeCmdLine_Enabled" -Value 1 -Type DWord -Force
-
-# Enable Additional Security Logs
-$SecurityLogPaths = @(
-    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational",
-    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-TerminalServices-LocalSessionManager/Operational",
-    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-TerminalServices-RemoteConnectionManager/Operational",
-    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-SmbClient/Security",
-    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-SMBServer/Security"
-)
-
-foreach ($LogPath in $SecurityLogPaths) {
-    if (-not (Test-Path $LogPath)) {
-        Write-Output "Creating registry key: $LogPath"
-        New-Item -Path $LogPath -Force | Out-Null
-    }
-    Write-Output "Enabling $($LogPath.Split('\\')[-1]) log"
-    New-ItemProperty -Path $LogPath -Name "Enabled" -Value 1 -PropertyType DWord -Force
-}
-
-# Enable Application Event Log
-$ApplicationLogPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-Application-Experience/Analytic"
-if (-not (Test-Path $ApplicationLogPath)) {
-    Write-Output "Creating registry key: $ApplicationLogPath"
-    New-Item -Path $ApplicationLogPath -Force | Out-Null
-}
-Write-Output "Enabling Application Event Log"
-New-ItemProperty -Path $ApplicationLogPath -Name "Enabled" -Value 1 -PropertyType DWord -Force
-
-# Enable System Event Log
-$SystemLogPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Winevt\Channels\Microsoft-Windows-Kernel-General/Analytic"
-if (-not (Test-Path $SystemLogPath)) {
-    Write-Output "Creating registry key: $SystemLogPath"
-    New-Item -Path $SystemLogPath -Force | Out-Null
-}
-Write-Output "Enabling System Event Log"
-New-ItemProperty -Path $SystemLogPath -Name "Enabled" -Value 1 -PropertyType DWord -Force
-
-# Check if Sysmon is installed
-$SysmonInstalled = Test-Path "C:\Windows\SysmonDrv.sys"
-
-# Uninstall Sysmon if it's already installed
-if ($InstallSysmon -eq "y") {
-    $SysmonPath = "$env:TEMP\Sysmon.zip"
-    $SysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
-    $SysmonConfigUrl = "https://raw.githubusercontent.com/Eyezuhk/InfoSec-Misc/refs/heads/main/Sysmon/sysmonconfig-excludes-only.xml"
-    $SysmonConfigPath = "$env:ProgramData\Sysmon\config.xml"
-
-    # Verify and create the Sysmon directory if it doesn't exist
-    $SysmonDir = "$env:ProgramData\Sysmon"
-    if (-not (Test-Path $SysmonDir)) {
-        Write-Output "Creating Sysmon directory: $SysmonDir"
-        New-Item -ItemType Directory -Path $SysmonDir | Out-Null
+function Enable-AuditPolicies {
+    Write-Output "Configuring advanced audit policies for threat hunting..."
+    
+    # Enable Process Creation with Command Line
+    auditpol /set /subcategory:"Process Creation" /success:enable /failure:enable
+    reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit" /v "ProcessCreationIncludeCmdLine_Enabled" /t REG_DWORD /d 1 /f
+    
+    # Enhanced Security Audit Policy Configuration
+    $auditPolicies = @{
+        # Critical for detecting credential theft and authentication attacks
+        "Account Logon" = @(
+            "Credential Validation",
+            "Kerberos Authentication Service",
+            "Kerberos Service Ticket Operations"
+        )
+        # Track account management and modifications
+        "Account Management" = @(
+            "User Account Management",
+            "Security Group Management",
+            "Computer Account Management"
+        )
+        # Essential for process tracking and command execution
+        "Detailed Tracking" = @(
+            "Process Creation",
+            "Process Termination",
+            "DPAPI Activity",
+            "RPC Events"
+        )
+        # Critical for lateral movement detection
+        "Logon/Logoff" = @(
+            "Logon",
+            "Logoff",
+            "Special Logon",
+            "Other Logon/Logoff Events",
+            "Network Policy Server"
+        )
+        # File and registry access monitoring
+        "Object Access" = @(
+            "File System",
+            "Registry",
+            "Kernel Object",
+            "SAM",
+            "Certification Services",
+            "Handle Manipulation"
+        )
+        # Track security policy changes
+        "Policy Change" = @(
+            "Audit Policy Change",
+            "Authentication Policy Change",
+            "Authorization Policy Change"
+        )
+        # Monitor privileged operations
+        "Privilege Use" = @(
+            "Sensitive Privilege Use",
+            "Non Sensitive Privilege Use"
+        )
+        # System level changes and security state
+        "System" = @(
+            "Security State Change",
+            "Security System Extension",
+            "System Integrity"
+        )
     }
 
-    # Download files using .NET WebClient
-    $WebClient = New-Object System.Net.WebClient
-    
-    # Set TLS 1.2 as the default protocol for WebClient
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
-    
-    Write-Output "Downloading Sysmon archive..."
-    $WebClient.DownloadFile($SysmonUrl, $SysmonPath)
-    Write-Output "Downloading Sysmon configuration..."
-    $WebClient.DownloadFile($SysmonConfigUrl, $SysmonConfigPath)
+    foreach ($category in $auditPolicies.Keys) {
+        foreach ($subcategory in $auditPolicies[$category]) {
+            Write-Output "Enabling audit policy: $category - $subcategory"
+            auditpol /set /subcategory:"$subcategory" /success:enable /failure:enable
+        }
+    }
 
-    Write-Output "Expanding Sysmon archive to $env:TEMP\Sysmon"
-    Expand-Archive -Path $SysmonPath -DestinationPath "$env:TEMP\Sysmon" -Force
+    # Enhanced PowerShell Logging
+    $registryPaths = @{
+        "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging" = @{
+            "EnableScriptBlockLogging" = 1
+            "EnableScriptBlockInvocationLogging" = 1
+        }
+        "HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ModuleLogging" = @{
+            "EnableModuleLogging" = 1
+        }
 
-    Write-Output "Installing and enabling Sysmon with configuration: $SysmonConfigPath"
-    & "$env:TEMP\Sysmon\Sysmon64.exe" -accepteula -i $SysmonConfigPath
+    }
 
-    Remove-Item -Recurse -Force "$env:TEMP\Sysmon" -Confirm:$false
+    foreach ($path in $registryPaths.Keys) {
+        if (-not (Test-Path $path)) {
+            New-Item -Path $path -Force | Out-Null
+        }
+        foreach ($name in $registryPaths[$path].Keys) {
+            Set-ItemProperty -Path $path -Name $name -Value $registryPaths[$path][$name] -Type DWord -Force
+        }
+    }
+
+    # Enable Windows Security Event Log Size
+    Write-Output "Configuring Security Event Log size 2GB ..."
+    wevtutil sl Security /ms:2147483648 # 2GB
 }
 
-Prompt user to press a key before exiting
+function Install-Sysmon {
+    param (
+        [string]$ConfigUrl = "https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml"
+    )
+
+    $sysmonPath = "$env:TEMP\Sysmon.zip"
+    $sysmonUrl = "https://download.sysinternals.com/files/Sysmon.zip"
+    $sysmonConfigPath = "$env:ProgramData\Sysmon\config.xml"
+    $sysmonDir = "$env:ProgramData\Sysmon"
+
+    if (-not (Test-Path $sysmonDir)) {
+        New-Item -ItemType Directory -Path $sysmonDir | Out-Null
+    }
+
+    try {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+        Write-Output "Downloading Sysmon..."
+        Invoke-WebRequest -Uri $sysmonUrl -OutFile $sysmonPath
+
+        Write-Output "Downloading Sysmon configuration..."
+        Invoke-WebRequest -Uri $ConfigUrl -OutFile $sysmonConfigPath
+
+        Expand-Archive -Path $sysmonPath -DestinationPath "$env:TEMP\Sysmon" -Force
+        & "$env:TEMP\Sysmon\Sysmon64.exe" -accepteula -i $sysmonConfigPath
+
+        # Cleanup
+        Remove-Item -Recurse -Force "$env:TEMP\Sysmon" -ErrorAction SilentlyContinue
+        Remove-Item -Force $sysmonPath -ErrorAction SilentlyContinue
+
+        Write-Output "Sysmon installed successfully!"
+        
+        # Configure Sysmon Event Log Size
+        wevtutil sl Microsoft-Windows-Sysmon/Operational /ms:2147483648 # 2GB
+    }
+    catch {
+        Write-Error "Error installing Sysmon: $_"
+    }
+}
+
+function Update-SysmonConfig {
+    Write-Host "Choose update method:"
+    Write-Host "1. Provide URL to download config file"
+    Write-Host "2. Provide local file path"
+    $updateChoice = Read-Host "Enter your choice (1-2)"
+
+    $sysmonConfigPath = "$env:ProgramData\Sysmon\config.xml"
+
+    try {
+        switch ($updateChoice) {
+            "1" {
+                $ConfigUrl = Read-Host "Enter URL for the Sysmon configuration file"
+                Write-Output "Downloading new Sysmon configuration..."
+                [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+                Invoke-WebRequest -Uri $ConfigUrl -OutFile $sysmonConfigPath
+            }
+            "2" {
+                $localPath = Read-Host "Enter the full path to the local configuration file"
+                if (Test-Path $localPath) {
+                    Copy-Item -Path $localPath -Destination $sysmonConfigPath -Force
+                }
+                else {
+                    throw "Local configuration file not found!"
+                }
+            }
+            default {
+                throw "Invalid choice!"
+            }
+        }
+
+        Write-Output "Updating Sysmon configuration..."
+        & "C:\Windows\Sysmon64.exe" -c $sysmonConfigPath
+        Write-Output "Sysmon configuration updated successfully!"
+    }
+    catch {
+        Write-Error "Error updating Sysmon configuration: $_"
+    }
+}
+
+function Uninstall-Sysmon {
+    try {
+        Write-Output "Uninstalling Sysmon..."
+        & "C:\Windows\Sysmon64.exe" -u force
+        Remove-Item -Path "C:\Windows\Sysmon64.exe" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "C:\Windows\SysmonDrv.sys" -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$env:ProgramData\Sysmon" -Recurse -Force -ErrorAction SilentlyContinue
+        Write-Output "Sysmon uninstalled successfully!"
+    }
+    catch {
+        Write-Error "Error uninstalling Sysmon: $_"
+    }
+}
+
+# Main script execution
+$sysmonInstalled = Test-Path "C:\Windows\SysmonDrv.sys"
+$action = $null
+
+if ($sysmonInstalled) {
+    Write-Host "Sysmon is currently installed. Choose an action:"
+    Write-Host "1. Update Sysmon configuration"
+    Write-Host "2. Uninstall Sysmon"
+    Write-Host "3. Enable/Update audit policies only"
+    Write-Host "4. Exit"
+    $action = Read-Host "Enter your choice (1-4)"
+}
+else {
+    Write-Host "Sysmon is not installed. Choose an action:"
+    Write-Host "1. Install Sysmon"
+    Write-Host "2. Enable audit policies only"
+    Write-Host "3. Exit"
+    $action = Read-Host "Enter your choice (1-3)"
+}
+
+switch ($action) {
+    "1" {
+        if ($sysmonInstalled) {
+            Update-SysmonConfig
+        }
+        else {
+            Install-Sysmon
+        }
+        Enable-AuditPolicies
+    }
+    "2" {
+        if ($sysmonInstalled) {
+            Uninstall-Sysmon
+        }
+        else {
+            Enable-AuditPolicies
+        }
+    }
+    "3" {
+        if ($sysmonInstalled) {
+            Enable-AuditPolicies
+        }
+        else {
+            Write-Output "Exiting..."
+            exit
+        }
+    }
+    "4" {
+        if ($sysmonInstalled) {
+            Write-Output "Exiting..."
+            exit
+        }
+    }
+    default {
+        Write-Output "Invalid choice. Exiting..."
+        exit
+    }
+}
+
 Write-Host "Press any key to exit..."
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 ```
