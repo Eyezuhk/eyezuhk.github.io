@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://eyezuhk.github.io/pt-br/feed.xml" rel="self" type="application/atom+xml"/><link href="https://eyezuhk.github.io/pt-br/" rel="alternate" type="text/html" hreflang="en"/><updated>2025-01-06T19:08:46+00:00</updated><id>https://eyezuhk.github.io/feed.xml</id><title type="html">blank</title><subtitle>A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.. </subtitle><entry><title type="html">Detection CVE-2024-35250</title><link href="https://eyezuhk.github.io/pt-br/blog/2024/CVE-2024-35250/" rel="alternate" type="text/html" title="Detection CVE-2024-35250"/><published>2024-12-19T12:00:00+00:00</published><updated>2024-12-19T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/CVE-2024-35250</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/CVE-2024-35250/"><![CDATA[<p>A Agência de Segurança Cibernética e Infraestrutura dos EUA (CISA) adicionou, em 16/12, uma falha de segurança ao seu catálogo de Vulnerabilidades Exploradas Conhecidas (KEV), citando evidências de exploração ativa em ambientes reais.</p> <p>Verifiquei que já existe um PoC (Proof of Concept) disponível e, por considerar essa uma vulnerabilidade de alto risco, decidi compartilhar esta detecção.</p> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://eyezuhk.github.io/pt-br/feed.xml" rel="self" type="application/atom+xml"/><link href="https://eyezuhk.github.io/pt-br/" rel="alternate" type="text/html" hreflang="en"/><updated>2025-01-06T21:03:20+00:00</updated><id>https://eyezuhk.github.io/feed.xml</id><title type="html">blank</title><subtitle>A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.. </subtitle><entry><title type="html">Detection CVE-2024-35250</title><link href="https://eyezuhk.github.io/pt-br/blog/2024/CVE-2024-35250/" rel="alternate" type="text/html" title="Detection CVE-2024-35250"/><published>2024-12-19T12:00:00+00:00</published><updated>2024-12-19T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/CVE-2024-35250</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/CVE-2024-35250/"><![CDATA[<p>A Agência de Segurança Cibernética e Infraestrutura dos EUA (CISA) adicionou, em 16/12, uma falha de segurança ao seu catálogo de Vulnerabilidades Exploradas Conhecidas (KEV), citando evidências de exploração ativa em ambientes reais.</p> <p>Verifiquei que já existe um PoC (Proof of Concept) disponível e, por considerar essa uma vulnerabilidade de alto risco, decidi compartilhar esta detecção.</p> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -519,163 +519,355 @@ docker pull mariadb
 157
 158
 159
-</pre></td><td class="rouge-code"><pre><span class="c"># This PowerShell script enhances Windows security logging by enabling various event logs and installing Sysmon. </span>
-<span class="c"># It prompts for admin rights and asks if you want to install Sysmon. If confirmed, it activates logs for user logon events, object access, privilege use, process tracking, and more. It also enables PowerShell script block logging and command line auditing for better visibility into executed commands.</span>
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+</pre></td><td class="rouge-code"><pre><span class="c">#Requires -RunAsAdministrator</span>
 
 <span class="c">#powershell.exe -ExecutionPolicy Bypass -File .\Sysmon.ps1</span>
 
-<span class="c"># Security Logs:</span>
-<span class="c"># Logon/Logoff Events: Events related to user logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).</span>
-<span class="c"># Object Access: Events related to accessing objects such as files, directories, and registry keys (Event IDs: 4656, 4663, etc.).</span>
-<span class="c"># Privilege Use: Events related to the use of sensitive privileges (Event IDs: 4672, 4673, etc.).</span>
-<span class="c"># Process Tracking: Events related to the creation, termination, and access of processes (Event IDs: 4688, 4689, etc.).</span>
-<span class="c"># Account Logon: Events related to account logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).</span>
-<span class="c"># Account Management: Events related to the creation, modification, and deletion of user accounts (Event IDs: 4720, 4722, 4724, etc.).</span>
-<span class="c"># Policy Changes: Events related to changes in security policies (Event IDs: 4670, 4719, etc.).</span>
-<span class="c"># System Events: Events related to system changes, such as updates, drivers, etc. (Event IDs: 4610, 4615, etc.).</span>
-<span class="c"># Group Membership: Events related to adding and removing users from groups (Event IDs: 4728, 4732, 4756, etc.).</span>
-<span class="c"># Sensitive Privilege Use: Events related to the use of sensitive privileges, such as the ability to debug processes (Event IDs: 4672, 4673, etc.).</span>
-
-<span class="c"># PowerShell Script Log: The script activates PowerShell script block logging, allowing auditing of scripts executed on the system.</span>
-<span class="c"># Command Line Log: The script activates auditing of Event 4688, which records the full command line used to create new processes.</span>
-
-<span class="c"># Additional Security Logs:</span>
-<span class="c"># Remote Desktop Services: Events related to the use of Remote Desktop Services (RDP).</span>
-<span class="c"># Local Session Manager of Terminal Services: Events related to local terminal sessions.</span>
-<span class="c"># Remote Connection Manager of Terminal Services: Events related to remote terminal connections.</span>
-<span class="c"># SMB Client: Events related to the use of the SMB (Server Message Block) client for file sharing.</span>
-<span class="c"># SMB Server: Events related to the SMB (Server Message Block) server for file sharing.</span>
-<span class="c"># Application Log: The script activates the application log, which records events related to applications and services running on the system.</span>
-<span class="c"># System Log: The script activates the system log, which records events related to the Windows kernel and drivers.</span>
-
-
-<span class="c"># Check if the user has elevated permissions (Administrator)</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">([</span>Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent<span class="o">())</span>.IsInRole<span class="o">([</span>Security.Principal.WindowsBuiltInRole] <span class="s2">"Administrator"</span><span class="o">))</span> <span class="o">{</span>
-    Write-Warning <span class="s2">"This script requires administrative privileges. Please run it as an administrator."</span>
-    Exit
-<span class="o">}</span>
-
-<span class="c"># Prompt user to install Sysmon</span>
-<span class="nv">$InstallSysmon</span> <span class="o">=</span> Read-Host <span class="s2">"Do you want to install Sysmon? (Y/N)"</span>
-<span class="nv">$InstallSysmon</span> <span class="o">=</span> <span class="nv">$InstallSysmon</span>.ToLower<span class="o">()</span>
-
-<span class="c"># Enable Security Event Log</span>
-<span class="nv">$SecurityLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SecurityLogPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$SecurityLogPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$SecurityLogPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-
-Write-Output <span class="s2">"Enabling Security Event Log settings"</span>
-<span class="nv">$SecuritySettings</span> <span class="o">=</span> @<span class="o">{</span>
-    AuditLogonEvents <span class="o">=</span> 3
-    AuditObjectAccess <span class="o">=</span> 3
-    AuditPrivilegeUse <span class="o">=</span> 3
-    AuditProcessTracking <span class="o">=</span> 3
-    AuditAccountLogon <span class="o">=</span> 3
-    AuditAccountManagement <span class="o">=</span> 3
-    AuditPolicyChange <span class="o">=</span> 3
-    AuditSystemEvents <span class="o">=</span> 3
-    AuditGroupMembership <span class="o">=</span> 3
-    AuditSensitivePrivilegeUse <span class="o">=</span> 3
-<span class="o">}</span>
-<span class="nv">$SecuritySettings</span>.GetEnumerator<span class="o">()</span> | ForEach-Object <span class="o">{</span>
-    Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$SecurityLogPath</span> <span class="nt">-Name</span> <span class="nv">$_</span>.Key <span class="nt">-Value</span> <span class="nv">$_</span>.Value <span class="nt">-Force</span>
-<span class="o">}</span>
-
-<span class="c"># Enable PowerShell Logging with Script Block</span>
-<span class="nv">$RegistryPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\S</span><span class="s2">criptBlockLogging"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$RegistryPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$RegistryPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling PowerShell Script Block Logging"</span>
-Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"EnableScriptBlockLogging"</span> <span class="nt">-Value</span> 1 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Enable Command Line Audit Event 4688</span>
-<span class="nv">$RegistryPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$RegistryPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$RegistryPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling Command Line Audit Event 4688"</span>
-Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"AuditProcessCreation"</span> <span class="nt">-Value</span> 3 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
-Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"ProcessCreationIncludeCmdLine_Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Enable Additional Security Logs</span>
-<span class="nv">$SecurityLogPaths</span> <span class="o">=</span> @<span class="o">(</span>
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-TerminalServices-LocalSessionManager/Operational"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-TerminalServices-RemoteConnectionManager/Operational"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-SmbClient/Security"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-SMBServer/Security"</span>
-<span class="o">)</span>
-
-foreach <span class="o">(</span><span class="nv">$LogPath</span> <span class="k">in</span> <span class="nv">$SecurityLogPaths</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$LogPath</span><span class="o">))</span> <span class="o">{</span>
-        Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$LogPath</span><span class="s2">"</span>
-        New-Item <span class="nt">-Path</span> <span class="nv">$LogPath</span> <span class="nt">-Force</span> | Out-Null
-    <span class="o">}</span>
-    Write-Output <span class="s2">"Enabling </span><span class="si">$(</span><span class="nv">$LogPath</span>.Split<span class="o">(</span><span class="s1">'\\'</span><span class="o">)[</span><span class="nt">-1</span><span class="o">]</span><span class="si">)</span><span class="s2"> log"</span>
-    New-ItemProperty <span class="nt">-Path</span> <span class="nv">$LogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
-<span class="o">}</span>
-
-<span class="c"># Enable Application Event Log</span>
-<span class="nv">$ApplicationLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-Application-Experience/Analytic"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$ApplicationLogPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$ApplicationLogPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$ApplicationLogPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling Application Event Log"</span>
-New-ItemProperty <span class="nt">-Path</span> <span class="nv">$ApplicationLogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Enable System Event Log</span>
-<span class="nv">$SystemLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-Kernel-General/Analytic"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SystemLogPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$SystemLogPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$SystemLogPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling System Event Log"</span>
-New-ItemProperty <span class="nt">-Path</span> <span class="nv">$SystemLogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Check if Sysmon is installed</span>
-<span class="nv">$SysmonInstalled</span> <span class="o">=</span> Test-Path <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span>
-
-<span class="c"># Uninstall Sysmon if it's already installed</span>
-<span class="k">if</span> <span class="o">(</span><span class="nv">$InstallSysmon</span> <span class="nt">-eq</span> <span class="s2">"y"</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nv">$SysmonPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon.zip"</span>
-    <span class="nv">$SysmonUrl</span> <span class="o">=</span> <span class="s2">"https://download.sysinternals.com/files/Sysmon.zip"</span>
-    <span class="nv">$SysmonConfigUrl</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/Eyezuhk/InfoSec-Misc/refs/heads/main/Sysmon/sysmonconfig-excludes-only.xml"</span>
-    <span class="nv">$SysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
-
-    <span class="c"># Verify and create the Sysmon directory if it doesn't exist</span>
-    <span class="nv">$SysmonDir</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span>
-    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SysmonDir</span><span class="o">))</span> <span class="o">{</span>
-        Write-Output <span class="s2">"Creating Sysmon directory: </span><span class="nv">$SysmonDir</span><span class="s2">"</span>
-        New-Item <span class="nt">-ItemType</span> Directory <span class="nt">-Path</span> <span class="nv">$SysmonDir</span> | Out-Null
+<span class="k">function </span>Enable-AuditPolicies <span class="o">{</span>
+    Write-Output <span class="s2">"Configuring advanced audit policies for threat hunting..."</span>
+    
+    <span class="c"># Enable Process Creation with Command Line</span>
+    auditpol /set /subcategory:<span class="s2">"Process Creation"</span> /success:enable /failure:enable
+    reg add <span class="s2">"HKLM</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span> /v <span class="s2">"ProcessCreationIncludeCmdLine_Enabled"</span> /t REG_DWORD /d 1 /f
+    
+    <span class="c"># Enhanced Security Audit Policy Configuration</span>
+    <span class="nv">$auditPolicies</span> <span class="o">=</span> @<span class="o">{</span>
+        <span class="c"># Critical for detecting credential theft and authentication attacks</span>
+        <span class="s2">"Account Logon"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Credential Validation"</span>,
+            <span class="s2">"Kerberos Authentication Service"</span>,
+            <span class="s2">"Kerberos Service Ticket Operations"</span>
+        <span class="o">)</span>
+        <span class="c"># Track account management and modifications</span>
+        <span class="s2">"Account Management"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"User Account Management"</span>,
+            <span class="s2">"Security Group Management"</span>,
+            <span class="s2">"Computer Account Management"</span>
+        <span class="o">)</span>
+        <span class="c"># Essential for process tracking and command execution</span>
+        <span class="s2">"Detailed Tracking"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Process Creation"</span>,
+            <span class="s2">"Process Termination"</span>,
+            <span class="s2">"DPAPI Activity"</span>,
+            <span class="s2">"RPC Events"</span>
+        <span class="o">)</span>
+        <span class="c"># Critical for lateral movement detection</span>
+        <span class="s2">"Logon/Logoff"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Logon"</span>,
+            <span class="s2">"Logoff"</span>,
+            <span class="s2">"Special Logon"</span>,
+            <span class="s2">"Other Logon/Logoff Events"</span>,
+            <span class="s2">"Network Policy Server"</span>
+        <span class="o">)</span>
+        <span class="c"># File and registry access monitoring</span>
+        <span class="s2">"Object Access"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"File System"</span>,
+            <span class="s2">"Registry"</span>,
+            <span class="s2">"Kernel Object"</span>,
+            <span class="s2">"SAM"</span>,
+            <span class="s2">"Certification Services"</span>,
+            <span class="s2">"Handle Manipulation"</span>
+        <span class="o">)</span>
+        <span class="c"># Track security policy changes</span>
+        <span class="s2">"Policy Change"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Audit Policy Change"</span>,
+            <span class="s2">"Authentication Policy Change"</span>,
+            <span class="s2">"Authorization Policy Change"</span>
+        <span class="o">)</span>
+        <span class="c"># Monitor privileged operations</span>
+        <span class="s2">"Privilege Use"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Sensitive Privilege Use"</span>,
+            <span class="s2">"Non Sensitive Privilege Use"</span>
+        <span class="o">)</span>
+        <span class="c"># System level changes and security state</span>
+        <span class="s2">"System"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Security State Change"</span>,
+            <span class="s2">"Security System Extension"</span>,
+            <span class="s2">"System Integrity"</span>
+        <span class="o">)</span>
     <span class="o">}</span>
 
-    <span class="c"># Download files using .NET WebClient</span>
-    <span class="nv">$WebClient</span> <span class="o">=</span> New-Object System.Net.WebClient
-    
-    <span class="c"># Set TLS 1.2 as the default protocol for WebClient</span>
-    <span class="o">[</span>System.Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>System.Net.SecurityProtocolType]::Tls12
-    
-    Write-Output <span class="s2">"Downloading Sysmon archive..."</span>
-    <span class="nv">$WebClient</span>.DownloadFile<span class="o">(</span><span class="nv">$SysmonUrl</span>, <span class="nv">$SysmonPath</span><span class="o">)</span>
-    Write-Output <span class="s2">"Downloading Sysmon configuration..."</span>
-    <span class="nv">$WebClient</span>.DownloadFile<span class="o">(</span><span class="nv">$SysmonConfigUrl</span>, <span class="nv">$SysmonConfigPath</span><span class="o">)</span>
+    foreach <span class="o">(</span><span class="nv">$category</span> <span class="k">in</span> <span class="nv">$auditPolicies</span>.Keys<span class="o">)</span> <span class="o">{</span>
+        foreach <span class="o">(</span><span class="nv">$subcategory</span> <span class="k">in</span> <span class="nv">$auditPolicies</span><span class="o">[</span><span class="nv">$category</span><span class="o">])</span> <span class="o">{</span>
+            Write-Output <span class="s2">"Enabling audit policy: </span><span class="nv">$category</span><span class="s2"> - </span><span class="nv">$subcategory</span><span class="s2">"</span>
+            auditpol /set /subcategory:<span class="s2">"</span><span class="nv">$subcategory</span><span class="s2">"</span> /success:enable /failure:enable
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    Write-Output <span class="s2">"Expanding Sysmon archive to </span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span>
-    Expand-Archive <span class="nt">-Path</span> <span class="nv">$SysmonPath</span> <span class="nt">-DestinationPath</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Force</span>
+    <span class="c"># Enhanced PowerShell Logging</span>
+    <span class="nv">$registryPaths</span> <span class="o">=</span> @<span class="o">{</span>
+        <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\S</span><span class="s2">criptBlockLogging"</span> <span class="o">=</span> @<span class="o">{</span>
+            <span class="s2">"EnableScriptBlockLogging"</span> <span class="o">=</span> 1
+            <span class="s2">"EnableScriptBlockInvocationLogging"</span> <span class="o">=</span> 1
+        <span class="o">}</span>
+        <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\M</span><span class="s2">oduleLogging"</span> <span class="o">=</span> @<span class="o">{</span>
+            <span class="s2">"EnableModuleLogging"</span> <span class="o">=</span> 1
+        <span class="o">}</span>
 
-    Write-Output <span class="s2">"Installing and enabling Sysmon with configuration: </span><span class="nv">$SysmonConfigPath</span><span class="s2">"</span>
-    &amp; <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-accepteula</span> <span class="nt">-i</span> <span class="nv">$SysmonConfigPath</span>
+    <span class="o">}</span>
 
-    Remove-Item <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Confirm</span>:<span class="nv">$false</span>
+    foreach <span class="o">(</span><span class="nv">$path</span> <span class="k">in</span> <span class="nv">$registryPaths</span>.Keys<span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$path</span><span class="o">))</span> <span class="o">{</span>
+            New-Item <span class="nt">-Path</span> <span class="nv">$path</span> <span class="nt">-Force</span> | Out-Null
+        <span class="o">}</span>
+        foreach <span class="o">(</span><span class="nv">$name</span> <span class="k">in</span> <span class="nv">$registryPaths</span><span class="o">[</span><span class="nv">$path</span><span class="o">]</span>.Keys<span class="o">)</span> <span class="o">{</span>
+            Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$path</span> <span class="nt">-Name</span> <span class="nv">$name</span> <span class="nt">-Value</span> <span class="nv">$registryPaths</span><span class="o">[</span><span class="nv">$path</span><span class="o">][</span><span class="nv">$name</span><span class="o">]</span> <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c"># Enable Windows Security Event Log Size</span>
+    Write-Output <span class="s2">"Configuring Security Event Log size 2GB ..."</span>
+    wevtutil sl Security /ms:2147483648 <span class="c"># 2GB</span>
 <span class="o">}</span>
 
-Prompt user to press a key before exiting
+<span class="k">function </span>Install-Sysmon <span class="o">{</span>
+    param <span class="o">(</span>
+        <span class="o">[</span>string]<span class="nv">$ConfigUrl</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml"</span>
+    <span class="o">)</span>
+
+    <span class="nv">$sysmonPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon.zip"</span>
+    <span class="nv">$sysmonUrl</span> <span class="o">=</span> <span class="s2">"https://download.sysinternals.com/files/Sysmon.zip"</span>
+    <span class="nv">$sysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
+    <span class="nv">$sysmonDir</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$sysmonDir</span><span class="o">))</span> <span class="o">{</span>
+        New-Item <span class="nt">-ItemType</span> Directory <span class="nt">-Path</span> <span class="nv">$sysmonDir</span> | Out-Null
+    <span class="o">}</span>
+
+    try <span class="o">{</span>
+        <span class="o">[</span>Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>Net.SecurityProtocolType]::Tls12
+
+        Write-Output <span class="s2">"Downloading Sysmon..."</span>
+        Invoke-WebRequest <span class="nt">-Uri</span> <span class="nv">$sysmonUrl</span> <span class="nt">-OutFile</span> <span class="nv">$sysmonPath</span>
+
+        Write-Output <span class="s2">"Downloading Sysmon configuration..."</span>
+        Invoke-WebRequest <span class="nt">-Uri</span> <span class="nv">$ConfigUrl</span> <span class="nt">-OutFile</span> <span class="nv">$sysmonConfigPath</span>
+
+        Expand-Archive <span class="nt">-Path</span> <span class="nv">$sysmonPath</span> <span class="nt">-DestinationPath</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Force</span>
+        &amp; <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-accepteula</span> <span class="nt">-i</span> <span class="nv">$sysmonConfigPath</span>
+
+        <span class="c"># Cleanup</span>
+        Remove-Item <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Remove-Item <span class="nt">-Force</span> <span class="nv">$sysmonPath</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+
+        Write-Output <span class="s2">"Sysmon installed successfully!"</span>
+        
+        <span class="c"># Configure Sysmon Event Log Size</span>
+        wevtutil sl Microsoft-Windows-Sysmon/Operational /ms:2147483648 <span class="c"># 2GB</span>
+    <span class="o">}</span>
+    catch <span class="o">{</span>
+        Write-Error <span class="s2">"Error installing Sysmon: </span><span class="nv">$_</span><span class="s2">"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">function </span>Update-SysmonConfig <span class="o">{</span>
+    Write-Host <span class="s2">"Choose update method:"</span>
+    Write-Host <span class="s2">"1. Provide URL to download config file"</span>
+    Write-Host <span class="s2">"2. Provide local file path"</span>
+    <span class="nv">$updateChoice</span> <span class="o">=</span> Read-Host <span class="s2">"Enter your choice (1-2)"</span>
+
+    <span class="nv">$sysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
+
+    try <span class="o">{</span>
+        switch <span class="o">(</span><span class="nv">$updateChoice</span><span class="o">)</span> <span class="o">{</span>
+            <span class="s2">"1"</span> <span class="o">{</span>
+                <span class="nv">$ConfigUrl</span> <span class="o">=</span> Read-Host <span class="s2">"Enter URL for the Sysmon configuration file"</span>
+                Write-Output <span class="s2">"Downloading new Sysmon configuration..."</span>
+                <span class="o">[</span>Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>Net.SecurityProtocolType]::Tls12
+                Invoke-WebRequest <span class="nt">-Uri</span> <span class="nv">$ConfigUrl</span> <span class="nt">-OutFile</span> <span class="nv">$sysmonConfigPath</span>
+            <span class="o">}</span>
+            <span class="s2">"2"</span> <span class="o">{</span>
+                <span class="nv">$localPath</span> <span class="o">=</span> Read-Host <span class="s2">"Enter the full path to the local configuration file"</span>
+                <span class="k">if</span> <span class="o">(</span>Test-Path <span class="nv">$localPath</span><span class="o">)</span> <span class="o">{</span>
+                    Copy-Item <span class="nt">-Path</span> <span class="nv">$localPath</span> <span class="nt">-Destination</span> <span class="nv">$sysmonConfigPath</span> <span class="nt">-Force</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>
+                    throw <span class="s2">"Local configuration file not found!"</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            default <span class="o">{</span>
+                throw <span class="s2">"Invalid choice!"</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        Write-Output <span class="s2">"Updating Sysmon configuration..."</span>
+        &amp; <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-c</span> <span class="nv">$sysmonConfigPath</span>
+        Write-Output <span class="s2">"Sysmon configuration updated successfully!"</span>
+    <span class="o">}</span>
+    catch <span class="o">{</span>
+        Write-Error <span class="s2">"Error updating Sysmon configuration: </span><span class="nv">$_</span><span class="s2">"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">function </span>Uninstall-Sysmon <span class="o">{</span>
+    try <span class="o">{</span>
+        Write-Output <span class="s2">"Uninstalling Sysmon..."</span>
+        &amp; <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-u</span> force
+        Remove-Item <span class="nt">-Path</span> <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-Force</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Remove-Item <span class="nt">-Path</span> <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span> <span class="nt">-Force</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Remove-Item <span class="nt">-Path</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Write-Output <span class="s2">"Sysmon uninstalled successfully!"</span>
+    <span class="o">}</span>
+    catch <span class="o">{</span>
+        Write-Error <span class="s2">"Error uninstalling Sysmon: </span><span class="nv">$_</span><span class="s2">"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c"># Main script execution</span>
+<span class="nv">$sysmonInstalled</span> <span class="o">=</span> Test-Path <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span>
+<span class="nv">$action</span> <span class="o">=</span> <span class="nv">$null</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+    Write-Host <span class="s2">"Sysmon is currently installed. Choose an action:"</span>
+    Write-Host <span class="s2">"1. Update Sysmon configuration"</span>
+    Write-Host <span class="s2">"2. Uninstall Sysmon"</span>
+    Write-Host <span class="s2">"3. Enable/Update audit policies only"</span>
+    Write-Host <span class="s2">"4. Exit"</span>
+    <span class="nv">$action</span> <span class="o">=</span> Read-Host <span class="s2">"Enter your choice (1-4)"</span>
+<span class="o">}</span>
+<span class="k">else</span> <span class="o">{</span>
+    Write-Host <span class="s2">"Sysmon is not installed. Choose an action:"</span>
+    Write-Host <span class="s2">"1. Install Sysmon"</span>
+    Write-Host <span class="s2">"2. Enable audit policies only"</span>
+    Write-Host <span class="s2">"3. Exit"</span>
+    <span class="nv">$action</span> <span class="o">=</span> Read-Host <span class="s2">"Enter your choice (1-3)"</span>
+<span class="o">}</span>
+
+switch <span class="o">(</span><span class="nv">$action</span><span class="o">)</span> <span class="o">{</span>
+    <span class="s2">"1"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Update-SysmonConfig
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            Install-Sysmon
+        <span class="o">}</span>
+        Enable-AuditPolicies
+    <span class="o">}</span>
+    <span class="s2">"2"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Uninstall-Sysmon
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            Enable-AuditPolicies
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="s2">"3"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Enable-AuditPolicies
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            Write-Output <span class="s2">"Exiting..."</span>
+            <span class="nb">exit</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="s2">"4"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Write-Output <span class="s2">"Exiting..."</span>
+            <span class="nb">exit</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    default <span class="o">{</span>
+        Write-Output <span class="s2">"Invalid choice. Exiting..."</span>
+        <span class="nb">exit</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
 Write-Host <span class="s2">"Press any key to exit..."</span>
 <span class="nv">$null</span> <span class="o">=</span> <span class="nv">$Host</span>.UI.RawUI.ReadKey<span class="o">(</span><span class="s2">"NoEcho,IncludeKeyDown"</span><span class="o">)</span>
 </pre></td></tr></tbody></table></code></pre></div></div>]]></content><author><name></name></author><category term="Scripts"/><category term="Windows-Audit"/><category term="Sysmon"/><category term="SIEM"/><summary type="html"><![CDATA[Auditorias Windows e Sysmon]]></summary></entry><entry><title type="html">FnStegoCrypt dados encriptados em imagens.</title><link href="https://eyezuhk.github.io/pt-br/blog/2024/FnStegoCrypt/" rel="alternate" type="text/html" title="FnStegoCrypt dados encriptados em imagens."/><published>2024-06-25T12:00:00+00:00</published><updated>2024-06-25T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/FnStegoCrypt</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/FnStegoCrypt/"><![CDATA[<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/eyezuhk/FnStegoCrypt"> <img class="repo-img-light w-100" alt="eyezuhk/FnStegoCrypt" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FnStegoCrypt&amp;theme=default&amp;show_owner=false&amp;description_lines_count=3"/> <img class="repo-img-dark w-100" alt="eyezuhk/FnStegoCrypt" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FnStegoCrypt&amp;theme=dark&amp;show_owner=false&amp;description_lines_count=3"/> </a> </div> </div> <hr/> <h2 id="funcionalidades-principais">Funcionalidades principais</h2> <p>O programa possui as seguintes capacidades principais:</p> <ol> <li><strong>Geração de Sal e Derivação de Chave</strong>: <ul> <li>Utiliza uma combinação de PBKDF2-HMAC com SHA-256 para derivar uma chave segura a partir de uma senha fornecida.</li> <li>Gera um <em>salt</em> aleatório para aumentar a segurança da derivação da chave.</li> </ul> </li> <li><strong>Criptografia AES-GCM</strong>: <ul> <li>Os dados são criptografados com o algoritmo AES-GCM, que oferece confidencialidade e autenticação integrada dos dados.</li> </ul> </li> <li><strong>Ocultação de Dados em Imagens</strong>: <ul> <li>Utiliza os bits menos significativos (LSBs) dos pixels para armazenar informações sem comprometer a qualidade visível da imagem.</li> </ul> </li> <li><strong>Verificação de Integridade</strong>: <ul> <li>Gera um hash SHA-256 dos dados originais e o embute junto com os dados criptografados, permitindo verificar se os dados foram corrompidos.</li> </ul> </li> <li><strong>Suporte a Diversos Formatos de Imagem</strong>: <ul> <li>Suporta formatos comuns como PNG e JPEG, além de imagens no formato HEIF e HEIC.</li> </ul> </li> <li><strong>Processamento em Massa</strong>: <ul> <li>Permite processar múltiplas imagens em um diretório de forma eficiente utilizando threads.</li> </ul> </li> </ol> <hr/> <div class="row mt-3"> <div class="col-sm mt-3 mt-md-0"> <figure> <video src="/assets/videos/FnStegoCrypt/FnStegoCrypt.mp4" class="img-fluid rounded z-depth-1" width="auto" height="auto" autoplay="" controls=""/> </figure> </div> </div> <div class="caption"> Vídeo exemplo FnStegoCrypt. </div> <h2 id="estrutura-do-programa">Estrutura do Programa</h2> <h3 id="classe-improvedsteganography">Classe <code class="language-plaintext highlighter-rouge">ImprovedSteganography</code></h3> <p>Essa classe é o núcleo do programa e contém os métodos responsáveis por todas as operações de esteganografia e criptografia:</p> <ul> <li><strong><code class="language-plaintext highlighter-rouge">generate_salt</code></strong>: Gera um <em>salt</em> aleatório.</li> <li><strong><code class="language-plaintext highlighter-rouge">_derive_key</code></strong>: Deriva uma chave segura a partir de uma senha usando PBKDF2.</li> <li><strong><code class="language-plaintext highlighter-rouge">encrypt_data</code> e <code class="language-plaintext highlighter-rouge">decrypt_data</code></strong>: Realizam a criptografia e descriptografia dos dados usando AES-GCM.</li> <li><strong><code class="language-plaintext highlighter-rouge">hash_data</code></strong>: Calcula o hash SHA-256 dos dados para garantir integridade.</li> <li><strong><code class="language-plaintext highlighter-rouge">check_image_capacity</code></strong>: Verifica se a imagem tem capacidade suficiente para armazenar os dados.</li> <li><strong><code class="language-plaintext highlighter-rouge">hide_data_in_image</code></strong>: Insere os dados criptografados na imagem.</li> <li><strong><code class="language-plaintext highlighter-rouge">extract_data_from_image</code></strong>: Recupera os dados escondidos da imagem.</li> </ul> <h3 id="fluxo-do-programa">Fluxo do Programa</h3> <ol> <li><strong>Modo de Escrita (Ocultar Dados)</strong>: <ul> <li>O usuário escolhe um arquivo de imagem ou um diretório.</li> <li>Lê os dados de um arquivo de texto e os criptografa.</li> <li>Insere os dados criptografados na imagem e salva uma nova versão da imagem.</li> </ul> </li> <li><strong>Modo de Leitura (Extrair Dados)</strong>: <ul> <li>O usuário fornece uma imagem com dados ocultos e a senha correspondente.</li> <li>O programa extrai e verifica os dados criptografados, realiza a descriptografia e os retorna ao usuário.</li> </ul> </li> </ol> <hr/> <h2 id="principais-tecnologias-utilizadas">Principais Tecnologias Utilizadas</h2> <ul> <li><strong>Biblioteca <code class="language-plaintext highlighter-rouge">cryptography</code></strong>: <ul> <li>Utilizada para criptografia e derivação de chave.</li> </ul> </li> <li><strong>Biblioteca <code class="language-plaintext highlighter-rouge">Pillow</code></strong>: <ul> <li>Usada para manipulação de imagens.</li> </ul> </li> <li><strong><code class="language-plaintext highlighter-rouge">NumPy</code></strong>: <ul> <li>Fornece operações eficientes para manipular arrays de pixels.</li> </ul> </li> <li><strong><code class="language-plaintext highlighter-rouge">concurrent.futures</code></strong>: <ul> <li>Permite processamento paralelo para otimizar operações em lotes.</li> </ul> </li> </ul> <hr/> <h2 id="exemplos-de-uso">Exemplos de Uso</h2> <h3 id="escondendo-dados-em-uma-imagem">Escondendo Dados em Uma Imagem</h3> <ol> <li>O programa solicita a senha e o caminho de uma imagem e de um arquivo de texto.</li> <li>Encripta o conteúdo do arquivo de texto com a senha fornecida.</li> <li>Esconde os dados criptografados na imagem e salva a imagem resultante em um diretório de saída.</li> </ol> <h3 id="extraindo-dados-de-uma-imagem">Extraindo Dados de Uma Imagem</h3> <ol> <li>O usuário fornece a imagem esteganografada e a senha.</li> <li>O programa verifica a integridade dos dados e os descriptografa.</li> <li>Retorna os dados ao usuário, que pode optar por visualizá-los ou salvá-los em um arquivo.</li> </ol> <hr/> <h2 id="considerações-finais">Considerações Finais</h2> <p>O <strong>FnStegoCrypt</strong> é uma ferramenta poderosa para aplicações que exigem discrição e segurança na transmissão de informações. Seu uso de algoritmos de ponta, como AES-GCM e SHA-256, aliado à capacidade de trabalhar com múltiplos formatos de imagem, torna-o ideal para cenários onde a proteção de dados é essencial.</p> <p>Caso tenha interesse em contribuir para melhorias, fique à vontade para explorar o código e adaptá-lo às suas necessidades.</p>]]></content><author><name></name></author><category term="Tools"/><category term="FnStegoCrypt"/><summary type="html"><![CDATA[Programa que encripta os dados com aes-gcm e adiciona a imagens usando LSB.]]></summary></entry><entry><title type="html">Expondo aplicações locais com FNLocalCloud.</title><link href="https://eyezuhk.github.io/pt-br/blog/2024/FNLocalCloud/" rel="alternate" type="text/html" title="Expondo aplicações locais com FNLocalCloud."/><published>2024-04-12T12:00:00+00:00</published><updated>2024-04-12T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/FNLocalCloud</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/FNLocalCloud/"><![CDATA[<div class="repositories d-flex flex-wrap flex-md-row flex-column justify-content-between align-items-center"> <div class="repo p-2 text-center"> <a href="https://github.com/eyezuhk/FNLocalCloud"> <img class="repo-img-light w-100" alt="eyezuhk/FNLocalCloud" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FNLocalCloud&amp;theme=default&amp;show_owner=false&amp;description_lines_count=3"/> <img class="repo-img-dark w-100" alt="eyezuhk/FNLocalCloud" src="https://github-readme-stats.vercel.app/api/pin/?username=eyezuhk&amp;repo=FNLocalCloud&amp;theme=dark&amp;show_owner=false&amp;description_lines_count=3"/> </a> </div> </div> <hr/> <p>Recentement eu me vi em um cenário onde eu precisava acessar minha máquina via RDP, mas eu não tenho um ip público por conta da escassez de ips, minha provedora utiliza cgnat.</p> <blockquote> <p>Lembrei de um passado distante em que tudo o que eu queria era um VPS para expor um servidor de Counter-Strike 1.6 ou Lineage 2 para meus amigos jogarem online. Nem todos os provedores ofereciam IPs públicos, e hoje essa é a regra.</p> </blockquote> <p>Uma solução comum para esse cenário é usar o ngrok, e funcionou bem, mas o delay adicionado me deixou insatisfeito com a usabilidade.</p> <p>O mesmo aconteceu quando fiz um túnel ssh para uma máquina free tier que tenho na oracle, então decidi tentar criar uma solução em python para isso com ajuda de llms, visto que para esse propósito, acelera muito o processo de criação.</p> <h4 id="motivos-para-a-ausência-de-ips-públicos">Motivos para a Ausência de IPs Públicos:</h4> <p>Escassez de IPv4: Com o aumento da demanda por IPs públicos, acabamos recorrendo a técnicas como o CGNAT, onde vários usuários compartilham o mesmo endereço IPv4 público.</p> <p>Custos e Segurança: Alugar um bloco de IPs públicos pode ser caro, e o CGNAT oferece uma camada extra de segurança ao ocultar nossos endereços IP internos.</p> <h4 id="desafios-do-cgnat">Desafios do CGNAT:</h4> <p>Exposição de Serviços Locais: Com o CGNAT, enfrentamos dificuldades para expor nossos serviços locais, já que todos os dispositivos internos compartilham o mesmo endereço IPv4 público.</p> <p>Complexidade de Configuração: Configurar redirecionamento de portas e lidar com as restrições do CGNAT pode ser complicado, especialmente para aqueles que não são muito técnicos.</p> <h4 id="desafios-na-adoção-do-ipv6">Desafios na Adoção do IPv6:</h4> <p>Falta de Incentivo: Muitos provedores de internet ainda não adotaram o IPv6, o que dificulta nossa jornada de expor serviços locais.</p> <h3 id="solução">Solução</h3> <p>Então, se você precisar expor algum serviço local com um TCP proxy reverso, confira a ferramenta que criei no GitHub!</p> <p>Link: <a href="https://github.com/Eyezuhk/FNLocalCloud">https://github.com/Eyezuhk/FNLocalCloud</a></p> <div class="row mt-3"> <div class="col-sm mt-3 mt-md-0"> <figure> <video src="/assets/videos/FNLocalCloud/FNLocalCloud.mp4" class="img-fluid rounded z-depth-1" width="auto" height="auto" autoplay="" controls=""/> </figure> </div> </div> <div class="caption"> Vídeo exemplo FNLocalCloud. </div>]]></content><author><name></name></author><category term="Tools"/><category term="FNLocalCloud"/><summary type="html"><![CDATA[Programa baseado em agente e servidor para expor serviços de rede locais na internet bypassando cgnat...]]></summary></entry><entry><title type="html">FIRST Fortaleza 2023.</title><link href="https://eyezuhk.github.io/pt-br/blog/2023/First/" rel="alternate" type="text/html" title="FIRST Fortaleza 2023."/><published>2023-10-05T12:00:00+00:00</published><updated>2023-10-05T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2023/First</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2023/First/"><![CDATA[<p>Compartilho minha recente participação no FIRST (Forum of Incident Response and Security Teams) Regional Symposium Latin America &amp; Caribbean realizado pelo LACNIC, que aconteceu nos dias 4 e 5 de outubro em Fortaleza.</p> <p>Este evento foi uma verdadeira imersão em segurança cibernética, um fórum de discussão para compartilhar informações sobre vulnerabilidades, incidentes, ferramentas e todas as outras questões que afetam a operação das equipes de segurança e resposta a incidentes, proporcionando dois dias de aprendizado intenso e inspirador.</p> <p>Participei de um treinamento de Resposta a Incidentes (IR) para Ransomware, nossa tarefa era proteger uma máquina contra ataques de ransomware e manter seus serviços funcionando.</p> <p>Cada equipe recebeu uma máquina virtual Linux para simulação. Durante o laboratório, enfrentamos diversas situações desafiadoras e participamos de discussões acaloradas. No entanto, com o tempo limitado para proteger a máquina, nossa VM acabou sendo comprometida e nossos serviços web ficaram indisponíveis. (Esta parte era prevista do laboratório)</p> <p>Foi um momento crítico, mas o cenário do treinamento evoluiu, e agora enfrentamos o desafio de recuperar os arquivos criptografados. Através da análise dos registros (logs), conseguimos identificar o possível responsável pelo ataque. Descobrimos que o usuário comprometido havia executado um binário, e este binário ainda estava presente na máquina.</p> <p>Após várias tentativas, surgiu uma sugestão que se revelou surpreendente: verificar o manual do binário. Para nossa surpresa, constatamos que o mesmo programa responsável pela criptografia dos arquivos também continha uma função de descriptografia.</p> <p>Conseguimos com sucesso descriptografar os arquivos e restaurar os serviços. Na segunda parte do laboratório, tivemos que fazer um relatório público abrangente sobre os acontecimentos.</p> <p>A experiência foi notavelmente realista, uma vez que recebemos a máquina sem qualquer informação prévia, exceto que estaríamos lidando com um incidente de ransomware. Embora nossa equipe tenha sido formada na hora, conseguimos prontamente dividir as funções. Enquanto uma parte se concentrou no fortalecimento da segurança (hardening), a outra procurou ativamente por possíveis indicadores de comprometimento.</p> <p>Aprofundamos nossa análise além do esperado do desafio e identificamos que a ferramenta utilizada no exercício era o <a href="https://github.com/hazcod/ransomwhere">https://github.com/hazcod/ransomwhere</a> Uma prova de conceito de Ransomware.</p> <p>Ao final, não apenas recuperamos a máquina comprometida, mas também produzimos um relatório abrangente que documentou todas as ações tomadas, os aprendizados adquiridos e as estratégias implementadas. Essa experiência ressaltou a importância da preparação e colaboração eficaz em situações de segurança cibernética.</p> <swiper-container keyboard="true" navigation="true" pagination="true" pagination-clickable="true" pagination-dynamic-bullets="true" rewind="true"> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/First/First_1-480.webp 480w,/assets/img/First/First_1-800.webp 800w,/assets/img/First/First_1-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/First/First_1.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> </swiper-slide> <swiper-slide> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/First/First_2-480.webp 480w,/assets/img/First/First_2-800.webp 800w,/assets/img/First/First_2-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/First/First_2.jpg" class="img-fluid rounded z-depth-1" width="100%" height="auto" loading="eager" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> </swiper-slide> </swiper-container>]]></content><author><name></name></author><category term="Events"/><category term="First"/><summary type="html"><![CDATA[FIRST (Forum of Incident Response and Security Teams)]]></summary></entry><entry><title type="html">Resolução CyberDefenders Qradar101.</title><link href="https://eyezuhk.github.io/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/" rel="alternate" type="text/html" title="Resolução CyberDefenders Qradar101."/><published>2022-02-16T12:00:00+00:00</published><updated>2022-02-16T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2022/CyberDefenders-Qradar101-Write-up</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2022/CyberDefenders-Qradar101-Write-up/"><![CDATA[<p>Publicado originalmente por mim no Medium <a href="https://infosecwriteups.com/cyberdefenders-qradar101-write-up-88bf45fdf82c">InfosecWriteups CyberDefenders QRadar101</a></p> <p>Este foi o primeiro write-up para este CTF.</p> <p>Olhando para trás, percebo que teria sido muito mais fácil se eu soubesse na época o que sei agora. Ainda assim, tenho orgulho de ter sido o primeiro!</p> <hr/> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p><strong>Este write-up é baseado no desafio Cyberdefenders Qradar101 de Ali Alwashali.</strong></p> <p>Você pode conferir em <a href="https://cyberdefenders.org/blueteam-ctf-challenges/39">https://cyberdefenders.org/blueteam-ctf-challenges/39</a></p> <hr/> <p>Primeiramente, vamos começar procurando por ofensas.</p> <p>Podemos ver 26 ofensas entre 17 de outubro e 8 de novembro de 2020.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*UfcJEcN7jFEnz4FTcG8JbA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p><em>Apesar disso, os logs são entre 10/11/2020 22:00 e 10/11/2020 15:00.</em></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*QuNpAdQgXKVGakze7d1XTQ.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <h2 id="perguntas"><strong>Perguntas</strong></h2> <blockquote> <h3 id="quantas-fontes-de-log-estão-disponíveis"><strong>Quantas fontes de log estão disponíveis?</strong></h3> </blockquote> <p>Podemos encontrar esta informação acessando Admin &gt; ### Fontes de Log.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A-480.webp 480w,https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A-800.webp 800w,https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:970/format:webp/1*Xtxty8vIelmjePXM3txN4A.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-software-ids-usado-para-monitorar-a-rede"><strong>Qual é o software IDS usado para monitorar a rede?</strong></h3> </blockquote> <p>Podemos ver na Figura 3 que o IDS é uma das fontes de log.</p> <blockquote> <h3 id="qual-é-o-nome-do-domínio-usado-na-rede"><strong>Qual é o nome do domínio usado na rede?</strong></h3> </blockquote> <p>Podemos encontrar esta informação procurando por eventos de payload relacionados a hosts, como, por exemplo: “Success Audit: A Kerberos service ticket was granted.”</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*lA1syASBL-Cv41NAXjKtQA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="vários-ips-estavam-se-comunicando-com-o-servidor-malicioso-um-deles-termina-com-20-forneça-o-ip-completo"><strong>Vários IPs estavam se comunicando com o servidor malicioso. Um deles termina com “20”. Forneça o IP completo.</strong></h3> </blockquote> <p>Podemos exibir a Atividade de Logs por IP de Origem para ver quais IPs geraram mais comunicação.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*mm83K3gfDbeGJs8O76HZ-w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-sid-da-regra-de-alerta-mais-frequente-no-conjunto-de-dados"><strong>Qual é o SID da regra de alerta mais frequente no conjunto de dados?</strong></h3> </blockquote> <p>Podemos procurar por <code class="language-plaintext highlighter-rouge">sid:</code> no payload usando expressões regulares.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*0flYzSiMHVDtgeN7VOuleQ.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Encontramos 110 logs do SO-Suricata, dos quais 72 são para a regra <code class="language-plaintext highlighter-rouge">sid:</code>.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*TDaJUGXn8hWtS-a_xVf6lw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-endereço-ip-do-atacante"><strong>Qual é o endereço IP do atacante?</strong></h3> </blockquote> <p>Em ofensas encerradas, podemos ver um IP público suspeito.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*50S669S0LXIETxGIRjGgtg.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="o-atacante-estava-procurando-dados-pertencentes-a-um-dos-projetos-da-empresa-você-pode-encontrar-o-nome-do-projeto"><strong>O atacante estava procurando dados pertencentes a um dos projetos da empresa. Você pode encontrar o nome do projeto?</strong></h3> </blockquote> <p>Podemos buscar pelo projeto com expressões regulares.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww-480.webp 480w,https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww-800.webp 800w,https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1006/format:webp/1*hSlpjUdc87yP-FDZNun0Ww.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Encontraremos 4 eventos, depois leremos o payload.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*-hyqniVwRcXXGOwW74epaw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-endereço-ip-da-primeira-máquina-infectada"><strong>Qual é o endereço IP da primeira máquina infectada?</strong></h3> </blockquote> <p>Podemos ordenar os eventos por tempo crescente. Vemos um evento suspeito.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*VdVE_VvgpO4zVEqOBXPJWA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-nome-de-usuário-do-funcionário-infectado-que-usa-1921681015"><strong>Qual é o nome de usuário do funcionário infectado que usa 192.168.10.15?</strong></h3> </blockquote> <p>Adicionando um filtro onde o IP de origem é 192.168.10.15, podemos encontrar o primeiro nome de usuário que fez login.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2BLNfFZ2qw6f17x4hOie7A.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="hackers-não-gostam-de-registros-qual-registro-o-atacante-estava-verificando-para-ver-se-estava-ativado"><strong>Hackers não gostam de registros. Qual registro o atacante estava verificando para ver se estava ativado?</strong></h3> </blockquote> <p>Vamos observar os primeiros eventos gerados pelo atacante. Podemos identificar uma ferramenta amplamente usada em ataques.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*oxkLfg4uQWTBOB3oDHBIAg.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Também podemos ver que o atacante está usando PowerShell para encontrar project48.</p> <blockquote> <h3 id="nome-do-segundo-sistema-que-o-atacante-alvejou-para-incriminar-o-funcionário"><strong>Nome do segundo sistema que o atacante alvejou para incriminar o funcionário?</strong></h3> </blockquote> <p>Podemos buscar arquivos deletados.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w-480.webp 480w,https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w-800.webp 800w,https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:494/format:webp/1*LXFLGmodEfXXa498m9Ck3w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*tCCUhfbbnuIlUBof352auA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="quando-foi-feita-a-primeira-conexão-maliciosa-ao-controlador-de-domínio-horário-de-início-do-log--hhmmss"><strong>Quando foi feita a primeira conexão maliciosa ao controlador de domínio (horário de início do log — hh:mm:ss)?</strong></h3> </blockquote> <p>Podemos procurar conexões de rede detectadas nos payloads e ver que o primeiro evento é uma conexão com o servidor do atacante (192.20.80.25) por um processo que não deveria fazer essa conexão.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cSK-Db2B1EQ5q26dbaWFqw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-hash-md5-do-arquivo-malicioso"><strong>Qual é o hash MD5 do arquivo malicioso?</strong></h3> </blockquote> <p>Filtrando por hash, encontramos 10 eventos. Ao olhar o primeiro da máquina infectada 192.168.10.15, podemos identificar o arquivo .docx com hash malicioso.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*LsU-skjXwlQd2zuTPLNJuA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*bZNAtw5DBqJ-EuR-FHH7WA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-id-da-técnica-de-persistência-usada-pelo-atacante-segundo-a-mitre"><strong>Qual é o ID da técnica de persistência usada pelo atacante segundo a MITRE?</strong></h3> </blockquote> <p>Consultando as técnicas de persistência em <a href="https://attack.mitre.org/tactics/TA0003/"><strong><em>mitre</em></strong></a>, podemos buscar nos logs as técnicas que o atacante pode ter usado.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*cz-rjkImg4uxRo3EsRXZ1Q.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A-480.webp 480w,https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A-800.webp 800w,https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:832/format:webp/1*8jhAXJeeH_pEL66kOdSV8A.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-protocolo-é-usado-para-realizar-a-descoberta-de-hosts"><strong>Qual protocolo é usado para realizar a descoberta de hosts?</strong></h3> </blockquote> <p>Podemos descobrir essa informação analisando o tráfego de saída do primeiro host comprometido.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*M6gRH8_uZA3ZXIpgTVlHHg.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*DJHJ3cWbNnjZozN92LZM9g.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-serviço-de-e-mail-usado-pela-empresa-uma-palavra"><strong>Qual é o serviço de e-mail usado pela empresa? (uma palavra)</strong></h3> </blockquote> <p>Podemos analisar o tráfego direcionado às portas padrão dos serviços de IP. Nesse caso, sem sucesso, analisamos o tráfego HTTPS na porta 443. Consultamos <a href="https://viewdns.info">https://viewdns.info</a> e a maioria dos IPs pertencem à Microsoft, confirmando a resposta.</p> <blockquote> <h3 id="qual-é-o-nome-do-arquivo-malicioso-usado-para-a-infecção-inicial"><strong>Qual é o nome do arquivo malicioso usado para a infecção inicial?</strong></h3> </blockquote> <p>Identificamos o arquivo pelo hash MD5.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Tcfjcty0Nq6f2wm8PiK9GA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-nome-da-nova-conta-adicionada-pelo-atacante"><strong>Qual é o nome da nova conta adicionada pelo atacante?</strong></h3> </blockquote> <p>Podemos buscar o ID de evento 4720, que indica a criação de uma conta de usuário.</p> <p><a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4720">Ref: ultimatewindowssecurity EVENT 4720</a></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw-480.webp 480w,https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw-800.webp 800w,https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:490/format:webp/1*xFOxxKzXKW7diiu2mgeDFw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*jcrZ0OxzRtwgro1gngojLw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-pid-do-processo-que-realizou-a-injeção"><strong>Qual é o PID do processo que realizou a injeção?</strong></h3> </blockquote> <p>Podemos buscar por criação de processos no host infectado.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig-480.webp 480w,https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig-800.webp 800w,https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:960/format:webp/1*5YSQUgerqg_FZiqFy78Dig.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*ghrXmlEOUMNmzdLyBbqy-w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*7QyI99xBqt4hFNrh0fP4rA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-nome-da-ferramenta-usada-para-movimentação-lateral"><strong>Qual é o nome da ferramenta usada para movimentação lateral?</strong></h3> </blockquote> <p>Eu não conhecia essa ferramenta e não encontrei nada nos logs. Usei a dica e, ao pesquisar no Google, encontrei <a href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw-480.webp 480w,https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw-800.webp 800w,https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1240/format:webp/1*wcQmKJ0jUI24ubbGXVFUWw.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="o-atacante-exfiltrou-um-arquivo-qual-é-o-nome-da-ferramenta-usada-para-exfiltração"><strong>O atacante exfiltrou um arquivo. Qual é o nome da ferramenta usada para exfiltração?</strong></h3> </blockquote> <p>Pesquisando eventos que indicam comunicação com o atacante.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*60qypUXRT6TSI2f3eP331w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*dz7B6IkGTfLGaKlohftT9g.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="quem-é-o-outro-administrador-de-domínio-legítimo-além-do-administrador"><strong>Quem é o outro administrador de domínio legítimo além do administrador?</strong></h3> </blockquote> <p>Podemos ver uma lista de usuários agrupados por nome e buscar o evento <a href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/event.aspx?eventid=4672"><strong><em>4672</em></strong></a><strong><em>.</em></strong></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w-480.webp 480w,https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w-800.webp 800w,https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:606/format:webp/1*ChKRs3mb3hIAuxqapP3x9w.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA-480.webp 480w,https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA-800.webp 800w,https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:840/format:webp/1*kZlSbod-_IYuPFIRt5YJTA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="o-atacante-usou-a-técnica-de-descoberta-de-hosts-para-saber-quantos-estavam-disponíveis-em-certa-rede-qual-rede-o-hacker-escaneou-do-host-ip-1-ao-30"><strong>O atacante usou a técnica de descoberta de hosts para saber quantos estavam disponíveis em certa rede. Qual rede o hacker escaneou do host IP 1 ao 30?</strong></h3> </blockquote> <p>Podemos verificar se a primeira máquina comprometida escaneou a rede.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q-480.webp 480w,https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q-800.webp 800w,https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1148/format:webp/1*C78p5kQSWI0CSwIPfr647Q.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*k_mTtZ-NVq8E4PFvS82iaQ.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <blockquote> <h3 id="qual-é-o-nome-do-funcionário-que-contratou-o-atacante"><strong>Qual é o nome do funcionário que contratou o atacante?</strong></h3> </blockquote> <p>Ao buscar qual ferramenta o atacante usou para exfiltração de dados, notamos uma planilha .xlsx suspeita.</p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*Wnh0tvkWlhnXJtfleAxuSA.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Espero que este write-up tenha ajudado. Para dúvidas, entre em contato: <a href="https://www.linkedin.com/in/isaacfn/">https://www.linkedin.com/in/isaacfn/</a></p> <p><br/></p> <figure> <picture> <source class="responsive-img-srcset" srcset="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-480.webp 480w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-800.webp 800w,https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/0*RQ1UkOuc8hVmcWw_.png" class="img-fluid rounded z-depth-1" width="100%" height="auto" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p><br/><br/></p>]]></content><author><name></name></author><category term="Threat-Hunting"/><category term="Qradar"/><category term="Cyberdefenders"/><category term="SIEM"/><summary type="html"><![CDATA[Resolução de CTF]]></summary></entry></feed>

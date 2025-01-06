@@ -161,163 +161,355 @@
 157
 158
 159
-</pre></td> <td class="rouge-code"><pre><span class="c"># This PowerShell script enhances Windows security logging by enabling various event logs and installing Sysmon. </span>
-<span class="c"># It prompts for admin rights and asks if you want to install Sysmon. If confirmed, it activates logs for user logon events, object access, privilege use, process tracking, and more. It also enables PowerShell script block logging and command line auditing for better visibility into executed commands.</span>
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+</pre></td> <td class="rouge-code"><pre><span class="c">#Requires -RunAsAdministrator</span>
 
 <span class="c">#powershell.exe -ExecutionPolicy Bypass -File .\Sysmon.ps1</span>
 
-<span class="c"># Security Logs:</span>
-<span class="c"># Logon/Logoff Events: Events related to user logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).</span>
-<span class="c"># Object Access: Events related to accessing objects such as files, directories, and registry keys (Event IDs: 4656, 4663, etc.).</span>
-<span class="c"># Privilege Use: Events related to the use of sensitive privileges (Event IDs: 4672, 4673, etc.).</span>
-<span class="c"># Process Tracking: Events related to the creation, termination, and access of processes (Event IDs: 4688, 4689, etc.).</span>
-<span class="c"># Account Logon: Events related to account logon and logoff (Event IDs: 4624, 4625, 4634, 4647, etc.).</span>
-<span class="c"># Account Management: Events related to the creation, modification, and deletion of user accounts (Event IDs: 4720, 4722, 4724, etc.).</span>
-<span class="c"># Policy Changes: Events related to changes in security policies (Event IDs: 4670, 4719, etc.).</span>
-<span class="c"># System Events: Events related to system changes, such as updates, drivers, etc. (Event IDs: 4610, 4615, etc.).</span>
-<span class="c"># Group Membership: Events related to adding and removing users from groups (Event IDs: 4728, 4732, 4756, etc.).</span>
-<span class="c"># Sensitive Privilege Use: Events related to the use of sensitive privileges, such as the ability to debug processes (Event IDs: 4672, 4673, etc.).</span>
-
-<span class="c"># PowerShell Script Log: The script activates PowerShell script block logging, allowing auditing of scripts executed on the system.</span>
-<span class="c"># Command Line Log: The script activates auditing of Event 4688, which records the full command line used to create new processes.</span>
-
-<span class="c"># Additional Security Logs:</span>
-<span class="c"># Remote Desktop Services: Events related to the use of Remote Desktop Services (RDP).</span>
-<span class="c"># Local Session Manager of Terminal Services: Events related to local terminal sessions.</span>
-<span class="c"># Remote Connection Manager of Terminal Services: Events related to remote terminal connections.</span>
-<span class="c"># SMB Client: Events related to the use of the SMB (Server Message Block) client for file sharing.</span>
-<span class="c"># SMB Server: Events related to the SMB (Server Message Block) server for file sharing.</span>
-<span class="c"># Application Log: The script activates the application log, which records events related to applications and services running on the system.</span>
-<span class="c"># System Log: The script activates the system log, which records events related to the Windows kernel and drivers.</span>
-
-
-<span class="c"># Check if the user has elevated permissions (Administrator)</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">([</span>Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent<span class="o">())</span>.IsInRole<span class="o">([</span>Security.Principal.WindowsBuiltInRole] <span class="s2">"Administrator"</span><span class="o">))</span> <span class="o">{</span>
-    Write-Warning <span class="s2">"This script requires administrative privileges. Please run it as an administrator."</span>
-    Exit
-<span class="o">}</span>
-
-<span class="c"># Prompt user to install Sysmon</span>
-<span class="nv">$InstallSysmon</span> <span class="o">=</span> Read-Host <span class="s2">"Do you want to install Sysmon? (Y/N)"</span>
-<span class="nv">$InstallSysmon</span> <span class="o">=</span> <span class="nv">$InstallSysmon</span>.ToLower<span class="o">()</span>
-
-<span class="c"># Enable Security Event Log</span>
-<span class="nv">$SecurityLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SecurityLogPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$SecurityLogPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$SecurityLogPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-
-Write-Output <span class="s2">"Enabling Security Event Log settings"</span>
-<span class="nv">$SecuritySettings</span> <span class="o">=</span> @<span class="o">{</span>
-    AuditLogonEvents <span class="o">=</span> 3
-    AuditObjectAccess <span class="o">=</span> 3
-    AuditPrivilegeUse <span class="o">=</span> 3
-    AuditProcessTracking <span class="o">=</span> 3
-    AuditAccountLogon <span class="o">=</span> 3
-    AuditAccountManagement <span class="o">=</span> 3
-    AuditPolicyChange <span class="o">=</span> 3
-    AuditSystemEvents <span class="o">=</span> 3
-    AuditGroupMembership <span class="o">=</span> 3
-    AuditSensitivePrivilegeUse <span class="o">=</span> 3
-<span class="o">}</span>
-<span class="nv">$SecuritySettings</span>.GetEnumerator<span class="o">()</span> | ForEach-Object <span class="o">{</span>
-    Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$SecurityLogPath</span> <span class="nt">-Name</span> <span class="nv">$_</span>.Key <span class="nt">-Value</span> <span class="nv">$_</span>.Value <span class="nt">-Force</span>
-<span class="o">}</span>
-
-<span class="c"># Enable PowerShell Logging with Script Block</span>
-<span class="nv">$RegistryPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\S</span><span class="s2">criptBlockLogging"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$RegistryPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$RegistryPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling PowerShell Script Block Logging"</span>
-Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"EnableScriptBlockLogging"</span> <span class="nt">-Value</span> 1 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Enable Command Line Audit Event 4688</span>
-<span class="nv">$RegistryPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$RegistryPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$RegistryPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling Command Line Audit Event 4688"</span>
-Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"AuditProcessCreation"</span> <span class="nt">-Value</span> 3 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
-Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$RegistryPath</span> <span class="nt">-Name</span> <span class="s2">"ProcessCreationIncludeCmdLine_Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Enable Additional Security Logs</span>
-<span class="nv">$SecurityLogPaths</span> <span class="o">=</span> @<span class="o">(</span>
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-TerminalServices-LocalSessionManager/Operational"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-TerminalServices-RemoteConnectionManager/Operational"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-SmbClient/Security"</span>,
-    <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-SMBServer/Security"</span>
-<span class="o">)</span>
-
-foreach <span class="o">(</span><span class="nv">$LogPath</span> <span class="k">in</span> <span class="nv">$SecurityLogPaths</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$LogPath</span><span class="o">))</span> <span class="o">{</span>
-        Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$LogPath</span><span class="s2">"</span>
-        New-Item <span class="nt">-Path</span> <span class="nv">$LogPath</span> <span class="nt">-Force</span> | Out-Null
-    <span class="o">}</span>
-    Write-Output <span class="s2">"Enabling </span><span class="si">$(</span><span class="nv">$LogPath</span>.Split<span class="o">(</span><span class="s1">'\\'</span><span class="o">)[</span><span class="nt">-1</span><span class="o">]</span><span class="si">)</span><span class="s2"> log"</span>
-    New-ItemProperty <span class="nt">-Path</span> <span class="nv">$LogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
-<span class="o">}</span>
-
-<span class="c"># Enable Application Event Log</span>
-<span class="nv">$ApplicationLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-Application-Experience/Analytic"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$ApplicationLogPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$ApplicationLogPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$ApplicationLogPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling Application Event Log"</span>
-New-ItemProperty <span class="nt">-Path</span> <span class="nv">$ApplicationLogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Enable System Event Log</span>
-<span class="nv">$SystemLogPath</span> <span class="o">=</span> <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\W</span><span class="s2">inevt</span><span class="se">\C</span><span class="s2">hannels</span><span class="se">\M</span><span class="s2">icrosoft-Windows-Kernel-General/Analytic"</span>
-<span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SystemLogPath</span><span class="o">))</span> <span class="o">{</span>
-    Write-Output <span class="s2">"Creating registry key: </span><span class="nv">$SystemLogPath</span><span class="s2">"</span>
-    New-Item <span class="nt">-Path</span> <span class="nv">$SystemLogPath</span> <span class="nt">-Force</span> | Out-Null
-<span class="o">}</span>
-Write-Output <span class="s2">"Enabling System Event Log"</span>
-New-ItemProperty <span class="nt">-Path</span> <span class="nv">$SystemLogPath</span> <span class="nt">-Name</span> <span class="s2">"Enabled"</span> <span class="nt">-Value</span> 1 <span class="nt">-PropertyType</span> DWord <span class="nt">-Force</span>
-
-<span class="c"># Check if Sysmon is installed</span>
-<span class="nv">$SysmonInstalled</span> <span class="o">=</span> Test-Path <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span>
-
-<span class="c"># Uninstall Sysmon if it's already installed</span>
-<span class="k">if</span> <span class="o">(</span><span class="nv">$InstallSysmon</span> <span class="nt">-eq</span> <span class="s2">"y"</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nv">$SysmonPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon.zip"</span>
-    <span class="nv">$SysmonUrl</span> <span class="o">=</span> <span class="s2">"https://download.sysinternals.com/files/Sysmon.zip"</span>
-    <span class="nv">$SysmonConfigUrl</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/Eyezuhk/InfoSec-Misc/refs/heads/main/Sysmon/sysmonconfig-excludes-only.xml"</span>
-    <span class="nv">$SysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
-
-    <span class="c"># Verify and create the Sysmon directory if it doesn't exist</span>
-    <span class="nv">$SysmonDir</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span>
-    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$SysmonDir</span><span class="o">))</span> <span class="o">{</span>
-        Write-Output <span class="s2">"Creating Sysmon directory: </span><span class="nv">$SysmonDir</span><span class="s2">"</span>
-        New-Item <span class="nt">-ItemType</span> Directory <span class="nt">-Path</span> <span class="nv">$SysmonDir</span> | Out-Null
+<span class="k">function </span>Enable-AuditPolicies <span class="o">{</span>
+    Write-Output <span class="s2">"Configuring advanced audit policies for threat hunting..."</span>
+    
+    <span class="c"># Enable Process Creation with Command Line</span>
+    auditpol /set /subcategory:<span class="s2">"Process Creation"</span> /success:enable /failure:enable
+    reg add <span class="s2">"HKLM</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\C</span><span class="s2">urrentVersion</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\S</span><span class="s2">ystem</span><span class="se">\A</span><span class="s2">udit"</span> /v <span class="s2">"ProcessCreationIncludeCmdLine_Enabled"</span> /t REG_DWORD /d 1 /f
+    
+    <span class="c"># Enhanced Security Audit Policy Configuration</span>
+    <span class="nv">$auditPolicies</span> <span class="o">=</span> @<span class="o">{</span>
+        <span class="c"># Critical for detecting credential theft and authentication attacks</span>
+        <span class="s2">"Account Logon"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Credential Validation"</span>,
+            <span class="s2">"Kerberos Authentication Service"</span>,
+            <span class="s2">"Kerberos Service Ticket Operations"</span>
+        <span class="o">)</span>
+        <span class="c"># Track account management and modifications</span>
+        <span class="s2">"Account Management"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"User Account Management"</span>,
+            <span class="s2">"Security Group Management"</span>,
+            <span class="s2">"Computer Account Management"</span>
+        <span class="o">)</span>
+        <span class="c"># Essential for process tracking and command execution</span>
+        <span class="s2">"Detailed Tracking"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Process Creation"</span>,
+            <span class="s2">"Process Termination"</span>,
+            <span class="s2">"DPAPI Activity"</span>,
+            <span class="s2">"RPC Events"</span>
+        <span class="o">)</span>
+        <span class="c"># Critical for lateral movement detection</span>
+        <span class="s2">"Logon/Logoff"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Logon"</span>,
+            <span class="s2">"Logoff"</span>,
+            <span class="s2">"Special Logon"</span>,
+            <span class="s2">"Other Logon/Logoff Events"</span>,
+            <span class="s2">"Network Policy Server"</span>
+        <span class="o">)</span>
+        <span class="c"># File and registry access monitoring</span>
+        <span class="s2">"Object Access"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"File System"</span>,
+            <span class="s2">"Registry"</span>,
+            <span class="s2">"Kernel Object"</span>,
+            <span class="s2">"SAM"</span>,
+            <span class="s2">"Certification Services"</span>,
+            <span class="s2">"Handle Manipulation"</span>
+        <span class="o">)</span>
+        <span class="c"># Track security policy changes</span>
+        <span class="s2">"Policy Change"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Audit Policy Change"</span>,
+            <span class="s2">"Authentication Policy Change"</span>,
+            <span class="s2">"Authorization Policy Change"</span>
+        <span class="o">)</span>
+        <span class="c"># Monitor privileged operations</span>
+        <span class="s2">"Privilege Use"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Sensitive Privilege Use"</span>,
+            <span class="s2">"Non Sensitive Privilege Use"</span>
+        <span class="o">)</span>
+        <span class="c"># System level changes and security state</span>
+        <span class="s2">"System"</span> <span class="o">=</span> @<span class="o">(</span>
+            <span class="s2">"Security State Change"</span>,
+            <span class="s2">"Security System Extension"</span>,
+            <span class="s2">"System Integrity"</span>
+        <span class="o">)</span>
     <span class="o">}</span>
 
-    <span class="c"># Download files using .NET WebClient</span>
-    <span class="nv">$WebClient</span> <span class="o">=</span> New-Object System.Net.WebClient
-    
-    <span class="c"># Set TLS 1.2 as the default protocol for WebClient</span>
-    <span class="o">[</span>System.Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>System.Net.SecurityProtocolType]::Tls12
-    
-    Write-Output <span class="s2">"Downloading Sysmon archive..."</span>
-    <span class="nv">$WebClient</span>.DownloadFile<span class="o">(</span><span class="nv">$SysmonUrl</span>, <span class="nv">$SysmonPath</span><span class="o">)</span>
-    Write-Output <span class="s2">"Downloading Sysmon configuration..."</span>
-    <span class="nv">$WebClient</span>.DownloadFile<span class="o">(</span><span class="nv">$SysmonConfigUrl</span>, <span class="nv">$SysmonConfigPath</span><span class="o">)</span>
+    foreach <span class="o">(</span><span class="nv">$category</span> <span class="k">in</span> <span class="nv">$auditPolicies</span>.Keys<span class="o">)</span> <span class="o">{</span>
+        foreach <span class="o">(</span><span class="nv">$subcategory</span> <span class="k">in</span> <span class="nv">$auditPolicies</span><span class="o">[</span><span class="nv">$category</span><span class="o">])</span> <span class="o">{</span>
+            Write-Output <span class="s2">"Enabling audit policy: </span><span class="nv">$category</span><span class="s2"> - </span><span class="nv">$subcategory</span><span class="s2">"</span>
+            auditpol /set /subcategory:<span class="s2">"</span><span class="nv">$subcategory</span><span class="s2">"</span> /success:enable /failure:enable
+        <span class="o">}</span>
+    <span class="o">}</span>
 
-    Write-Output <span class="s2">"Expanding Sysmon archive to </span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span>
-    Expand-Archive <span class="nt">-Path</span> <span class="nv">$SysmonPath</span> <span class="nt">-DestinationPath</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Force</span>
+    <span class="c"># Enhanced PowerShell Logging</span>
+    <span class="nv">$registryPaths</span> <span class="o">=</span> @<span class="o">{</span>
+        <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\S</span><span class="s2">criptBlockLogging"</span> <span class="o">=</span> @<span class="o">{</span>
+            <span class="s2">"EnableScriptBlockLogging"</span> <span class="o">=</span> 1
+            <span class="s2">"EnableScriptBlockInvocationLogging"</span> <span class="o">=</span> 1
+        <span class="o">}</span>
+        <span class="s2">"HKLM:</span><span class="se">\S</span><span class="s2">OFTWARE</span><span class="se">\P</span><span class="s2">olicies</span><span class="se">\M</span><span class="s2">icrosoft</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\P</span><span class="s2">owerShell</span><span class="se">\M</span><span class="s2">oduleLogging"</span> <span class="o">=</span> @<span class="o">{</span>
+            <span class="s2">"EnableModuleLogging"</span> <span class="o">=</span> 1
+        <span class="o">}</span>
 
-    Write-Output <span class="s2">"Installing and enabling Sysmon with configuration: </span><span class="nv">$SysmonConfigPath</span><span class="s2">"</span>
-    &amp; <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-accepteula</span> <span class="nt">-i</span> <span class="nv">$SysmonConfigPath</span>
+    <span class="o">}</span>
 
-    Remove-Item <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Confirm</span>:<span class="nv">$false</span>
+    foreach <span class="o">(</span><span class="nv">$path</span> <span class="k">in</span> <span class="nv">$registryPaths</span>.Keys<span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$path</span><span class="o">))</span> <span class="o">{</span>
+            New-Item <span class="nt">-Path</span> <span class="nv">$path</span> <span class="nt">-Force</span> | Out-Null
+        <span class="o">}</span>
+        foreach <span class="o">(</span><span class="nv">$name</span> <span class="k">in</span> <span class="nv">$registryPaths</span><span class="o">[</span><span class="nv">$path</span><span class="o">]</span>.Keys<span class="o">)</span> <span class="o">{</span>
+            Set-ItemProperty <span class="nt">-Path</span> <span class="nv">$path</span> <span class="nt">-Name</span> <span class="nv">$name</span> <span class="nt">-Value</span> <span class="nv">$registryPaths</span><span class="o">[</span><span class="nv">$path</span><span class="o">][</span><span class="nv">$name</span><span class="o">]</span> <span class="nt">-Type</span> DWord <span class="nt">-Force</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c"># Enable Windows Security Event Log Size</span>
+    Write-Output <span class="s2">"Configuring Security Event Log size 2GB ..."</span>
+    wevtutil sl Security /ms:2147483648 <span class="c"># 2GB</span>
 <span class="o">}</span>
 
-Prompt user to press a key before exiting
+<span class="k">function </span>Install-Sysmon <span class="o">{</span>
+    param <span class="o">(</span>
+        <span class="o">[</span>string]<span class="nv">$ConfigUrl</span> <span class="o">=</span> <span class="s2">"https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml"</span>
+    <span class="o">)</span>
+
+    <span class="nv">$sysmonPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon.zip"</span>
+    <span class="nv">$sysmonUrl</span> <span class="o">=</span> <span class="s2">"https://download.sysinternals.com/files/Sysmon.zip"</span>
+    <span class="nv">$sysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
+    <span class="nv">$sysmonDir</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span>
+
+    <span class="k">if</span> <span class="o">(</span><span class="nt">-not</span> <span class="o">(</span>Test-Path <span class="nv">$sysmonDir</span><span class="o">))</span> <span class="o">{</span>
+        New-Item <span class="nt">-ItemType</span> Directory <span class="nt">-Path</span> <span class="nv">$sysmonDir</span> | Out-Null
+    <span class="o">}</span>
+
+    try <span class="o">{</span>
+        <span class="o">[</span>Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>Net.SecurityProtocolType]::Tls12
+
+        Write-Output <span class="s2">"Downloading Sysmon..."</span>
+        Invoke-WebRequest <span class="nt">-Uri</span> <span class="nv">$sysmonUrl</span> <span class="nt">-OutFile</span> <span class="nv">$sysmonPath</span>
+
+        Write-Output <span class="s2">"Downloading Sysmon configuration..."</span>
+        Invoke-WebRequest <span class="nt">-Uri</span> <span class="nv">$ConfigUrl</span> <span class="nt">-OutFile</span> <span class="nv">$sysmonConfigPath</span>
+
+        Expand-Archive <span class="nt">-Path</span> <span class="nv">$sysmonPath</span> <span class="nt">-DestinationPath</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Force</span>
+        &amp; <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-accepteula</span> <span class="nt">-i</span> <span class="nv">$sysmonConfigPath</span>
+
+        <span class="c"># Cleanup</span>
+        Remove-Item <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:TEMP</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Remove-Item <span class="nt">-Force</span> <span class="nv">$sysmonPath</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+
+        Write-Output <span class="s2">"Sysmon installed successfully!"</span>
+        
+        <span class="c"># Configure Sysmon Event Log Size</span>
+        wevtutil sl Microsoft-Windows-Sysmon/Operational /ms:2147483648 <span class="c"># 2GB</span>
+    <span class="o">}</span>
+    catch <span class="o">{</span>
+        Write-Error <span class="s2">"Error installing Sysmon: </span><span class="nv">$_</span><span class="s2">"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">function </span>Update-SysmonConfig <span class="o">{</span>
+    Write-Host <span class="s2">"Choose update method:"</span>
+    Write-Host <span class="s2">"1. Provide URL to download config file"</span>
+    Write-Host <span class="s2">"2. Provide local file path"</span>
+    <span class="nv">$updateChoice</span> <span class="o">=</span> Read-Host <span class="s2">"Enter your choice (1-2)"</span>
+
+    <span class="nv">$sysmonConfigPath</span> <span class="o">=</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon</span><span class="se">\c</span><span class="s2">onfig.xml"</span>
+
+    try <span class="o">{</span>
+        switch <span class="o">(</span><span class="nv">$updateChoice</span><span class="o">)</span> <span class="o">{</span>
+            <span class="s2">"1"</span> <span class="o">{</span>
+                <span class="nv">$ConfigUrl</span> <span class="o">=</span> Read-Host <span class="s2">"Enter URL for the Sysmon configuration file"</span>
+                Write-Output <span class="s2">"Downloading new Sysmon configuration..."</span>
+                <span class="o">[</span>Net.ServicePointManager]::SecurityProtocol <span class="o">=</span> <span class="o">[</span>Net.SecurityProtocolType]::Tls12
+                Invoke-WebRequest <span class="nt">-Uri</span> <span class="nv">$ConfigUrl</span> <span class="nt">-OutFile</span> <span class="nv">$sysmonConfigPath</span>
+            <span class="o">}</span>
+            <span class="s2">"2"</span> <span class="o">{</span>
+                <span class="nv">$localPath</span> <span class="o">=</span> Read-Host <span class="s2">"Enter the full path to the local configuration file"</span>
+                <span class="k">if</span> <span class="o">(</span>Test-Path <span class="nv">$localPath</span><span class="o">)</span> <span class="o">{</span>
+                    Copy-Item <span class="nt">-Path</span> <span class="nv">$localPath</span> <span class="nt">-Destination</span> <span class="nv">$sysmonConfigPath</span> <span class="nt">-Force</span>
+                <span class="o">}</span>
+                <span class="k">else</span> <span class="o">{</span>
+                    throw <span class="s2">"Local configuration file not found!"</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+            default <span class="o">{</span>
+                throw <span class="s2">"Invalid choice!"</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+
+        Write-Output <span class="s2">"Updating Sysmon configuration..."</span>
+        &amp; <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-c</span> <span class="nv">$sysmonConfigPath</span>
+        Write-Output <span class="s2">"Sysmon configuration updated successfully!"</span>
+    <span class="o">}</span>
+    catch <span class="o">{</span>
+        Write-Error <span class="s2">"Error updating Sysmon configuration: </span><span class="nv">$_</span><span class="s2">"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">function </span>Uninstall-Sysmon <span class="o">{</span>
+    try <span class="o">{</span>
+        Write-Output <span class="s2">"Uninstalling Sysmon..."</span>
+        &amp; <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-u</span> force
+        Remove-Item <span class="nt">-Path</span> <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmon64.exe"</span> <span class="nt">-Force</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Remove-Item <span class="nt">-Path</span> <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span> <span class="nt">-Force</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Remove-Item <span class="nt">-Path</span> <span class="s2">"</span><span class="nv">$env</span><span class="s2">:ProgramData</span><span class="se">\S</span><span class="s2">ysmon"</span> <span class="nt">-Recurse</span> <span class="nt">-Force</span> <span class="nt">-ErrorAction</span> SilentlyContinue
+        Write-Output <span class="s2">"Sysmon uninstalled successfully!"</span>
+    <span class="o">}</span>
+    catch <span class="o">{</span>
+        Write-Error <span class="s2">"Error uninstalling Sysmon: </span><span class="nv">$_</span><span class="s2">"</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c"># Main script execution</span>
+<span class="nv">$sysmonInstalled</span> <span class="o">=</span> Test-Path <span class="s2">"C:</span><span class="se">\W</span><span class="s2">indows</span><span class="se">\S</span><span class="s2">ysmonDrv.sys"</span>
+<span class="nv">$action</span> <span class="o">=</span> <span class="nv">$null</span>
+
+<span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+    Write-Host <span class="s2">"Sysmon is currently installed. Choose an action:"</span>
+    Write-Host <span class="s2">"1. Update Sysmon configuration"</span>
+    Write-Host <span class="s2">"2. Uninstall Sysmon"</span>
+    Write-Host <span class="s2">"3. Enable/Update audit policies only"</span>
+    Write-Host <span class="s2">"4. Exit"</span>
+    <span class="nv">$action</span> <span class="o">=</span> Read-Host <span class="s2">"Enter your choice (1-4)"</span>
+<span class="o">}</span>
+<span class="k">else</span> <span class="o">{</span>
+    Write-Host <span class="s2">"Sysmon is not installed. Choose an action:"</span>
+    Write-Host <span class="s2">"1. Install Sysmon"</span>
+    Write-Host <span class="s2">"2. Enable audit policies only"</span>
+    Write-Host <span class="s2">"3. Exit"</span>
+    <span class="nv">$action</span> <span class="o">=</span> Read-Host <span class="s2">"Enter your choice (1-3)"</span>
+<span class="o">}</span>
+
+switch <span class="o">(</span><span class="nv">$action</span><span class="o">)</span> <span class="o">{</span>
+    <span class="s2">"1"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Update-SysmonConfig
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            Install-Sysmon
+        <span class="o">}</span>
+        Enable-AuditPolicies
+    <span class="o">}</span>
+    <span class="s2">"2"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Uninstall-Sysmon
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            Enable-AuditPolicies
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="s2">"3"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Enable-AuditPolicies
+        <span class="o">}</span>
+        <span class="k">else</span> <span class="o">{</span>
+            Write-Output <span class="s2">"Exiting..."</span>
+            <span class="nb">exit</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="s2">"4"</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nv">$sysmonInstalled</span><span class="o">)</span> <span class="o">{</span>
+            Write-Output <span class="s2">"Exiting..."</span>
+            <span class="nb">exit</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+    default <span class="o">{</span>
+        Write-Output <span class="s2">"Invalid choice. Exiting..."</span>
+        <span class="nb">exit</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
 Write-Host <span class="s2">"Press any key to exit..."</span>
 <span class="nv">$null</span> <span class="o">=</span> <span class="nv">$Host</span>.UI.RawUI.ReadKey<span class="o">(</span><span class="s2">"NoEcho,IncludeKeyDown"</span><span class="o">)</span>
-</pre></td> </tr></tbody></table></code></pre></div></div> </div> </article> <br> <hr> <br> <ul class="list-disc pl-8"></ul> <h2 class="text-3xl font-semibold mb-4 mt-12">Gostou de Ler este Artigo?</h2> <p class="mb-2">Aqui estão alguns artigos relacionados que você pode gostar de ler:</p> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/Audit-Sysmon/">Script for enabling Windows Audit and Sysmon.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/">CyberDefenders Qradar101 Write up.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/Guacamole/">Step-by-step Apache Guacamole Installation.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/FnStegoCrypt/">FnStegoCrypt - Encrypted Data in Images</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/CVE-2024-35250/">Detection CVE-2024-35250</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/FNLocalCloud/">Exposing Local Applications with FNLocalCloud.</a> </li> <div id="giscus_thread" style="max-width: 1000px; margin: 0 auto;"> <script>let giscusTheme=determineComputedTheme(),giscusAttributes={src:"https://giscus.app/client.js","data-repo":"Eyezuhk/eyezuhk.github.io","data-repo-id":"R_kgDONTi2VA","data-category":"General","data-category-id":"DIC_kwDONTi2VM4Ck09L","data-mapping":"title","data-strict":"1","data-reactions-enabled":"1","data-emit-metadata":"0","data-input-position":"bottom","data-theme":giscusTheme,"data-lang":"en",crossorigin:"anonymous",async:""},giscusScript=document.createElement("script");Object.entries(giscusAttributes).forEach(([t,e])=>giscusScript.setAttribute(t,e)),document.getElementById("giscus_thread").appendChild(giscusScript);</script> <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a> </noscript> </div> </div> </div> </div> </div> <footer class="sticky-bottom mt-5" role="contentinfo"> <div class="container"> © Copyright 2025 Eyezuhk Isaac Fernandes. Disclaimer. All the opinions and views discussed here are mine and do not necessarily represent the views of my employer. I am not an expert. I am just sharing my views on topics, and I’m open to other perspectives. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script defer src="/assets/js/bootstrap-toc.min.js?c82ff4de8b0955d6ff14f5b05eed7eb6"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?e0514a05c5c95ac1a93a8dfd5249b92e"></script> <script defer src="/assets/js/copy_code.js?12775fdf7f95e901d7119054556e495f" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script type="text/javascript">function progressBarSetup(){"max"in document.createElement("progress")?(initializeProgressElement(),$(document).on("scroll",function(){progressBar.attr({value:getCurrentScrollPosition()})}),$(window).on("resize",initializeProgressElement)):(resizeProgressBar(),$(document).on("scroll",resizeProgressBar),$(window).on("resize",resizeProgressBar))}function getCurrentScrollPosition(){return $(window).scrollTop()}function initializeProgressElement(){let e=$("#navbar").outerHeight(!0);$("body").css({"padding-top":e}),$("progress-container").css({"padding-top":e}),progressBar.css({top:e}),progressBar.attr({max:getDistanceToScroll(),value:getCurrentScrollPosition()})}function getDistanceToScroll(){return $(document).height()-$(window).height()}function resizeProgressBar(){progressBar.css({width:getWidthPercentage()+"%"})}function getWidthPercentage(){return getCurrentScrollPosition()/getDistanceToScroll()*100}const progressBar=$("#progress");window.onload=function(){setTimeout(progressBarSetup,50)};</script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>addBackToTop();</script> <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Digite para iniciar a busca"> <div class="modal-footer" slot="footer"> <span class="help"> <svg version="1.0" class="ninja-examplekey" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1280 1280"> <path d="M1013 376c0 73.4-.4 113.3-1.1 120.2a159.9 159.9 0 0 1-90.2 127.3c-20 9.6-36.7 14-59.2 15.5-7.1.5-121.9.9-255 1h-242l95.5-95.5 95.5-95.5-38.3-38.2-38.2-38.3-160 160c-88 88-160 160.4-160 161 0 .6 72 73 160 161l160 160 38.2-38.3 38.3-38.2-95.5-95.5-95.5-95.5h251.1c252.9 0 259.8-.1 281.4-3.6 72.1-11.8 136.9-54.1 178.5-116.4 8.6-12.9 22.6-40.5 28-55.4 4.4-12 10.7-36.1 13.1-50.6 1.6-9.6 1.8-21 2.1-132.8l.4-122.2H1013v110z"></path> </svg> para selecionar </span> <span class="help"> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24"> <path d="M0 0h24v24H0V0z" fill="none"></path> <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24"> <path d="M0 0h24v24H0V0z" fill="none"></path> <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"></path> </svg> para navegar </span> <span class="help"> <span class="ninja-examplekey esc">esc</span> para fechar </span> <span class="help"> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey backspace" viewbox="0 0 20 20" fill="currentColor"> <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd"></path> </svg> voltar um nível </span> </div> </ninja-keys> <script>let searchTheme=determineComputedTheme();const ninjaKeys=document.querySelector("ninja-keys");"dark"===searchTheme?ninjaKeys.classList.add("dark"):ninjaKeys.classList.remove("dark");const openSearchModal=()=>{const e=$("#navbarNav");e.hasClass("show")&&e.collapse("hide"),ninjaKeys.open()};</script> <script>const ninja=document.querySelector("ninja-keys");ninja.data=[{id:"nav-sobre",title:"Sobre",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/"}},{id:"nav-blog",title:"Blog",description:"Uma cole\xe7\xe3o dos meus pensamentos sobre ciberseguran\xe7a e opini\xf5es pessoais que abrangem diversos t\xf3picos.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/blog/"}},{id:"nav-differ",title:"Differ",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/Differ/"}},{id:"nav-htmlive",title:"HTMLive",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/HTMLive/"}},{id:"nav-github-reposit\xf3rios",title:"Github Reposit\xf3rios",description:"Projetos pessoais.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/github-repositories/"}},{id:"nav-cv",title:"CV",description:"Curriculum Vitae.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/cv/"}},{id:"post-detection-cve-2024-35250",title:"Detection CVE-2024-35250",description:"Detecta quando cmd.exe com privil\xe9gios de sistema \xe9 executado depois que um processo carrega &#39;ksproxy.ax&#39; e &#39;ksuser.dll&#39;, indicando poss\xedvel explora\xe7\xe3o do CVE-2024-35250.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/CVE-2024-35250/"}},{id:"post-apts-ou-uaps",title:"APTs ou UAPs?",description:"Como Fen\xf4menos An\xf4malos se Assemelham a Amea\xe7as Cibern\xe9ticas.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/APT-UAP/"}},{id:"post-passo-a-passo-instala\xe7\xe3o-apache-guacamole",title:"Passo a passo instala\xe7\xe3o Apache Guacamole.",description:"Instala\xe7\xe3o Guacamole",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/Guacamole/"}},{id:"post-script-para-habilitar-auditorias-windows-e-sysmon",title:"Script para habilitar auditorias Windows e Sysmon.",description:"Auditorias Windows e Sysmon",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/Audit-Sysmon/"}},{id:"post-fnstegocrypt-dados-encriptados-em-imagens",title:"FnStegoCrypt dados encriptados em imagens.",description:"Programa que encripta os dados com aes-gcm e adiciona a imagens usando LSB.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/FnStegoCrypt/"}},{id:"post-expondo-aplica\xe7\xf5es-locais-com-fnlocalcloud",title:"Expondo aplica\xe7\xf5es locais com FNLocalCloud.",description:"Programa baseado em agente e servidor para expor servi\xe7os de rede locais na internet bypassando cgnat...",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/FNLocalCloud/"}},{id:"post-first-fortaleza-2023",title:"FIRST Fortaleza 2023.",description:"FIRST (Forum of Incident Response and Security Teams)",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2023/First/"}},{id:"post-resolu\xe7\xe3o-cyberdefenders-qradar101",title:"Resolu\xe7\xe3o CyberDefenders Qradar101.",description:"Resolu\xe7\xe3o de CTF",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/"}},{id:"news-memento-mori",title:"Memento mori.",description:"",section:"Novidades"},{id:"projects-projects",title:"Projects",description:"with background image",section:"Projetos",handler:()=>{window.location.href="/pt-br/projects/1_project/"}},{id:"socials-email",title:"Enviar um email",section:"Redes sociais",handler:()=>{window.open("mailto:%65%79%65%7A%75%68%6B@%67%6D%61%69%6C.%63%6F%6D","_blank")}},{id:"socials-github",title:"GitHub",section:"Redes sociais",handler:()=>{window.open("https://github.com/Eyezuhk","_blank")}},{id:"socials-linkedin",title:"LinkedIn",section:"Redes sociais",handler:()=>{window.open("https://www.linkedin.com/in/isaacfn","_blank")}},{id:"socials-spotify",title:"Spotify",section:"Redes sociais",handler:()=>{window.open("https://open.spotify.com/user/12144303025","_blank")}},{id:"socials-rss",title:"RSS Feed",section:"Redes sociais",handler:()=>{window.open("/feed.xml","_blank")}},{id:"lang-en-us",title:"en-us",section:"Idiomas",handler:()=>{window.location.href="/blog/2024/Audit-Sysmon/"}},{id:"light-theme",title:"Muda o tema para claro",description:"Muda o tema do site para claro",section:"Tema",handler:()=>{setThemeSetting("light")}},{id:"dark-theme",title:"Muda o tema para escuro",description:"Muda o tema do site para escuro",section:"Tema",handler:()=>{setThemeSetting("dark")}},{id:"system-theme",title:"Usa o tema padr\xe3o do sistema",description:"Muda o tema do site para o padr\xe3o do sistema",section:"Tema",handler:()=>{setThemeSetting("system")}}];</script> <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script> </body> </html>
+</pre></td> </tr></tbody></table></code></pre></div></div> </div> </article> <br> <hr> <br> <ul class="list-disc pl-8"></ul> <h2 class="text-3xl font-semibold mb-4 mt-12">Gostou de Ler este Artigo?</h2> <p class="mb-2">Aqui estão alguns artigos relacionados que você pode gostar de ler:</p> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/Audit-Sysmon/">Script for enabling Windows Audit and Sysmon.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/">CyberDefenders Qradar101 Write up.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/FnStegoCrypt/">FnStegoCrypt - Encrypted Data in Images</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/Guacamole/">Step-by-step Apache Guacamole Installation.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/CVE-2024-35250/">Detection CVE-2024-35250</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2023/First/">FIRST Fortaleza 2023.</a> </li> <div id="giscus_thread" style="max-width: 1000px; margin: 0 auto;"> <script>let giscusTheme=determineComputedTheme(),giscusAttributes={src:"https://giscus.app/client.js","data-repo":"Eyezuhk/eyezuhk.github.io","data-repo-id":"R_kgDONTi2VA","data-category":"General","data-category-id":"DIC_kwDONTi2VM4Ck09L","data-mapping":"title","data-strict":"1","data-reactions-enabled":"1","data-emit-metadata":"0","data-input-position":"bottom","data-theme":giscusTheme,"data-lang":"en",crossorigin:"anonymous",async:""},giscusScript=document.createElement("script");Object.entries(giscusAttributes).forEach(([t,e])=>giscusScript.setAttribute(t,e)),document.getElementById("giscus_thread").appendChild(giscusScript);</script> <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a> </noscript> </div> </div> </div> </div> </div> <footer class="sticky-bottom mt-5" role="contentinfo"> <div class="container"> © Copyright 2025 Eyezuhk Isaac Fernandes. Disclaimer. All the opinions and views discussed here are mine and do not necessarily represent the views of my employer. I am not an expert. I am just sharing my views on topics, and I’m open to other perspectives. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script defer src="/assets/js/bootstrap-toc.min.js?c82ff4de8b0955d6ff14f5b05eed7eb6"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?e0514a05c5c95ac1a93a8dfd5249b92e"></script> <script defer src="/assets/js/copy_code.js?12775fdf7f95e901d7119054556e495f" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script type="text/javascript">function progressBarSetup(){"max"in document.createElement("progress")?(initializeProgressElement(),$(document).on("scroll",function(){progressBar.attr({value:getCurrentScrollPosition()})}),$(window).on("resize",initializeProgressElement)):(resizeProgressBar(),$(document).on("scroll",resizeProgressBar),$(window).on("resize",resizeProgressBar))}function getCurrentScrollPosition(){return $(window).scrollTop()}function initializeProgressElement(){let e=$("#navbar").outerHeight(!0);$("body").css({"padding-top":e}),$("progress-container").css({"padding-top":e}),progressBar.css({top:e}),progressBar.attr({max:getDistanceToScroll(),value:getCurrentScrollPosition()})}function getDistanceToScroll(){return $(document).height()-$(window).height()}function resizeProgressBar(){progressBar.css({width:getWidthPercentage()+"%"})}function getWidthPercentage(){return getCurrentScrollPosition()/getDistanceToScroll()*100}const progressBar=$("#progress");window.onload=function(){setTimeout(progressBarSetup,50)};</script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>addBackToTop();</script> <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Digite para iniciar a busca"> <div class="modal-footer" slot="footer"> <span class="help"> <svg version="1.0" class="ninja-examplekey" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1280 1280"> <path d="M1013 376c0 73.4-.4 113.3-1.1 120.2a159.9 159.9 0 0 1-90.2 127.3c-20 9.6-36.7 14-59.2 15.5-7.1.5-121.9.9-255 1h-242l95.5-95.5 95.5-95.5-38.3-38.2-38.2-38.3-160 160c-88 88-160 160.4-160 161 0 .6 72 73 160 161l160 160 38.2-38.3 38.3-38.2-95.5-95.5-95.5-95.5h251.1c252.9 0 259.8-.1 281.4-3.6 72.1-11.8 136.9-54.1 178.5-116.4 8.6-12.9 22.6-40.5 28-55.4 4.4-12 10.7-36.1 13.1-50.6 1.6-9.6 1.8-21 2.1-132.8l.4-122.2H1013v110z"></path> </svg> para selecionar </span> <span class="help"> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24"> <path d="M0 0h24v24H0V0z" fill="none"></path> <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24"> <path d="M0 0h24v24H0V0z" fill="none"></path> <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"></path> </svg> para navegar </span> <span class="help"> <span class="ninja-examplekey esc">esc</span> para fechar </span> <span class="help"> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey backspace" viewbox="0 0 20 20" fill="currentColor"> <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd"></path> </svg> voltar um nível </span> </div> </ninja-keys> <script>let searchTheme=determineComputedTheme();const ninjaKeys=document.querySelector("ninja-keys");"dark"===searchTheme?ninjaKeys.classList.add("dark"):ninjaKeys.classList.remove("dark");const openSearchModal=()=>{const e=$("#navbarNav");e.hasClass("show")&&e.collapse("hide"),ninjaKeys.open()};</script> <script>const ninja=document.querySelector("ninja-keys");ninja.data=[{id:"nav-sobre",title:"Sobre",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/"}},{id:"nav-blog",title:"Blog",description:"Uma cole\xe7\xe3o dos meus pensamentos sobre ciberseguran\xe7a e opini\xf5es pessoais que abrangem diversos t\xf3picos.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/blog/"}},{id:"nav-differ",title:"Differ",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/Differ/"}},{id:"nav-htmlive",title:"HTMLive",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/HTMLive/"}},{id:"nav-github-reposit\xf3rios",title:"Github Reposit\xf3rios",description:"Projetos pessoais.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/github-repositories/"}},{id:"nav-cv",title:"CV",description:"Curriculum Vitae.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/cv/"}},{id:"post-detection-cve-2024-35250",title:"Detection CVE-2024-35250",description:"Detecta quando cmd.exe com privil\xe9gios de sistema \xe9 executado depois que um processo carrega &#39;ksproxy.ax&#39; e &#39;ksuser.dll&#39;, indicando poss\xedvel explora\xe7\xe3o do CVE-2024-35250.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/CVE-2024-35250/"}},{id:"post-apts-ou-uaps",title:"APTs ou UAPs?",description:"Como Fen\xf4menos An\xf4malos se Assemelham a Amea\xe7as Cibern\xe9ticas.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/APT-UAP/"}},{id:"post-passo-a-passo-instala\xe7\xe3o-apache-guacamole",title:"Passo a passo instala\xe7\xe3o Apache Guacamole.",description:"Instala\xe7\xe3o Guacamole",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/Guacamole/"}},{id:"post-script-para-habilitar-auditorias-windows-e-sysmon",title:"Script para habilitar auditorias Windows e Sysmon.",description:"Auditorias Windows e Sysmon",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/Audit-Sysmon/"}},{id:"post-fnstegocrypt-dados-encriptados-em-imagens",title:"FnStegoCrypt dados encriptados em imagens.",description:"Programa que encripta os dados com aes-gcm e adiciona a imagens usando LSB.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/FnStegoCrypt/"}},{id:"post-expondo-aplica\xe7\xf5es-locais-com-fnlocalcloud",title:"Expondo aplica\xe7\xf5es locais com FNLocalCloud.",description:"Programa baseado em agente e servidor para expor servi\xe7os de rede locais na internet bypassando cgnat...",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/FNLocalCloud/"}},{id:"post-first-fortaleza-2023",title:"FIRST Fortaleza 2023.",description:"FIRST (Forum of Incident Response and Security Teams)",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2023/First/"}},{id:"post-resolu\xe7\xe3o-cyberdefenders-qradar101",title:"Resolu\xe7\xe3o CyberDefenders Qradar101.",description:"Resolu\xe7\xe3o de CTF",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/"}},{id:"news-memento-mori",title:"Memento mori.",description:"",section:"Novidades"},{id:"projects-projects",title:"Projects",description:"with background image",section:"Projetos",handler:()=>{window.location.href="/pt-br/projects/1_project/"}},{id:"socials-email",title:"Enviar um email",section:"Redes sociais",handler:()=>{window.open("mailto:%65%79%65%7A%75%68%6B@%67%6D%61%69%6C.%63%6F%6D","_blank")}},{id:"socials-github",title:"GitHub",section:"Redes sociais",handler:()=>{window.open("https://github.com/Eyezuhk","_blank")}},{id:"socials-linkedin",title:"LinkedIn",section:"Redes sociais",handler:()=>{window.open("https://www.linkedin.com/in/isaacfn","_blank")}},{id:"socials-spotify",title:"Spotify",section:"Redes sociais",handler:()=>{window.open("https://open.spotify.com/user/12144303025","_blank")}},{id:"socials-rss",title:"RSS Feed",section:"Redes sociais",handler:()=>{window.open("/feed.xml","_blank")}},{id:"lang-en-us",title:"en-us",section:"Idiomas",handler:()=>{window.location.href="/blog/2024/Audit-Sysmon/"}},{id:"light-theme",title:"Muda o tema para claro",description:"Muda o tema do site para claro",section:"Tema",handler:()=>{setThemeSetting("light")}},{id:"dark-theme",title:"Muda o tema para escuro",description:"Muda o tema do site para escuro",section:"Tema",handler:()=>{setThemeSetting("dark")}},{id:"system-theme",title:"Usa o tema padr\xe3o do sistema",description:"Muda o tema do site para o padr\xe3o do sistema",section:"Tema",handler:()=>{setThemeSetting("system")}}];</script> <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script> </body> </html>
