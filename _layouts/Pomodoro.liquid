@@ -1,10 +1,3 @@
----
-layout: none
----
-
-<body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
-    
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,11 +7,10 @@ layout: none
     <title>Fn Pomodoro Timer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-       :root {
+        :root {
             --primary-color: #ff6b6b;
             --shortbreak-color: #4dabf7;
             --longbreak-color: #40c057;
-            --theme-toggle-color: #ff6b6b;
             --bg-color: #ffffff;
             --text-color: #333333;
             --overlay-color: rgba(255, 255, 255, 0.8);
@@ -69,7 +61,6 @@ layout: none
             background-color: rgba(255, 255, 255, 0.05);
             margin-bottom: 2rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            padding-top: 4rem; /* Add space for theme toggle */
         }
 
         .timer-display {
@@ -89,14 +80,10 @@ layout: none
         .progress-ring__circle {
             transition: stroke-dashoffset var(--transition-speed);
             stroke-linecap: round;
-			stroke: var(--primary-color) !important;
-            transition: stroke 0.3s ease;
         }
 
         .progress-ring__circle-bg {
             opacity: 0.2;
-			stroke: var(--primary-color) !important;
-            transition: stroke 0.3s ease;
         }
 
         .time {
@@ -258,7 +245,6 @@ layout: none
             display: flex;
             gap: 1rem;
             margin-bottom: 1.5rem;
-            flex-direction: column;
         }
 
         .task-item {
@@ -316,14 +302,15 @@ layout: none
 
         .theme-toggle {
             position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 10000;
-             width: 40px;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            width: 40px;
             height: 40px;
             border-radius: 50%;
             padding: 0;
             margin: 0rem;
+			background: #ff6b6b;
             display: flex;
             cursor: pointer;
             color: #ffffff;
@@ -337,89 +324,103 @@ layout: none
         @media (max-width: 768px) {
             .container {
                 padding: 1rem;
-                padding-top: 3rem;
-            }
-
-             .mode-buttons {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-             .mode-buttons button {
-                flex: 1;
-                min-width: 100px;
-            }
-
-            .controls {
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .controls button {
-                flex: 1;
-                min-width: 100px;
             }
 
             .timer-display {
                 width: 250px;
                 height: 250px;
-                margin: 1rem auto;
             }
 
-             .task-input-container {
+            .time {
+                font-size: 3rem;
+            }
+
+            .keyboard-shortcuts {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .setting-input-group {
                 flex-direction: column;
+                align-items: stretch;
             }
 
-           .task-input-container input {
-                width: 100%;
-                margin-bottom: 0.5rem;
+            input[type="number"],
+            input[type="text"],
+            select {
+                max-width: 100%;
             }
         }
 
-       /* Fix Jekyll-specific styles */
-        body.fixed-top-nav #pomodoro-container {
-            padding-top: 0;
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
         }
 
-        .content {
-            padding-top: 0 !important;
+        .task-actions button {
+            width: auto;
+            height: auto;
+            padding: 0.5rem;
         }
-         #pomodoro-container {
-            position: fixed;
+
+        .pomodoro-count {
+            font-size: 0.875rem;
+            color: var(--primary-color);
+        }
+
+        .task-selection-container {
+            margin: 1.5rem 0;
+        }
+
+        select#taskSelect {
+            margin: 0 auto;
+            display: block;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid rgba(156, 163, 175, 0.2);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+        }
+
+        select#taskSelect option {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .youtube-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            margin-top: 2rem;
+        }
+
+        .youtube-container iframe {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
-            z-index: 9999;
-            background: var(--bg-color);
-			overflow-y: auto;
-			-webkit-overflow-scrolling: touch;
+            height: 100%;
+            border-radius: 10px;
         }
 
-         #pomodoro-container > * {
-            pointer-events: auto; /* Isso permite que interaja com o código do pomodoro*/
-         }
-
-        .pomodoro-toolbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1001;
+        .hide {
+            display: none !important;
         }
 
+        .active {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
-<body onload="initPomodoro()">
-	<div id="pomodoro-container">
-	<div class="pomodoro-toolbar">
-		<div class="mode-buttons">
-			<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-				<i class="fas fa-moon"></i>
-			</button>
-		</div>
-    </div>
+<body>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+            <i class="fas fa-moon"></i>
+        </button>
     <div class="container">
         <div class="timer-container">
             <div class="mode-buttons">
@@ -621,17 +622,10 @@ layout: none
         <div>3 - Long Break</div>
         <div>Click here to hide</div>
     </div>
-</div>
-	<script>
-	{% raw %}
-         // Add Jekyll-specific initialization
-        document.addEventListener('DOMContentLoaded', function() {
-            if (document.querySelector('.fixed-top-nav')) {
-                document.querySelector('#pomodoro-container').style.paddingTop = '0';
-            }
-            initPomodoro();
-        });
-		// --- Utility Functions ---
+
+    <script>
+    {% raw %}
+        // --- Utility Functions ---
         const el = id => document.getElementById(id);
         const playSound = src => new Audio(src).play();
         const formatTime = seconds => {
@@ -657,7 +651,7 @@ layout: none
         const CIRCLE_RADIUS = 140;
         const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS;
         const DEFAULT_YOUTUBE_URL = "https://www.youtube.com/watch?v=jfKfPfyJRdk";
-		const colors = {
+        const colors = {
             pomodoro: '#ff6b6b',
             shortBreak: '#4dabf7',
             longBreak: '#40c057'
@@ -682,12 +676,12 @@ layout: none
         const timeDisplay = el('time').querySelector('span');
         const pomoCounterDisplay = el('time').querySelector('.pomo-counter');
         const startBtn = el('startBtn');
-		const modeButtons = document.querySelectorAll('.mode-buttons button');
+        const modeButtons = document.querySelectorAll('.mode-buttons button');
         const progressCircle = document.querySelector('.progress-ring__circle');
         const progressCircleBg = document.querySelector('.progress-ring__circle-bg');
         const keyboardShortcutsDiv = el('keyboardShortcuts');
         progressCircle.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
-		progressCircleBg.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
+        progressCircleBg.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
 
         // --- YouTube API ---
         function onYouTubeIframeAPIReady() {
@@ -713,11 +707,11 @@ layout: none
             times = settings.times || { ...DEFAULT_TIMES };
             tasks = settings.tasks || [];
             statistics = settings.statistics || { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
-            autoStartBreaks = settings.autoStartBreaks || true;
-            pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak || 4;
+            autoStartBreaks = settings.autoStartBreaks ?? true;
+            pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak ?? 4;
             notificationSounds = settings.notificationSounds || { ...DEFAULT_SOUNDS };
-            muteSounds = settings.muteSounds || false;
-            selectedTaskIndex = settings.selectedTaskIndex || null;
+            muteSounds = settings.muteSounds ?? false;
+            selectedTaskIndex = settings.selectedTaskIndex ?? null;
             const bg = settings.background;
             if (bg) document.body.style.backgroundImage = `url('${bg}')`;
             el('pomodoroTime').value = times.pomodoro / 60;
@@ -741,15 +735,15 @@ layout: none
             };
             localStorage.setItem('pomodoroSettings', JSON.stringify(settings));
         };
-		 function updateColor(mode) {
+        function updateColor(mode) {
             const color = colors[mode];
             progressCircle.style.stroke = color;
             progressCircleBg.style.stroke = color;
-			progressCircleBg.style.opacity = '0.2';
+            progressCircleBg.style.opacity = '0.2';
             document.querySelectorAll('.controls button').forEach(btn => {
                 btn.style.backgroundColor = color;
             });
-			 modeButtons.forEach(btn => {
+            modeButtons.forEach(btn => {
                 btn.style.backgroundColor = color;
             });
         }
@@ -760,19 +754,19 @@ layout: none
             progressCircle.style.strokeDashoffset = offset;
         };
         const updateDisplay = () => {
-			const formattedTime = formatTime(Math.max(0, timeLeft)); // Garante que o tempo não seja negativo
+            const formattedTime = formatTime(Math.max(0, timeLeft));
             timeDisplay.textContent = formattedTime;
             setProgress((times[currentMode] - timeLeft) / times[currentMode] * 100);
             pomoCounterDisplay.textContent = statistics.totalPomodoros > 0 ? statistics.totalPomodoros : '';
         };
         const setMode = (mode) => {
-			 modeButtons.forEach(btn => {
+            modeButtons.forEach(btn => {
                 btn.classList.remove('active');
             });
             document.querySelector(`.${mode}`).classList.add('active');
             currentMode = mode;
             timeLeft = times[mode];
-			updateColor(mode);
+            updateColor(mode);
             resetTimer();
             updateDisplay();
         };
@@ -781,28 +775,24 @@ layout: none
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-                 if (youtubePlayer) {
-                    youtubePlayer.pauseVideo();
-                }
+                youtubePlayer?.pauseVideo();
             } else {
                 timerId = setInterval(() => {
-					timeLeft--;
+                    timeLeft--;
 					if (currentMode === 'pomodoro') {
-                        statistics.totalFocusTime++;
-                    }
+						statistics.totalFocusTime++;
+					}					
                     updateDisplay();
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
                         timerId = null;
                         handleTimerEnd();
-						return; // Sai do loop para não decrementar mais
+                        return; // Sai do loop para não decrementar mais
                     }
-					
+
                 }, 1000);
                 startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                 if (youtubePlayer) {
-                    youtubePlayer.playVideo();
-                }
+                youtubePlayer?.playVideo();
             }
         };
         const resetTimer = () => {
@@ -811,62 +801,57 @@ layout: none
             timeLeft = times[currentMode];
             updateDisplay();
             startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-            if (youtubePlayer) {
-                youtubePlayer.pauseVideo();
-            }
+            youtubePlayer?.pauseVideo();
         };
         const handleTimerEnd = () => {
             let nextMode;
             if (currentMode === 'pomodoro') {
                 statistics.totalPomodoros++;
-				if (selectedTaskIndex !== null) tasks[selectedTaskIndex].pomodoros++;
-				updateStatistics();
+                if (selectedTaskIndex !== null) tasks[selectedTaskIndex].pomodoros++;
+                updateStatistics();
                 playNotificationSound('pomodoro');
                 showNotification('Pomodoro Complete!');
-                 // MODIFICADO: Usa statistics.totalPomodoros para determinar se é pausa longa
+                pomodoroCount++;
                 nextMode = (statistics.totalPomodoros % pomodorosBeforeLongBreak === 0) ? 'longBreak' : 'shortBreak';
-				if(nextMode === 'longBreak') pomodoroCount = 0;
+                if(nextMode === 'longBreak') pomodoroCount = 0;
 
             } else {
                 playNotificationSound(currentMode);
                 showNotification('Break Complete!');
                 nextMode = 'pomodoro';
             }
-			// Atualiza o modo visualmente
-			modeButtons.forEach(btn => {
-				btn.classList.remove('active');
-			});
-			document.querySelector(`.${nextMode}`).classList.add('active');
-			currentMode = nextMode;
-    
-			// Atualiza a cor do timer
-			updateColor(currentMode);
-    
-			// Define o novo tempo e atualiza o display
-			timeLeft = times[currentMode];
-			updateDisplay();
-    
-			if (autoStartBreaks) {
-				startTimer();
-			} else {
-				startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-			}
-    
-			updateTaskList();
-			saveSettings();
-		};
+            // Atualiza o modo visualmente
+            modeButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.${nextMode}`).classList.add('active');
+            currentMode = nextMode;
 
-       // --- Task Management ---
+            // Atualiza a cor do timer
+            updateColor(currentMode);
+
+            // Define o novo tempo e atualiza o display
+            timeLeft = times[currentMode];
+            updateDisplay();
+
+            if (autoStartBreaks) {
+                startTimer();
+            } else {
+                startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+            }
+
+            updateTaskList();
+            saveSettings();
+        };
+
+
+        // --- Task Management ---
         const handleTaskInput = (event) => { if (event.key === 'Enter') addTask(); };
         const addTask = () => {
-            const taskInput = document.getElementById('taskInput');
+            const taskInput = el('taskInput');
             const taskText = taskInput.value.trim();
             if (taskText) {
-				tasks.push({
-                    text: taskText,
-                    completed: false,
-                    pomodoros: 0
-                });
+                tasks.push({ text: escapeHtml(taskText), completed: false, pomodoros: 0 });
                 taskInput.value = '';
                 updateTaskList();
                 updateTaskSelect();
@@ -885,23 +870,19 @@ layout: none
             updateTaskList();
             saveSettings();
         };
-         const updateTaskList = () => {
-            const taskListDiv = document.getElementById('taskList');
+        const updateTaskList = () => {
+            const taskListDiv = el('taskList');
             taskListDiv.innerHTML = '';
             tasks.forEach((task, index) => {
-                const taskItem = document.createElement('div');
-                taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
-                taskItem.innerHTML = `
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})">
-                    <span>${task.text}</span>
-                    <span class="pomodoro-count">Pomodoros: ${task.pomodoros}</span>
-                    <div class="task-actions">
-                        <button class="pomodoro" onclick="removeTask(${index})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                taskListDiv.appendChild(taskItem);
+                taskListDiv.innerHTML += `
+                    <div class="task-item ${task.completed ? 'completed' : ''}">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${index})">
+                        <span>${task.text}</span>
+                        <span class="pomodoro-count">Pomodoros: ${task.pomodoros}</span>
+                        <div class="task-actions">
+                            <button class="pomodoro" onclick"removeTask(${index})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
             });
         };
         const updateTaskSelect = () => {
@@ -1012,6 +993,7 @@ layout: none
             saveSettings();
         };
 
+
         const playNotificationSound = (mode) => {
             if (!muteSounds) {
                 const soundName = notificationSounds[mode];
@@ -1097,9 +1079,9 @@ layout: none
         };
 
         // --- Initialization ---
-         const initPomodoro = () => {
+        document.addEventListener('DOMContentLoaded', () => {
             loadSettings();
-             updateColor(currentMode); // ADICIONE ESSA LINHA
+            updateColor(currentMode);
             setMode('pomodoro');
             updateDisplay();
             const savedTheme = localStorage.getItem('theme');
@@ -1109,11 +1091,12 @@ layout: none
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             }
-        };
-         window.addEventListener('storage', (event) => {
+        });
+        window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
-	{% endraw %}	
+    {% endraw %}
     </script>
 </body>
+
 </html>
