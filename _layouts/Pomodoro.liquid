@@ -379,7 +379,10 @@ layout: none
             margin: 1.5rem 0;
         }
 
-        select#taskSelect {
+        select#taskSelect,
+            select#pomodoroSound,
+            select#shortBreakSound,
+            select#longBreakSound {
             margin: 0 auto;
             display: block;
             background-color: var(--bg-color);
@@ -389,10 +392,13 @@ layout: none
             padding: 0.5rem;
         }
 
-        select#taskSelect option {
+        select#taskSelect option,
+        select#pomodoroSound option,
+        select#shortBreakSound option,
+        select#longBreakSound option{
             background-color: var(--bg-color);
             color: var(--text-color);
-        }
+         }
 
         .youtube-container {
             position: relative;
@@ -418,10 +424,38 @@ layout: none
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+
+        #pomodoro-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+	    overflow: auto;
+        pointer-events: none; /* Isso permite que clique nos itens por baixo dele*/
+    }
+
+    #pomodoro-container > * {
+        pointer-events: auto; /* Isso permite que interaja com o código do pomodoro*/
+}
+    .pomodoro-toolbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1001;
+    }
     </style>
 </head>
 
-<body>
+<body onload="initPomodoro()">
+	<div id="pomodoro-container">
+	<div class="pomodoro-toolbar">
+					<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+				<i class="fas fa-moon"></i>
+			</button>
+    </div>
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
             <i class="fas fa-moon"></i>
         </button>
@@ -1089,7 +1123,7 @@ layout: none
         };
 
         // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
+        const initPomodoro = () => {
             loadSettings();
             updateColor(currentMode);
             setMode('pomodoro');
@@ -1101,7 +1135,7 @@ layout: none
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             }
-        });
+        };
         window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
