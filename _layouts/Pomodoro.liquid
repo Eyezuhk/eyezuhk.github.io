@@ -11,7 +11,6 @@
             --primary-color: #ff6b6b;
             --shortbreak-color: #4dabf7;
             --longbreak-color: #40c057;
-            --theme-toggle-color: #ff6b6b;
             --bg-color: #ffffff;
             --text-color: #333333;
             --overlay-color: rgba(255, 255, 255, 0.8);
@@ -81,14 +80,10 @@
         .progress-ring__circle {
             transition: stroke-dashoffset var(--transition-speed);
             stroke-linecap: round;
-            stroke: var(--primary-color) !important;
-            transition: stroke 0.3s ease;
         }
 
         .progress-ring__circle-bg {
             opacity: 0.2;
-            stroke: var(--primary-color) !important;
-            transition: stroke 0.3s ease;
         }
 
         .time {
@@ -307,14 +302,15 @@
 
         .theme-toggle {
             position: fixed;
-            top: 2rem;
-            right: 2rem;
+            top: 0rem;
+            right: 0rem;
             z-index: 1000;
             width: 40px;
             height: 40px;
             border-radius: 50%;
             padding: 0;
             margin: 0rem;
+			background: #ff6b6b;
             display: flex;
             cursor: pointer;
             color: #ffffff;
@@ -331,8 +327,8 @@
             }
 
             .timer-display {
-                width: 250px;
-                height: 250px;
+                width: 300px;
+                height: 300px;
             }
 
             .time {
@@ -418,33 +414,10 @@
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-           #pomodoro-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: 9999;
-            background: var(--bg-color);
-			overflow-y: auto;
-			-webkit-overflow-scrolling: touch;
-           }
-
-           #pomodoro-container > * {
-            pointer-events: auto; /* Isso permite que interaja com o código do pomodoro*/
-            }
-            .pomodoro-toolbar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                z-index: 1001;
-            }
     </style>
 </head>
 
-<body onload="initPomodoro()">
-  
+<body>
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
             <i class="fas fa-moon"></i>
         </button>
@@ -640,7 +613,7 @@
 
     <div class="notification" id="notification"></div>
 
-    <div class="keyboard-shortcuts hide" id="keyboardShortcuts" onclick="toggleKeyboardShortcuts()">
+    <div class="keyboard-shortcuts" id="keyboardShortcuts" onclick="toggleKeyboardShortcuts()">
         <strong>Keyboard Shortcuts:</strong>
         <div>Space - Start/Pause</div>
         <div>R - Reset Timer</div>
@@ -649,16 +622,9 @@
         <div>3 - Long Break</div>
         <div>Click here to hide</div>
     </div>
-</div>
+
     <script>
     {% raw %}
-    // Add Jekyll-specific initialization
-    document.addEventListener('DOMContentLoaded', function() {
-        if (document.querySelector('.fixed-top-nav')) {
-             document.querySelector('#pomodoro-container').style.paddingTop = '0';
-        }
-        initPomodoro();
-     });
         // --- Utility Functions ---
         const el = id => document.getElementById(id);
         const playSound = src => new Audio(src).play();
@@ -707,13 +673,13 @@
         let youtubePlayer;
 
         // --- DOM Elements ---
-        const timeDisplay = document.querySelector('#pomodoro-app #time span:first-child');
-        const pomoCounterDisplay = document.querySelector('#pomodoro-app #time .pomo-counter');
-        const startBtn = document.querySelector('#pomodoro-app #startBtn');
-        const modeButtons = document.querySelectorAll('#pomodoro-app .mode-buttons button');
-        const progressCircle = document.querySelector('#pomodoro-app .progress-ring__circle');
-        const progressCircleBg = document.querySelector('#pomodoro-app .progress-ring__circle-bg');
-        const keyboardShortcutsDiv = document.querySelector('#pomodoro-app #keyboardShortcuts');
+        const timeDisplay = el('time').querySelector('span');
+        const pomoCounterDisplay = el('time').querySelector('.pomo-counter');
+        const startBtn = el('startBtn');
+        const modeButtons = document.querySelectorAll('.mode-buttons button');
+        const progressCircle = document.querySelector('.progress-ring__circle');
+        const progressCircleBg = document.querySelector('.progress-ring__circle-bg');
+        const keyboardShortcutsDiv = el('keyboardShortcuts');
         progressCircle.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
         progressCircleBg.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
 
@@ -769,15 +735,15 @@
             };
             localStorage.setItem('pomodoroSettings', JSON.stringify(settings));
         };
-         function updateColor(mode) {
+        function updateColor(mode) {
             const color = colors[mode];
             progressCircle.style.stroke = color;
             progressCircleBg.style.stroke = color;
             progressCircleBg.style.opacity = '0.2';
-             document.querySelectorAll('#pomodoro-app .controls button').forEach(btn => {
+            document.querySelectorAll('.controls button').forEach(btn => {
                 btn.style.backgroundColor = color;
             });
-             modeButtons.forEach(btn => {
+            modeButtons.forEach(btn => {
                 btn.style.backgroundColor = color;
             });
         }
@@ -793,18 +759,18 @@
             setProgress((times[currentMode] - timeLeft) / times[currentMode] * 100);
             pomoCounterDisplay.textContent = statistics.totalPomodoros > 0 ? statistics.totalPomodoros : '';
         };
-       const setMode = (mode) => {
+        const setMode = (mode) => {
             modeButtons.forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.querySelector(`#pomodoro-app .${mode}`).classList.add('active');
+            document.querySelector(`.${mode}`).classList.add('active');
             currentMode = mode;
-             timeLeft = times[mode];
+            timeLeft = times[mode];
             updateColor(mode);
             resetTimer();
             updateDisplay();
         };
-      const startTimer = () => {
+        const startTimer = () => {
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
@@ -815,9 +781,9 @@
             } else {
                 timerId = setInterval(() => {
                     timeLeft--;
-                    if (currentMode === 'pomodoro') {
-                        statistics.totalFocusTime++;
-                    }
+					if (currentMode === 'pomodoro') {
+						statistics.totalFocusTime++;
+					}					
                     updateDisplay();
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
@@ -830,7 +796,7 @@
                 startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
                 if (youtubePlayer) {
                     youtubePlayer.playVideo();
-                 }
+                }
             }
         };
         const resetTimer = () => {
@@ -839,11 +805,11 @@
             timeLeft = times[currentMode];
             updateDisplay();
             startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-             if (youtubePlayer) {
-                youtubePlayer.pauseVideo();
+            if (youtubePlayer) {
+                    youtubePlayer.pauseVideo();
             }
         };
-       const handleTimerEnd = () => {
+        const handleTimerEnd = () => {
             let nextMode;
             if (currentMode === 'pomodoro') {
                 statistics.totalPomodoros++;
@@ -861,14 +827,14 @@
                 nextMode = 'pomodoro';
             }
             // Atualiza o modo visualmente
-             modeButtons.forEach(btn => {
+            modeButtons.forEach(btn => {
                 btn.classList.remove('active');
             });
-            document.querySelector(`#pomodoro-app .${nextMode}`).classList.add('active');
+            document.querySelector(`.${nextMode}`).classList.add('active');
             currentMode = nextMode;
 
             // Atualiza a cor do timer
-             updateColor(currentMode);
+            updateColor(currentMode);
 
             // Define o novo tempo e atualiza o display
             timeLeft = times[currentMode];
@@ -888,7 +854,7 @@
         // --- Task Management ---
         const handleTaskInput = (event) => { if (event.key === 'Enter') addTask(); };
         const addTask = () => {
-            const taskInput = document.querySelector('#pomodoro-app #taskInput');
+            const taskInput = el('taskInput');
             const taskText = taskInput.value.trim();
             if (taskText) {
                 tasks.push({ text: escapeHtml(taskText), completed: false, pomodoros: 0 });
@@ -910,23 +876,19 @@
             updateTaskList();
             saveSettings();
         };
-         const updateTaskList = () => {
+        const updateTaskList = () => {
             const taskListDiv = el('taskList');
             taskListDiv.innerHTML = '';
             tasks.forEach((task, index) => {
-                const taskItem = document.createElement('div');
-                taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
-                taskItem.innerHTML = `
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${index})">
-                    <span>${task.text}</span>
-                    <span class="pomodoro-count">Pomodoros: ${task.pomodoros}</span>
-                    <div class="task-actions">
-                        <button class="pomodoro" onclick="removeTask(${index})">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                taskListDiv.appendChild(taskItem);
+                taskListDiv.innerHTML += `
+                    <div class="task-item ${task.completed ? 'completed' : ''}">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onclick="toggleTask(${index})">
+                        <span>${task.text}</span>
+                        <span class="pomodoro-count">Pomodoros: ${task.pomodoros}</span>
+                        <div class="task-actions">
+                            <button class="pomodoro" onclick="removeTask(${index})"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>`;
             });
         };
         const updateTaskSelect = () => {
@@ -958,7 +920,7 @@
             }
             saveSettings();
         };
-       const updateBackground = (type) => {
+        const updateBackground = (type) => {
             if (type === 'url') {
                 const url = el('bgUrl').value.trim();
                 document.body.style.backgroundImage = url ? `url('${url}')` : '';
@@ -973,7 +935,7 @@
                     reader.readAsDataURL(file);
                 }
             }
-             saveSettings();
+            saveSettings();
         };
         const removeBackground = () => {
             document.body.style.backgroundImage = '';
@@ -982,7 +944,7 @@
             localStorage.setItem('backgroundImage', '');
             saveSettings();
         };
-       const updateYouTubeVideo = () => {
+        const updateYouTubeVideo = () => {
             const url = el('youtubeUrl').value;
             const videoId = getVideoId(url);
             if (videoId && youtubePlayer && youtubePlayer.loadVideoById) {
@@ -1021,7 +983,7 @@
         };
 
         // --- Statistics ---
-       const updateStatistics = () => {
+        const updateStatistics = () => {
             el('totalPomodorosStat').textContent = statistics.totalPomodoros;
             el('totalTime').textContent = formatTime(statistics.totalFocusTime);
             const today = new Date().toDateString();
@@ -1036,6 +998,7 @@
             statistics.lastCompleted = new Date();
             saveSettings();
         };
+
 
         const playNotificationSound = (mode) => {
             if (!muteSounds) {
@@ -1110,7 +1073,7 @@
         // --- Theme Toggle ---
         const toggleTheme = () => {
             document.body.classList.toggle('dark-mode');
-            const icon = document.querySelector('#pomodoro-app .theme-toggle i');
+            const icon = document.querySelector('.theme-toggle i');
             icon.classList.toggle('fa-moon');
             icon.classList.toggle('fa-sun');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
@@ -1122,52 +1085,20 @@
         };
 
         // --- Initialization ---
-        const initPomodoro = () => {
-             loadSettings();
-             updateColor(currentMode);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            updateColor(currentMode);
             setMode('pomodoro');
-			 timeLeft = times[currentMode];
             updateDisplay();
-            updateCircleDimensions();
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
                 document.body.classList.add('dark-mode');
-                const icon = document.querySelector('#pomodoro-app .theme-toggle i');
+                const icon = document.querySelector('.theme-toggle i');
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             }
-        };
-         // Add responsive circle handling
-        function updateCircleDimensions() {
-            const timerDisplay = document.querySelector('#pomodoro-app .timer-display');
-            const width = timerDisplay.offsetWidth;
-            const height = timerDisplay.offsetHeight;
-            const circle = document.querySelector('#pomodoro-app .progress-ring__circle');
-            const circleBg = document.querySelector('#pomodoro-app .progress-ring__circle-bg');
-
-            const svg = document.querySelector('#pomodoro-app .progress-ring');
-            svg.setAttribute('width', width);
-            svg.setAttribute('height', height);
-
-            const radius = Math.min(width, height) / 2 - 10;
-            const cx = width / 2;
-            const cy = height / 2;
-
-            circle.setAttribute('r', radius);
-            circle.setAttribute('cx', cx);
-            circle.setAttribute('cy', cy);
-            circleBg.setAttribute('r', radius);
-            circleBg.setAttribute('cx', cx);
-            circleBg.setAttribute('cy', cy);
-
-            const circumference = 2 * Math.PI * radius;
-            circle.style.strokeDasharray = `${circumference} ${circumference}`;
-            circleBg.style.strokeDasharray = `${circumference} ${circumference}`;
-        }
-        // Add these event listeners
-        window.addEventListener('load', updateCircleDimensions);
-        window.addEventListener('resize', updateCircleDimensions);
-         window.addEventListener('storage', (event) => {
+        });
+        window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
     {% endraw %}
