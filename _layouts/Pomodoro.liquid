@@ -778,7 +778,9 @@ layout: default
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-                youtubePlayer?.pauseVideo();
+                if (youtubePlayer) {
+                    youtubePlayer.pauseVideo();
+                }
             } else {
                 timerId = setInterval(() => {
                     timeLeft--;
@@ -795,7 +797,9 @@ layout: default
 
                 }, 1000);
                 startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                youtubePlayer?.playVideo();
+                if (youtubePlayer) {
+                    youtubePlayer.playVideo();
+                }
             }
         };
         const resetTimer = () => {
@@ -804,7 +808,9 @@ layout: default
             timeLeft = times[currentMode];
             updateDisplay();
             startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-            youtubePlayer?.pauseVideo();
+            if (youtubePlayer) {
+                youtubePlayer.pauseVideo();
+            }
         };
         const handleTimerEnd = () => {
             let nextMode;
