@@ -710,11 +710,11 @@ layout: default
             times = settings.times || { ...DEFAULT_TIMES };
             tasks = settings.tasks || [];
             statistics = settings.statistics || { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
-            autoStartBreaks = settings.autoStartBreaks ?? true;
-            pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak ?? 4;
+            autoStartBreaks = settings.autoStartBreaks || true;
+            pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak || 4;
             notificationSounds = settings.notificationSounds || { ...DEFAULT_SOUNDS };
-            muteSounds = settings.muteSounds ?? false;
-            selectedTaskIndex = settings.selectedTaskIndex ?? null;
+            muteSounds = settings.muteSounds || false;
+            selectedTaskIndex = settings.selectedTaskIndex || null;
             const bg = settings.background;
             if (bg) document.body.style.backgroundImage = `url('${bg}')`;
             el('pomodoroTime').value = times.pomodoro / 60;

@@ -30,3 +30,6 @@ _pages/pt-br/HTMLive.md
 _layouts/Differ.liquid
 _pages/en-us/Differ.md
 _pages/pt-br/Differ.md
+_layouts/Pomodoro.liquid
+_pages/en-us/Pomodoro.md
+_pages/pt-br/Pomodoro.md
