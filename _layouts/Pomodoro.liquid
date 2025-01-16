@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: none
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -1100,10 +1100,24 @@ layout: page
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             }
+            
+            if (!tasks) {
+                tasks = [];
+            }
+
+            const taskInput = el('taskInput');
+            if (taskInput) {
+                taskInput.addEventListener('keypress', handleTaskInput);
+            }
+
         });
         window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
+
+        window.addTask = addTask;
+        window.removeTask = removeTask;
+        window.toggleTask = toggleTask;
     {% endraw %}
     </script>
 </body>
