@@ -1,6 +1,54 @@
 ---
-layout: none
+layout: default
 ---
+
+<style>
+    body {
+        max-width: none; /* Remove o limite de largura 100%*/
+        margin: 0; /* Remove margens padrão */
+        padding: 0; /* Remove preenchimento padrão */
+    }
+    .full-width {
+        max-width: none !important; /* Ignora a largura máxima */
+    }
+    .editor-preview {
+        display: flex;
+        flex-direction: row;
+        height: calc(100vh - 0px); /* Ajusta a altura para ocupar a tela */
+        width: 100%; /* Garante que a área de edição use 100% da largura */
+    }
+    
+    #livePreview {
+        width: 100%; /* Mantém a divisão em 100% para a visualização */
+        padding: 0px; /* Removo o padding */
+        overflow-y: auto;
+        /*background-color: #828282; /* Fundo escuro para a visualização */
+        /*color: #fff;  Texto branco para o modo escuro */
+    }
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    .container {
+        max-width: none;
+    }
+    body {
+        max-width: 100%;
+    }
+
+</style>
+<div class="editor-preview">
+    <div id="livePreview">
+        <iframe id="liveFrame"></iframe>
+    </div>
+</div>
+
+<script>
+    const liveFrame = document.getElementById('liveFrame');
+
+// HTML da sua aplicação Pomodoro aqui
+const pomodoroAppHTML = `
 <!DOCTYPE html>
 <html lang="en">
 
@@ -313,7 +361,7 @@ layout: none
             border-radius: 50%;
             padding: 0;
             margin: 0rem;
-			background: #ff6b6b;
+            background: #ff6b6b;
             display: flex;
             cursor: pointer;
             color: #ffffff;
@@ -417,13 +465,33 @@ layout: none
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        /* Estilos simplificados para selects de áudio (notificações) */
+        .setting-input-group select {
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(156, 163, 175, 0.2);
+            width: 100%;
+            transition: border-color var(--transition-speed);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .setting-input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .setting-input-group select option {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
     </style>
 </head>
 
 <body>
-        <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-            <i class="fas fa-moon"></i>
-        </button>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+        <i class="fas fa-moon"></i>
+    </button>
     <div class="container">
         <div class="timer-container">
             <div class="mode-buttons">
@@ -627,15 +695,38 @@ layout: none
     </div>
 
     <script>
-    {% raw %}
         // --- Utility Functions ---
         const el = id => document.getElementById(id);
-        const playSound = src => new Audio(src).play();
         const formatTime = seconds => {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            if (seconds < 3600) { // Menos de 1 hora
+                const mins = Math.floor(seconds / 60);
+                const secs = seconds % 60;
+                return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            } else { // Mais de 1 hora
+                const hours = Math.floor(seconds / 3600);
+                const mins = Math.floor((seconds % 3600) / 60);
+                return `${hours}h ${mins}m`;
+            }
         };
+
+        // Função para criar beep
+        function createBeep(frequency = 440, duration = 200, volume = 0.1) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            gainNode.gain.value = volume;
+
+            oscillator.start();
+            setTimeout(() => {
+                oscillator.stop();
+                audioContext.close();
+            }, duration);
+        }
         const showNotification = (message) => {
             const notification = el('notification');
             notification.textContent = message;
@@ -664,7 +755,7 @@ layout: none
         let timeLeft;
         let timerId;
         let currentMode = 'pomodoro';
-        let tasks;
+        let tasks = [];
         let selectedTaskIndex = null;
         let autoStartBreaks = true;
         let pomodoroCount = 0;
@@ -710,11 +801,11 @@ layout: none
             times = settings.times || { ...DEFAULT_TIMES };
             tasks = settings.tasks || [];
             statistics = settings.statistics || { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
-            autoStartBreaks = settings.autoStartBreaks || true;
-            pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak || 4;
+            autoStartBreaks = settings.autoStartBreaks ?? true;
+            pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak ?? 4;
             notificationSounds = settings.notificationSounds || { ...DEFAULT_SOUNDS };
-            muteSounds = settings.muteSounds || false;
-            selectedTaskIndex = settings.selectedTaskIndex || null;
+            muteSounds = settings.muteSounds ?? false;
+            selectedTaskIndex = settings.selectedTaskIndex ?? null;
             const bg = settings.background;
             if (bg) document.body.style.backgroundImage = `url('${bg}')`;
             el('pomodoroTime').value = times.pomodoro / 60;
@@ -773,33 +864,35 @@ layout: none
             resetTimer();
             updateDisplay();
         };
-        const startTimer = () => {
+         const startTimer = () => {
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-                if (youtubePlayer) {
-                    youtubePlayer.pauseVideo();
-                }
+                youtubePlayer?.pauseVideo();
+
             } else {
+                startTimestamp = Date.now() - ((times[currentMode] - timeLeft) * 1000);
+
                 timerId = setInterval(() => {
-                    timeLeft--;
-					if (currentMode === 'pomodoro') {
-						statistics.totalFocusTime++;
-					}					
-                    updateDisplay();
+                    const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+                    timeLeft = times[currentMode] - elapsed;
+
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
                         timerId = null;
                         handleTimerEnd();
-                        return; // Sai do loop para não decrementar mais
+                        return;
                     }
 
+                    if (currentMode === 'pomodoro') {
+
+                    }
+                    updateDisplay();
                 }, 1000);
+
                 startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-                if (youtubePlayer) {
-                    youtubePlayer.playVideo();
-                }
+                youtubePlayer?.playVideo();
             }
         };
         const resetTimer = () => {
@@ -808,21 +901,21 @@ layout: none
             timeLeft = times[currentMode];
             updateDisplay();
             startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-            if (youtubePlayer) {
-                    youtubePlayer.pauseVideo();
-            }
+            youtubePlayer?.pauseVideo();
+
         };
         const handleTimerEnd = () => {
             let nextMode;
             if (currentMode === 'pomodoro') {
                 statistics.totalPomodoros++;
+                 statistics.totalFocusTime += times.pomodoro; // Add the time spent
                 if (selectedTaskIndex !== null) tasks[selectedTaskIndex].pomodoros++;
                 updateStatistics();
                 playNotificationSound('pomodoro');
                 showNotification('Pomodoro Complete!');
                 pomodoroCount++;
                 nextMode = (statistics.totalPomodoros % pomodorosBeforeLongBreak === 0) ? 'longBreak' : 'shortBreak';
-                if(nextMode === 'longBreak') pomodoroCount = 0;
+                if (nextMode === 'longBreak') pomodoroCount = 0;
 
             } else {
                 playNotificationSound(currentMode);
@@ -1002,19 +1095,30 @@ layout: none
             saveSettings();
         };
 
+        // Novo Event Listener para visibilidade da página
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && timerId) {
+                // Recalcula o tempo restante baseado no timestamp inicial
+                const elapsed = Math.floor((Date.now() - startTimestamp) / 1000);
+                timeLeft = Math.max(0, times[currentMode] - elapsed);
+                updateDisplay();
+            }
+        });
 
-        const playNotificationSound = (mode) => {
+
+       const playNotificationSound = (mode) => {
             if (!muteSounds) {
-                const soundName = notificationSounds[mode];
-                switch (soundName) {
+                switch (notificationSounds[mode]) {
                     case 'bell':
-                        playSound('https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/bell.mp3');
+                        createBeep(1000, 2000);  // Frequência de 1000 Hz para um tom geral e claro
+                        setTimeout(() => createBeep(1000, 2000), 2000); // Segundo beep
                         break;
-                    case 'chime':
-                        playSound('https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/chime.mp3');
+                     case 'chime':
+                        createBeep(600, 2000); // Frequência 600hz para um som um pouco mais suave
+                        setTimeout(() => createBeep(800, 2000), 2000); // Segundo beep, subindo um pouco para chamar atenção
                         break;
                     case 'ding':
-                        playSound('https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/ding.mp3');
+                         createBeep(400, 2000);   // Frequência 400 Hz para um tom grave e mais sutil
                         break;
                 }
             }
@@ -1100,26 +1204,24 @@ layout: none
                 icon.classList.remove('fa-moon');
                 icon.classList.add('fa-sun');
             }
-            
-            if (!tasks) {
-                tasks = [];
+              // Solicitar permissão para notificações
+            if ('Notification' in window) {
+                Notification.requestPermission();
             }
-
-            const taskInput = el('taskInput');
-            if (taskInput) {
-                taskInput.addEventListener('keypress', handleTaskInput);
-            }
-
         });
         window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
-
-        window.addTask = addTask;
-        window.removeTask = removeTask;
-        window.toggleTask = toggleTask;
-    {% endraw %}
     </script>
 </body>
 
 </html>
+`;
+
+
+
+    // Inicializa a visualização com o conteúdo da aplicação
+     liveFrame.srcdoc = pomodoroAppHTML;
+
+
+</script>
