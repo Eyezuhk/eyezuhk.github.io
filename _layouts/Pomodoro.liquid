@@ -4,20 +4,31 @@ layout: default
 
 <style>
     html, body {
-        max-width: none; /* Remove o limite de largura 100%*/
-        margin: 0; /* Remove margens padrão */
-        padding: 0; /* Remove preenchimento padrão */
-         height: 100%; /* Garante que html e body tenham 100% de altura */
-         overflow-x: hidden; /* Oculta a barra de rolagem horizontal no html */
-         overflow-y: auto; /* Mostra a barra de rolagem vertical no html */
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
-    iframe {
-        display: block; /* Remove espaços extras em volta do iframe */
-        width: 100%;
+    
+     #liveFrame {
+        display: block;
+        width: 100vw; /* Ocupa toda a largura da tela */
         height: 100vh; /* Ocupa toda a altura da viewport */
         border: none; /* Remove a borda do iframe */
-		overflow: hidden; /* Remove as barras de rolagem dentro do iframe */
-     }
+		    overflow: hidden; /* Remove as barras de rolagem dentro do iframe */
+		position: fixed; /* Garante que o iframe cubra toda a tela */
+        top: 0; /* Posiciona o topo do iframe no topo da tela */
+        left: 0; /* Posiciona a lateral esquerda do iframe na lateral esquerda da tela */
+    }
+	/* Remove as margens e paddings do container e wrapper do site */
+	 .container, .wrapper{
+		margin: 0 !important;
+		padding: 0 !important;
+		max-width: none !important;
+		width: 100% !important;
+	 }
 
 </style>
 
