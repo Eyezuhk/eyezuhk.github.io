@@ -695,18 +695,19 @@ const pomodoroAppHTML = `
     </div>
 
     <script>
-    {% raw %}
         // --- Utility Functions ---
         const el = id => document.getElementById(id);
+
         const formatTime = seconds => {
             if (seconds < 3600) { // Menos de 1 hora
                 const mins = Math.floor(seconds / 60);
                 const secs = seconds % 60;
-                return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+                // Substituindo padStart por uma solução mais compatível
+                return (mins < 10 ? '0' + mins : mins) + ':' + (secs < 10 ? '0' + secs : secs);
             } else { // Mais de 1 hora
                 const hours = Math.floor(seconds / 3600);
                 const mins = Math.floor((seconds % 3600) / 60);
-                return `${hours}h ${mins}m`;
+                return hours + 'h ' + mins + 'm';
             }
         };
 
@@ -1213,7 +1214,6 @@ const pomodoroAppHTML = `
         window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
-    {% endraw %}
     </script>
 </body>
 
