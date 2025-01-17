@@ -7,45 +7,21 @@ layout: default
         max-width: none; /* Remove o limite de largura 100%*/
         margin: 0; /* Remove margens padrão */
         padding: 0; /* Remove preenchimento padrão */
-        height: 100%; /* Garante que html e body tenham 100% de altura */
-        overflow-x: hidden;
-        overflow-y: auto;
+         height: 100%; /* Garante que html e body tenham 100% de altura */
+         overflow-x: hidden; /* Oculta a barra de rolagem horizontal no html */
+         overflow-y: auto; /* Mostra a barra de rolagem vertical no html */
     }
-    .full-width {
-        max-width: none !important; /* Ignora a largura máxima */
-    }
-    .editor-preview {
-        display: flex;
-        flex-direction: row;
-       height: 100vh; /* Ajusta a altura para ocupar toda a viewport */
-        width: 100%; /* Garante que a área de edição use 100% da largura */
-    }
-    
-    #livePreview {
-        width: 100%; /* Mantém a divisão em 100% para a visualização */
-        padding: 0px; /* Removo o padding */
-        overflow: hidden;
-		height: 100%;
-    }
-	  #liveFrame {
-        width: 100%; /* Mantém a divisão em 100% para a visualização */
-        height: 100%;
-        border: none;
-        overflow: hidden;
-		 }
-    .container {
-        max-width: none;
-    }
-     body {
-        max-width: 100%;
-    }
+    iframe {
+        display: block; /* Remove espaços extras em volta do iframe */
+        width: 100%;
+        height: 100vh; /* Ocupa toda a altura da viewport */
+        border: none; /* Remove a borda do iframe */
+		overflow: hidden; /* Remove as barras de rolagem dentro do iframe */
+     }
 
 </style>
-<div class="editor-preview">
-    <div id="livePreview">
-        <iframe id="liveFrame"></iframe>
-    </div>
-</div>
+
+ <iframe id="liveFrame"></iframe>
 
 <script>
     const liveFrame = document.getElementById('liveFrame');
