@@ -8,16 +8,14 @@ layout: default
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
+        overflow: hidden; /* Oculta as barras de rolagem vertical e horizontal da página */
     }
-    
-     #liveFrame {
+    iframe {
         display: block;
         width: 100vw; /* Ocupa toda a largura da tela */
         height: 100vh; /* Ocupa toda a altura da viewport */
         border: none; /* Remove a borda do iframe */
-		    overflow: hidden; /* Remove as barras de rolagem dentro do iframe */
+		    overflow: auto; /* Remove as barras de rolagem dentro do iframe */
 		position: fixed; /* Garante que o iframe cubra toda a tela */
         top: 0; /* Posiciona o topo do iframe no topo da tela */
         left: 0; /* Posiciona a lateral esquerda do iframe na lateral esquerda da tela */
