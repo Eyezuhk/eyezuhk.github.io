@@ -695,6 +695,7 @@ const pomodoroAppHTML = `
     </div>
 
     <script>
+    {% raw %}
         // --- Utility Functions ---
         const el = id => document.getElementById(id);
         const formatTime = seconds => {
@@ -1212,6 +1213,7 @@ const pomodoroAppHTML = `
         window.addEventListener('storage', (event) => {
             if (event.key === 'pomodoroSettings') loadSettings();
         });
+    {% endraw %}
     </script>
 </body>
 
