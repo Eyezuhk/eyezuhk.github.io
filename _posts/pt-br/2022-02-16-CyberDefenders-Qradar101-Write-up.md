@@ -8,7 +8,7 @@ categories: Threat-Hunting
 thumbnail: https://img.stackshare.io/service/12032/qradar.png
 giscus_comments: true
 related_posts: true
-featured: true
+featured: false
 toc:
   sidebar: left
 ---
