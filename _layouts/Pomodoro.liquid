@@ -14,7 +14,18 @@ layout: default
         overflow-x: hidden;
         overflow-y: auto;
         overscroll-behavior: none
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
+
+    .draggable {
+            touch-action: pan-y pan-x; /* Permite arrastar esses elementos específicos */
+            user-select: none;
+        }
     
      #liveFrame {
         display: block;
