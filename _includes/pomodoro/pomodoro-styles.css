@@ -1,68 +1,394 @@
 :root {
-    --primary-color: #ff6b6b;
-    --bg-color: #ffffff;
-    --text-color: #333333;
-  }
-  
+  --primary-color: #ff6b6b;
+  --shortbreak-color: #4dabf7;
+  --longbreak-color: #40c057;
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --overlay-color: rgba(255, 255, 255, 0.8);
+  --button-width: 120px;
+  --button-height: 40px;
+  --font-family: system-ui, -apple-system, sans-serif;
+  --border-radius: 12px;
+  --transition-speed: 0.3s;
+}
+
+.dark-mode {
+  --bg-color: #0d1117;
+  --text-color: #ffffff;
+  --overlay-color: rgba(0, 0, 0, 0.6);
+}
+
+.pomodoro-container {
+max-width: 1000px;
+min-width: 400px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.timer-container {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.timer-display {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 2rem auto;
+}
+
+.progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotate(-90deg);
+}
+
+.progress-ring__circle {
+  transition: stroke-dashoffset var(--transition-speed);
+  stroke-linecap: round;
+}
+
+.progress-ring__circle-bg {
+  opacity: 0.2;
+}
+
+.time-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pomo-counter {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  color: var(--primary-color);
+}
+
+.mode-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  width: var(--button-width);
+  height: var(--button-height);
+  border: none;
+  border-radius: var(--border-radius);
+  color: white;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-transform: capitalize;
+  font-weight: 500;
+  padding: 0 1rem;
+}
+
+button.pomodoro {
+  background-color: var(--primary-color);
+}
+
+button.shortBreak {
+  background-color: var(--shortbreak-color);
+}
+
+button.longBreak {
+  background-color: var(--longbreak-color);
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.panel {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+}
+
+.settings-group {
+  margin-bottom: 2rem;
+}
+
+.settings-group h3 {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+  font-size: 1.25rem;
+}
+
+.setting-input-group {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.setting-input-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.setting-input-group select option {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.setting-input-group label {
+  grid-column: 1;
+  text-align: left;
+}
+
+.setting-input-group>*:nth-child(2) {
+  grid-column: 2;
+}
+
+.setting-input-group>*:nth-child(3) {
+  grid-column: 3;
+  justify-self: start;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(156, 163, 175, 0.2);
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  width: 100%;
+  transition: border-color var(--transition-speed);
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.task-input-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 255, 255, 0.05);
+  margin-bottom: 0.5rem;
+  transition: all var(--transition-speed);
+  cursor: grab;
+  user-select: none;
+}
+
+.task-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.task-item.dragging {
+  opacity: 0.5;
+}
+
+.task-item.completed {
+  opacity: 0.7;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: white;
+  opacity: 0;
+  transition: opacity var(--transition-speed);
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.notification.show {
+  opacity: 1;
+}
+
+.keyboard-shortcuts {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--overlay-color);
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  z-index: 1000;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 0.7rem;
+  background: #ff6b6b;
+  display: flex;
+  cursor: pointer;
+  color: #ffffff;
+  transition: background-color var(--transition-speed);
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 768px) {
   .pomodoro-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 12px;
-    background: var(--bg-color);
+      padding: 1rem;
   }
-  
   .timer-display {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    margin: 0 auto;
+      width: 300px;
+      height: 300px;
   }
-  
-  .progress-ring {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: rotate(-90deg);
-  }
-  
-  .progress-ring__circle {
-    transition: stroke-dashoffset 0.3s;
-    stroke-linecap: round;
-  }
-  
   .time-display {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 3rem;
-    font-weight: bold;
+      font-size: 3rem;
   }
-  
-  .controls {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 2rem;
+
+  .keyboard-shortcuts {
+      display: none;
   }
-  
-  button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    background: var(--primary-color);
-    color: white;
-    cursor: pointer;
+
+  .stats-grid {
+      grid-template-columns: 1fr;
   }
-  
-  @media (max-width: 480px) {
-    .timer-display {
-      width: 250px;
-      height: 250px;
-    }
-    
-    .time-display {
-      font-size: 2.5rem;
-    }
+
+  .setting-input-group {
+      flex-direction: column;
+      align-items: stretch;
   }
+
+  input[type="number"],
+  input[type="text"],
+  select {
+      max-width: 100%;
+  }
+}
+
+.task-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.task-actions button {
+  width: auto;
+  height: auto;
+  padding: 0.5rem;
+}
+
+.pomodoro-count {
+  font-size: 0.875rem;
+  color: var(--primary-color);
+}
+
+.task-selection-container {
+  margin: 1.5rem 0;
+}
+
+select#taskSelect {
+  margin: 0 auto;
+  display: block;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid rgba(156, 163, 175, 0.2);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+}
+
+select#taskSelect option {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.youtube-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  margin-top: 2rem;
+}
+
+.youtube-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.hide {
+  display: none !important;
+}
+
+.active {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
