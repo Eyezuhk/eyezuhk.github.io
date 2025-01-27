@@ -98,15 +98,15 @@ setupEventListeners() {
 
 
   loadSettings() {
-      const settings = JSON.parse(localStorage.getItem('pomodoroSettings') || '{}');
+      const settings = JSON.parse(localStorage.getItem('pomodoroSettings')  '{}');
       this.modes = settings.times || { pomodoro: 25 * 60, shortBreak: 5 * 60, longBreak: 15 * 60 };
       this.tasks = settings.tasks || [];
       this.statistics = settings.statistics || { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
-      this.autoStartBreaks = settings.autoStartBreaks ?? true;
-      this.pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak ?? 4;
+      this.autoStartBreaks = settings.autoStartBreaks || true;
+      this.pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak || 4;
       this.notificationSounds = settings.notificationSounds || { pomodoro: 'chime', shortBreak: 'bell', longBreak: 'ding' };
-      this.muteSounds = settings.muteSounds ?? false;
-      this.selectedTaskIndex = settings.selectedTaskIndex ?? null;
+      this.muteSounds = settings.muteSounds || false;
+      this.selectedTaskIndex = settings.selectedTaskIndex || null;
       const bg = settings.background;
       if (bg) document.body.style.backgroundImage = `url('${bg}')`;
       this.container.querySelector('#pomodoroTime').value = this.modes.pomodoro / 60;
