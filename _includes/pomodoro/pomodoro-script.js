@@ -106,7 +106,7 @@ class PomodoroApp {
         this.pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak !== undefined ? settings.pomodorosBeforeLongBreak : 4;
         this.notificationSounds = settings.notificationSounds || { pomodoro: 'chime', shortBreak: 'bell', longBreak: 'ding' };
         this.muteSounds = settings.muteSounds !== undefined ? settings.muteSounds : false;
-        this.selectedTaskIndex = settings.selectedTaskIndex ?? null;
+        this.selectedTaskIndex = settings.selectedTaskIndex || null;
         const bg = settings.background;
         if (bg) document.body.style.backgroundImage = `url('${bg}')`;
         this.container.querySelector('#pomodoroTime').value = this.modes.pomodoro / 60;
