@@ -1,230 +1,230 @@
 class PomodoroApp {
-  constructor(containerId) {
-      this.container = document.getElementById(containerId);
-      this.modes = { pomodoro: 25 * 60, shortBreak: 5 * 60, longBreak: 15 * 60 };
-      this.currentMode = 'pomodoro';
-      this.timeLeft = this.modes[this.currentMode];
-      this.isRunning = false;
-      this.interval = null;
-      this.tasks = [];
-      this.selectedTaskIndex = null;
-      this.autoStartBreaks = true;
-      this.pomodoroCount = 0;
-      this.pomodorosBeforeLongBreak = 4;
-      this.notificationSounds = { pomodoro: 'chime', shortBreak: 'bell', longBreak: 'ding' };
-      this.muteSounds = false;
-      this.statistics = { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
-      this.youtubePlayer = null;
-   this.startTimestamp = null; // Add startTimestamp variable
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.modes = { pomodoro: 25 * 60, shortBreak: 5 * 60, longBreak: 15 * 60 };
+        this.currentMode = 'pomodoro';
+        this.timeLeft = this.modes[this.currentMode];
+        this.isRunning = false;
+        this.interval = null;
+        this.tasks = [];
+        this.selectedTaskIndex = null;
+        this.autoStartBreaks = true;
+        this.pomodoroCount = 0;
+        this.pomodorosBeforeLongBreak = 4;
+        this.notificationSounds = { pomodoro: 'chime', shortBreak: 'bell', longBreak: 'ding' };
+        this.muteSounds = false;
+        this.statistics = { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
+        this.youtubePlayer = null;
+		 this.startTimestamp = null; // Add startTimestamp variable
 
 
-      this.init();
-  }
+        this.init();
+    }
 
-  init() {
-      this.setupDOM();
-      this.loadSettings();
-      this.updateDisplay();
-      this.updateColor(this.currentMode);
-  this.initYouTube();
-      this.setupEventListeners();
-  }
-  initYouTube() {
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.body.appendChild(tag);
+    init() {
+        this.setupDOM();
+        this.loadSettings();
+        this.updateDisplay();
+        this.updateColor(this.currentMode);
+		this.initYouTube();
+        this.setupEventListeners();
+    }
+    initYouTube() {
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.body.appendChild(tag);
 
-      window.onYouTubeIframeAPIReady = () => {
-          this.youtubePlayer = new YT.Player('youtubePlayer', {
-              height: '360',
-              width: '640',
-              videoId: localStorage.getItem('youtubeVideoId') || this.getVideoId("https://www.youtube.com/watch?v=jfKfPfyJRdk"),
-              playerVars: { 'playsinline': 1 },
-          });
-      };
-  }
-  getVideoId(url) {
-      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=| Shorts\/))([a-zA-Z0-9_-]+)/);
-      return match ? match[1] : null;
-  }
-  setupDOM() {
-      this.timeDisplay = this.container.querySelector('#timeDisplay');
-      this.totalPomodoros = this.container.querySelector('#totalPomodoros');
-      this.startBtn = this.container.querySelector('#startBtn');
-      this.progressCircle = this.container.querySelector('.progress-ring__circle');
-      this.progressCircleBg = this.container.querySelector('.progress-ring__circle-bg');
-      this.keyboardShortcutsDiv = this.container.querySelector('#keyboardShortcuts');
-      this.circumference = 2 * Math.PI * 140;
+        window.onYouTubeIframeAPIReady = () => {
+            this.youtubePlayer = new YT.Player('youtubePlayer', {
+                height: '360',
+                width: '640',
+                videoId: localStorage.getItem('youtubeVideoId') || this.getVideoId("https://www.youtube.com/watch?v=jfKfPfyJRdk"),
+                playerVars: { 'playsinline': 1 },
+            });
+        };
+    }
+    getVideoId(url) {
+        const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=| Shorts\/))([a-zA-Z0-9_-]+)/);
+        return match ? match[1] : null;
+    }
+    setupDOM() {
+        this.timeDisplay = this.container.querySelector('#timeDisplay');
+        this.totalPomodoros = this.container.querySelector('#totalPomodoros');
+        this.startBtn = this.container.querySelector('#startBtn');
+        this.progressCircle = this.container.querySelector('.progress-ring__circle');
+        this.progressCircleBg = this.container.querySelector('.progress-ring__circle-bg');
+        this.keyboardShortcutsDiv = this.container.querySelector('#keyboardShortcuts');
+        this.circumference = 2 * Math.PI * 140;
 
-      this.progressCircle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
-      this.progressCircleBg.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
-  }
+        this.progressCircle.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
+        this.progressCircleBg.style.strokeDasharray = `${this.circumference} ${this.circumference}`;
+    }
 
-setupEventListeners() {
-      document.addEventListener('keydown', (event) => {
-          if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'SELECT' && event.target.tagName !== 'TEXTAREA') {
-              switch (event.code) {
-                  case 'Space':
-                      this.startTimer();
-                      event.preventDefault();
-                      break;
-                  case 'KeyR':
-                      this.resetTimer();
-                      break;
-                  case 'Digit1':
-                      this.setMode('pomodoro');
-                      break;
-                  case 'Digit2':
-                      this.setMode('shortBreak');
-                      break;
-                  case 'Digit3':
-                      this.setMode('longBreak');
-                      break;
-              }
-          }
-      });
-      document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'visible' && this.interval) {
-             this.recalculateTime();
-          }
-      });
-  }
+	setupEventListeners() {
+        document.addEventListener('keydown', (event) => {
+            if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'SELECT' && event.target.tagName !== 'TEXTAREA') {
+                switch (event.code) {
+                    case 'Space':
+                        this.startTimer();
+                        event.preventDefault();
+                        break;
+                    case 'KeyR':
+                        this.resetTimer();
+                        break;
+                    case 'Digit1':
+                        this.setMode('pomodoro');
+                        break;
+                    case 'Digit2':
+                        this.setMode('shortBreak');
+                        break;
+                    case 'Digit3':
+                        this.setMode('longBreak');
+                        break;
+                }
+            }
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && this.interval) {
+               this.recalculateTime();
+            }
+        });
+    }
 
-  recalculateTime(){
-     const elapsed = Math.floor((Date.now() - this.startTimestamp) / 1000);
-     this.timeLeft = Math.max(0, this.modes[this.currentMode] - elapsed);
-     this.updateDisplay();
-   }
+    recalculateTime(){
+       const elapsed = Math.floor((Date.now() - this.startTimestamp) / 1000);
+       this.timeLeft = Math.max(0, this.modes[this.currentMode] - elapsed);
+       this.updateDisplay();
+     }
 
 
-  loadSettings() {
-      const settings = JSON.parse(localStorage.getItem('pomodoroSettings')  '{}');
-      this.modes = settings.times || { pomodoro: 25 * 60, shortBreak: 5 * 60, longBreak: 15 * 60 };
-      this.tasks = settings.tasks || [];
-      this.statistics = settings.statistics || { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
-      this.autoStartBreaks = settings.autoStartBreaks || true;
-      this.pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak || 4;
-      this.notificationSounds = settings.notificationSounds || { pomodoro: 'chime', shortBreak: 'bell', longBreak: 'ding' };
-      this.muteSounds = settings.muteSounds || false;
-      this.selectedTaskIndex = settings.selectedTaskIndex || null;
-      const bg = settings.background;
-      if (bg) document.body.style.backgroundImage = `url('${bg}')`;
-      this.container.querySelector('#pomodoroTime').value = this.modes.pomodoro / 60;
-      this.container.querySelector('#shortBreakTime').value = this.modes.shortBreak / 60;
-      this.container.querySelector('#longBreakTime').value = this.modes.longBreak / 60;
-      this.container.querySelector('#pomodorosBeforeLongBreak').value = this.pomodorosBeforeLongBreak;
-      this.container.querySelector('#autoStartBreaks').checked = this.autoStartBreaks;
-      this.container.querySelector('#pomodoroSound').value = this.notificationSounds.pomodoro;
-      this.container.querySelector('#shortBreakSound').value = this.notificationSounds.shortBreak;
-      this.container.querySelector('#longBreakSound').value = this.notificationSounds.longBreak;
-      this.container.querySelector('#muteSounds').checked = this.muteSounds;
+    loadSettings() {
+        const settings = JSON.parse(localStorage.getItem('pomodoroSettings') || '{}');
+        this.modes = settings.times || { pomodoro: 25 * 60, shortBreak: 5 * 60, longBreak: 15 * 60 };
+        this.tasks = settings.tasks || [];
+        this.statistics = settings.statistics || { totalPomodoros: 0, totalFocusTime: 0, dailyStreak: 0, lastCompleted: null };
+		this.autoStartBreaks = settings.autoStartBreaks !== undefined ? settings.autoStartBreaks : true;
+        this.pomodorosBeforeLongBreak = settings.pomodorosBeforeLongBreak !== undefined ? settings.pomodorosBeforeLongBreak : 4;
+        this.notificationSounds = settings.notificationSounds || { pomodoro: 'chime', shortBreak: 'bell', longBreak: 'ding' };
+        this.muteSounds = settings.muteSounds !== undefined ? settings.muteSounds : false;
+        this.selectedTaskIndex = settings.selectedTaskIndex ?? null;
+        const bg = settings.background;
+        if (bg) document.body.style.backgroundImage = `url('${bg}')`;
+        this.container.querySelector('#pomodoroTime').value = this.modes.pomodoro / 60;
+        this.container.querySelector('#shortBreakTime').value = this.modes.shortBreak / 60;
+        this.container.querySelector('#longBreakTime').value = this.modes.longBreak / 60;
+        this.container.querySelector('#pomodorosBeforeLongBreak').value = this.pomodorosBeforeLongBreak;
+        this.container.querySelector('#autoStartBreaks').checked = this.autoStartBreaks;
+        this.container.querySelector('#pomodoroSound').value = this.notificationSounds.pomodoro;
+        this.container.querySelector('#shortBreakSound').value = this.notificationSounds.shortBreak;
+        this.container.querySelector('#longBreakSound').value = this.notificationSounds.longBreak;
+        this.container.querySelector('#muteSounds').checked = this.muteSounds;
 
-       this.container.querySelector('#youtubeUrl').value = localStorage.getItem('youtubeVideoId') ? `https://www.youtube.com/watch?v=${localStorage.getItem('youtubeVideoId')}` : "https://www.youtube.com/watch?v=jfKfPfyJRdk";
-      this.updateTaskList();
-      this.updateTaskSelect();
-       this.updateStatistics();
+         this.container.querySelector('#youtubeUrl').value = localStorage.getItem('youtubeVideoId') ? `https://www.youtube.com/watch?v=${localStorage.getItem('youtubeVideoId')}` : "https://www.youtube.com/watch?v=jfKfPfyJRdk";
+        this.updateTaskList();
+        this.updateTaskSelect();
+         this.updateStatistics();
 
-  }
+    }
 
-  saveSettings() {
-      const settings = {
-          times: this.modes,
-          tasks: this.tasks,
-          statistics: this.statistics,
-          autoStartBreaks: this.autoStartBreaks,
-          pomodorosBeforeLongBreak: this.pomodorosBeforeLongBreak,
-          notificationSounds: this.notificationSounds,
-          muteSounds: this.muteSounds,
-          selectedTaskIndex: this.selectedTaskIndex,
-          background: document.body.style.backgroundImage.slice(5, -2)
-      };
-      localStorage.setItem('pomodoroSettings', JSON.stringify(settings));
-  }
-  formatTime(seconds) {
-      if (seconds < 3600) {
-          const mins = Math.floor(seconds / 60);
-          const secs = seconds % 60;
-          return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-      } else {
-          const hours = Math.floor(seconds / 3600);
-          const mins = Math.floor((seconds % 3600) / 60);
-          return `${hours}h ${mins}m`;
-      }
-  }
-  setProgress(percent) {
-      const offset = this.circumference - (percent / 100) * this.circumference;
-      this.progressCircle.style.strokeDashoffset = offset;
-  }
-  updateDisplay() {
-   if (this.interval) {
-         this.recalculateTime();
-   }
+    saveSettings() {
+        const settings = {
+            times: this.modes,
+            tasks: this.tasks,
+            statistics: this.statistics,
+            autoStartBreaks: this.autoStartBreaks,
+            pomodorosBeforeLongBreak: this.pomodorosBeforeLongBreak,
+            notificationSounds: this.notificationSounds,
+            muteSounds: this.muteSounds,
+            selectedTaskIndex: this.selectedTaskIndex,
+            background: document.body.style.backgroundImage.slice(5, -2)
+        };
+        localStorage.setItem('pomodoroSettings', JSON.stringify(settings));
+    }
+    formatTime(seconds) {
+        if (seconds < 3600) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        } else {
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            return `${hours}h ${mins}m`;
+        }
+    }
+    setProgress(percent) {
+        const offset = this.circumference - (percent / 100) * this.circumference;
+        this.progressCircle.style.strokeDashoffset = offset;
+    }
+    updateDisplay() {
+		 if (this.interval) {
+           this.recalculateTime();
+		 }
 
-      const formattedTime = this.formatTime(Math.max(0, this.timeLeft));
-      this.timeDisplay.querySelector('span').textContent = formattedTime;
-      this.setProgress((this.modes[this.currentMode] - this.timeLeft) / this.modes[this.currentMode] * 100);
-       this.totalPomodoros.textContent = this.statistics.totalPomodoros > 0 ? this.statistics.totalPomodoros : '';
+        const formattedTime = this.formatTime(Math.max(0, this.timeLeft));
+        this.timeDisplay.querySelector('span').textContent = formattedTime;
+        this.setProgress((this.modes[this.currentMode] - this.timeLeft) / this.modes[this.currentMode] * 100);
+         this.totalPomodoros.textContent = this.statistics.totalPomodoros > 0 ? this.statistics.totalPomodoros : '';
 
-  }
-  updateColor(mode) {
-      const color = {
-          pomodoro: '#ff6b6b',
-          shortBreak: '#4dabf7',
-          longBreak: '#40c057'
-      }[mode];
-  
-  this.progressCircle.style.stroke = color;
-  this.progressCircleBg.style.stroke = color;
-  this.progressCircleBg.style.opacity = '0.2';
+    }
+    updateColor(mode) {
+        const color = {
+            pomodoro: '#ff6b6b',
+            shortBreak: '#4dabf7',
+            longBreak: '#40c057'
+        }[mode];
+		
+		this.progressCircle.style.stroke = color;
+		this.progressCircleBg.style.stroke = color;
+		this.progressCircleBg.style.opacity = '0.2';
 
-      this.container.querySelectorAll('.controls button').forEach(btn => {
-          btn.style.backgroundColor = color;
-      });
-      this.container.querySelectorAll('.mode-buttons button').forEach(btn => {
-          btn.style.backgroundColor = color;
-      });
-  }
-  setMode(mode) {
-      this.container.querySelectorAll('.mode-buttons button').forEach(btn => btn.classList.remove('active'));
-      this.container.querySelector(`button[data-mode="${mode}"]`).classList.add('active');
-      this.currentMode = mode;
-      this.timeLeft = this.modes[mode];
-      this.updateColor(mode);
-      this.resetTimer();
-      this.updateDisplay();
-  }
-  startTimer() {
-  if (this.interval) {
-          clearInterval(this.interval);
-          this.interval = null;
-          this.startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-    this.youtubePlayer?.pauseVideo();
-      } else {
-          this.startTimestamp = Date.now() - ((this.modes[this.currentMode] - this.timeLeft) * 1000);
-         this.interval = setInterval(() => this.updateDisplay(), 1000);
-          this.startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
-    this.youtubePlayer?.playVideo();
-      }
-  }
+        this.container.querySelectorAll('.controls button').forEach(btn => {
+            btn.style.backgroundColor = color;
+        });
+        this.container.querySelectorAll('.mode-buttons button').forEach(btn => {
+            btn.style.backgroundColor = color;
+        });
+    }
+    setMode(mode) {
+        this.container.querySelectorAll('.mode-buttons button').forEach(btn => btn.classList.remove('active'));
+        this.container.querySelector(`button[data-mode="${mode}"]`).classList.add('active');
+        this.currentMode = mode;
+        this.timeLeft = this.modes[mode];
+        this.updateColor(mode);
+        this.resetTimer();
+        this.updateDisplay();
+    }
+    startTimer() {
+		if (this.interval) {
+            clearInterval(this.interval);
+            this.interval = null;
+            this.startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+			this.youtubePlayer?.pauseVideo();
+        } else {
+            this.startTimestamp = Date.now() - ((this.modes[this.currentMode] - this.timeLeft) * 1000);
+           this.interval = setInterval(() => this.updateDisplay(), 1000);
+            this.startBtn.innerHTML = '<i class="fas fa-pause"></i> Pause';
+			this.youtubePlayer?.playVideo();
+        }
+    }
 
-  resetTimer() {
-      clearInterval(this.interval);
-      this.interval = null;
-      this.timeLeft = this.modes[this.currentMode];
-      this.updateDisplay();
-      this.startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
-  this.youtubePlayer?.pauseVideo();
-  }
-  handleTimerEnd() {
-       let nextMode;
-      if (this.currentMode === 'pomodoro') {
-          this.statistics.totalPomodoros++;
-          this.statistics.totalFocusTime += this.modes.pomodoro;
-          if (this.selectedTaskIndex !== null) this.tasks[this.selectedTaskIndex].pomodoros++;
-          this.updateStatistics();
-          this.playNotificationSound('pomodoro');
-          this.showNotification('Pomodoro Complete!');
-          this.sendNotification('Pomodoro Complete!', 'Time to take a break!');
+    resetTimer() {
+        clearInterval(this.interval);
+        this.interval = null;
+        this.timeLeft = this.modes[this.currentMode];
+        this.updateDisplay();
+        this.startBtn.innerHTML = '<i class="fas fa-play"></i> Start';
+		this.youtubePlayer?.pauseVideo();
+    }
+    handleTimerEnd() {
+         let nextMode;
+        if (this.currentMode === 'pomodoro') {
+            this.statistics.totalPomodoros++;
+            this.statistics.totalFocusTime += this.modes.pomodoro;
+            if (this.selectedTaskIndex !== null) this.tasks[this.selectedTaskIndex].pomodoros++;
+            this.updateStatistics();
+            this.playNotificationSound('pomodoro');
+            this.showNotification('Pomodoro Complete!');
+            this.sendNotification('Pomodoro Complete!', 'Time to take a break!');
             this.pomodoroCount++;
             nextMode = (this.statistics.totalPomodoros % this.pomodorosBeforeLongBreak === 0) ? 'longBreak' : 'shortBreak';
             if (nextMode === 'longBreak') this.pomodoroCount = 0;
