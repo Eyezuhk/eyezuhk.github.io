@@ -279,15 +279,6 @@ defaults:
       path: "assets"
     values:
       sitemap: false
-  - scope:
-      path: ""
-    values:
-      pomodoro:
-        enabled: true
-        settings:
-          default_time: 25
-          colors:
-            primary: '#ff6b6b'
 
 sass:
   sourcemap: never

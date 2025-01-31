@@ -1,6 +1,6 @@
 ---
 page_id: Pomodoro
-layout: pomo
+layout: Pomodoro
 permalink: /Pomodoro/
 title: Pomodoro
 nav: true
