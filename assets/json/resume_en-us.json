@@ -115,7 +115,8 @@
       "icon": "fa-solid fa-certificate",
       "duration": "11H",
       "skills": ["SOC", "CSIRT", "DFIR", "SIEM", "THREAT-HUNTING", "MALWARE-ANALYSIS", "EMAIL", "ENDPOINT", "NETWORK-SECURITY", "SECOPS"
-    },{
+    },
+    {
       "name": "Detection Engineering for Beginners",
       "issuer": "TCM Security",
       "date": "2024-04",
