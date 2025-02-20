@@ -114,7 +114,7 @@
       "url": "/assets/pdf/Certificados/CCD-ISAAC FERNANDES_certificate.png",
       "icon": "fa-solid fa-certificate",
       "duration": "11H",
-      "skills": ["SOC", "CSIRT", "DFIR", "SIEM", "THREAT-HUNTING", "MALWARE-ANALYSIS", "EMAIL", "ENDPOINT", "NETWORK-SECURITY", "SECOPS"
+      "skills": ["SOC", "CSIRT", "DFIR", "SIEM", "THREAT-HUNTING", "MALWARE-ANALYSIS", "EMAIL", "ENDPOINT", "NETWORK-SECURITY", "SECOPS"]
     },
     {
       "name": "Detection Engineering for Beginners",
