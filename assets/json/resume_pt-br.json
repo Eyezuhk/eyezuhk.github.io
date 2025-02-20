@@ -108,18 +108,26 @@
   ],
   "certificates": [
     {
-      "name": "Detection Engineering for Beginners",
-      "date": "2024-04",
-      "issuer": "TCM Security",
+      "name": "Certified CyberDefender (CCD)",
+      "issuer": "CyberDefenders",
+      "date": "2024-12",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
       "icon": "fa-solid fa-certificate",
       "duration": "11H",
+      "skills": ["SOC", "CSIRT", "DFIR", "SIEM", "THREAT-HUNTING", "MALWARE-ANALYSIS", "EMAIL", "ENDPOINT", "NETWORK-SECURITY", "SECOPS"
+    },{
+      "name": "Detection Engineering for Beginners",
+      "issuer": "TCM Security",
+      "date": "2024-04",
+      "url": "/assets/pdf/Certificados/certificate-of-completion-for-detection-engineering-for-beginners.pdf",
+      "icon": "fa-solid fa-certificate",
+      "duration": "Months",
       "skills": ["Detection Engineering", "Elastic Stack (ELK)", "Elastic SIEM", "GitHub", "Python", "Adversary Emulation"]
     },
     {
       "name": "Practical API Hacking",
-      "date": "2024-04",
       "issuer": "TCM Security",
+      "date": "2024-04",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-api-hacking.pdf",
       "icon": "fa-solid fa-tag",
       "duration": "6H",
@@ -127,8 +135,8 @@
     },
     {
       "name": "Practical Phishing Campaigns",
-      "date": "2024-04",
       "issuer": "TCM Security",
+      "date": "2024-04",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-phishing-campaigns.pdf",
       "icon": "fa-solid fa-envelope",
       "duration": "3H",
@@ -136,16 +144,17 @@
     },
     {
       "name": "Blue Team Level 1 (BTL1)",
-      "date": "2023-11",
       "issuer": "Security Blue Team",
+      "date": "2023-11",
       "url": "https://www.credly.com/badges/fe12cfcc-ede9-493a-8f02-82ef9766b36b",
       "icon": "fa-solid fa-certificate",
+      "duration": "Months",
       "skills": ["Phishing Analysis", "Threat Intelligence", "SIEM", "Incident Response", "DFIR"]
     },
     {
       "name": "Practical Malware Analysis & Triage",
-      "date": "2023-10",
       "issuer": "TCM Security",
+      "date": "2023-10",
       "url": "/assets/pdf/Certificados/certificate-of-completion-for-practical-malware-analysis-triage.pdf",
       "icon": "fa-solid fa-certificate",
       "duration": "9H",
