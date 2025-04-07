@@ -62,7 +62,11 @@
       "location": "Fortaleza, Ceará",
       "startDate": "2021-06",
       "endDate": "2022-05",
-      "summary": "Threat Hunting, Digital Forensics, Incident Response, RSA Netwitness Management, Securonix SNYPR, Kape, Volatility, Dettect, Mitre, TaHiTI, MAGMA, NIST, ServiceNow, Reporting, Documentation Creation, Daily Client Meetings",
+      "summary": "SIEM and Threat Intelligence alert triage, Threat Hunting, Incident Response, LogRhythm
+      and Qradar management, Resilient SOAR, Azure Sentinel, Splunk, Nessus, Darktrace, Proofpoint, Zabbix,
+      Fortinet, Kaspersky Security Center, BAS, OSINT, MITRE ATT&CK, Lockheed Martin Cyber Kill Chain,
+      Diamond Model, OWASP, NIST compliance, OTRS ticket handling with vendors, Reporting, Daily checklists,
+      Documentation creation",
       "highlights": ["Maintained security for multiple large companies in Latin America."]
     },
     {
