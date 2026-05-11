@@ -35,6 +35,16 @@
     }
   ],
   "work": [
+        {
+      "name": "SLB",
+      "position": "Cybersecurity Analyst",
+      "url": "https://www.slb.com/",
+      "location": "Rio de Janeiro, Brazil - Remote",
+      "startDate": "2025-05-08",
+      "endDate": "Present",
+      "summary": "SOC,DFIR",
+      "highlights": ["..."]
+    },
     {
       "name": "Capgemini",
       "position": "Security Consultant V | SOC Detection Engineer",
