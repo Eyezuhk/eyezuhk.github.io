@@ -1,4 +1,262 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://eyezuhk.github.io/pt-br/feed.xml" rel="self" type="application/atom+xml"/><link href="https://eyezuhk.github.io/pt-br/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-05-11T23:17:37+00:00</updated><id>https://eyezuhk.github.io/feed.xml</id><title type="html">blank</title><subtitle>A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.. </subtitle><entry><title type="html">Detection CVE-2024-35250</title><link href="https://eyezuhk.github.io/pt-br/blog/2024/CVE-2024-35250/" rel="alternate" type="text/html" title="Detection CVE-2024-35250"/><published>2024-12-19T12:00:00+00:00</published><updated>2024-12-19T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/CVE-2024-35250</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/CVE-2024-35250/"><![CDATA[<p>A Agência de Segurança Cibernética e Infraestrutura dos EUA (CISA) adicionou, em 16/12, uma falha de segurança ao seu catálogo de Vulnerabilidades Exploradas Conhecidas (KEV), citando evidências de exploração ativa em ambientes reais.</p> <p>Verifiquei que já existe um PoC (Proof of Concept) disponível e, por considerar essa uma vulnerabilidade de alto risco, decidi compartilhar esta detecção.</p> <hr/> <p>Atualização 24/02/2025</p> <p>A regra de detecção foi adicionada ao repositório sigma no Merge <a href="https://github.com/SigmaHQ/sigma/pull/5136">PR #5136.</a></p> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/CVE-2024-35250/Aurora-480.webp 480w,/assets/img/CVE-2024-35250/Aurora-800.webp 800w,/assets/img/CVE-2024-35250/Aurora-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/CVE-2024-35250/Aurora.jpg" class="img-fluid rounded z-depth-1" width="100%" height="100%" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Aqui está a versão final da regra atualizada.</p> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.4">Jekyll</generator><link href="https://eyezuhk.github.io/pt-br/feed.xml" rel="self" type="application/atom+xml"/><link href="https://eyezuhk.github.io/pt-br/" rel="alternate" type="text/html" hreflang="en"/><updated>2026-08-13T23:24:34+00:00</updated><id>https://eyezuhk.github.io/feed.xml</id><title type="html">blank</title><subtitle>A collection of my thoughts and reflections on cybersecurity, along with personal opinions spanning multiple topics.. </subtitle><entry><title type="html">Forensics on AI Coding Agents. What to Collect and Where to Find It.</title><link href="https://eyezuhk.github.io/pt-br/blog/2026/DFIR-AI/" rel="alternate" type="text/html" title="Forensics on AI Coding Agents. What to Collect and Where to Find It."/><published>2026-08-13T12:00:00+00:00</published><updated>2026-08-13T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2026/DFIR-AI</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2026/DFIR-AI/"><![CDATA[<p>AI coding agents are now common on developer workstations. Codex, Cursor, Claude Code, Cline, Windsurf, JetBrains AI Assistant, GitHub Copilot and OpenCode can all read code, change files, call external tools, run commands and retain chat history.</p> <p>That makes them a useful forensic source, and this guide is about where to find that evidence and how to collect it safely.</p> <h2 id="what-to-collect-first">What to collect first</h2> <p>If you need to triage a workstation quickly, start with:</p> <ol> <li>The agent or IDE user data directory.</li> <li>The affected project, including <code class="language-plaintext highlighter-rouge">.git/</code>, package manifests, lockfiles, build scripts and any project level agent instructions.</li> <li>SQLite databases together with their <code class="language-plaintext highlighter-rouge">-wal</code>, <code class="language-plaintext highlighter-rouge">-shm</code> and backup files.</li> <li>IDE, extension and agent logs.</li> <li>Shell history, process execution telemetry, network telemetry and file system timestamps.</li> </ol> <p>The questions worth answering are simple. What did the user ask the agent to do. Which project and files were involved. Which tools and commands did the agent invoke. What output did those commands produce. Which files changed. Did the agent install a package, download a binary, add a dependency, alter a build script or connect to an external service. Were credentials, API keys or local LLM endpoints configured.</p> <p>Paths in this guide are always listed <strong>Windows, then Linux, then macOS</strong>.</p> <table> <thead> <tr> <th>Tool</th> <th>Start here</th> <th>Most useful evidence</th> </tr> </thead> <tbody> <tr> <td>Codex</td> <td><code class="language-plaintext highlighter-rouge">%USERPROFILE%\.codex\</code> → <code class="language-plaintext highlighter-rouge">~/.codex/</code> → <code class="language-plaintext highlighter-rouge">~/.codex/</code></td> <td>JSONL session transcripts, working directories, tool calls, configuration</td> </tr> <tr> <td>Cursor</td> <td><code class="language-plaintext highlighter-rouge">%APPDATA%\Cursor\User\</code> → <code class="language-plaintext highlighter-rouge">~/.config/Cursor/User/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Cursor/User/</code></td> <td>Workspace mapping, SQLite state, chats, agent activity</td> </tr> <tr> <td>Claude Code</td> <td><code class="language-plaintext highlighter-rouge">%USERPROFILE%\.claude\</code> → <code class="language-plaintext highlighter-rouge">~/.claude/</code> → <code class="language-plaintext highlighter-rouge">~/.claude/</code></td> <td>Full JSONL sessions, prompt history, tool results, file snapshots</td> </tr> <tr> <td>Cline CLI</td> <td><code class="language-plaintext highlighter-rouge">%USERPROFILE%\.cline\</code> → <code class="language-plaintext highlighter-rouge">~/.cline/</code> → <code class="language-plaintext highlighter-rouge">~/.cline/</code></td> <td>Session database, provider settings, logs, rules, hooks</td> </tr> <tr> <td>Windsurf Editor</td> <td><code class="language-plaintext highlighter-rouge">%APPDATA%\Windsurf\User\</code> → <code class="language-plaintext highlighter-rouge">~/.config/Windsurf/User/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Windsurf/User/</code></td> <td>Workspace storage, state databases, editor logs</td> </tr> <tr> <td>JetBrains AI Assistant</td> <td><code class="language-plaintext highlighter-rouge">%APPDATA%\JetBrains\&lt;IDE&gt;&lt;version&gt;\workspace\</code> → <code class="language-plaintext highlighter-rouge">~/.config/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/</code></td> <td>Per project chat history, attachments, model metadata</td> </tr> <tr> <td>VS Code and AI extensions</td> <td><code class="language-plaintext highlighter-rouge">%APPDATA%\Code\User\</code> → <code class="language-plaintext highlighter-rouge">~/.config/Code/User/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Code/User/</code></td> <td>Extension state, chat sessions, workspace identity, logs</td> </tr> <tr> <td>OpenCode</td> <td><code class="language-plaintext highlighter-rouge">%USERPROFILE%\.local\share\opencode\</code> → <code class="language-plaintext highlighter-rouge">~/.local/share/opencode/</code> → <code class="language-plaintext highlighter-rouge">~/.local/share/opencode/</code></td> <td>Session and message data, logs, provider credentials</td> </tr> <tr> <td>Ollama</td> <td><code class="language-plaintext highlighter-rouge">%USERPROFILE%\.ollama\</code> → <code class="language-plaintext highlighter-rouge">/usr/share/ollama/.ollama/</code> → <code class="language-plaintext highlighter-rouge">~/.ollama/</code></td> <td>Model inventory, server configuration, logs</td> </tr> <tr> <td>LM Studio</td> <td><code class="language-plaintext highlighter-rouge">%USERPROFILE%\.lmstudio\</code> → <code class="language-plaintext highlighter-rouge">~/.lmstudio/</code> → <code class="language-plaintext highlighter-rouge">~/.lmstudio/</code></td> <td>Saved JSON conversations, model inventory, local API use</td> </tr> </tbody> </table> <h2 id="the-pattern-that-repeats-across-agents">The pattern that repeats across agents</h2> <p>The formats differ from tool to tool, but most agents leave the same categories of evidence.</p> <p>Chat history holds user prompts, model responses and sometimes attached files or selected code. Tool activity covers file reads, edits, searches, browser actions, MCP calls and other tool invocations. Command execution records what the agent proposed or ran, often with standard output, standard error, exit status and working directory. Workspace mapping links an opaque storage folder back to the project that was open. File changes show up as modified files, checkpoints, snapshots, local history or through Git itself. Configuration covers the model provider, endpoint URL, MCP servers, custom rules, permissions, extensions and plugins in use. Credentials show up as API keys, OAuth tokens or references to an operating system keyring.</p> <p>A transcript is not proof that a command succeeded. Treat it as evidence of intent and agent activity, then corroborate it with process execution, endpoint telemetry, file changes, shell history, package manager logs and network connections.</p> <h2 id="when-the-concern-is-malicious-software-or-dependencies">When the concern is malicious software or dependencies</h2> <p>An agent can be asked to install a library, fix a dependency error, download a tool or set up an environment. That can be entirely legitimate, but it is also a real attack path worth checking.</p> <p>Start with the agent transcript and look for commands like:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre>npm install
+pnpm add
+yarn add
+pip install
+uv add
+poetry add
+cargo add
+go get
+gem install
+composer require
+curl
+wget
+Invoke-WebRequest
+irm
+iex
+chmod +x
+powershell -enc
+bash -c
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Then inspect the project for changes to:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre>package.json
+package-lock.json
+npm-shrinkwrap.json
+pnpm-lock.yaml
+yarn.lock
+requirements.txt
+pyproject.toml
+poetry.lock
+Pipfile.lock
+Cargo.toml
+Cargo.lock
+go.mod
+go.sum
+Dockerfile
+docker-compose.yml
+Makefile
+.github/workflows/
+.git/hooks/
+.vscode/tasks.json
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Pay close attention to package lifecycle scripts, new Git hooks, CI workflow changes, newly added binaries, remote download URLs, obfuscated scripts and dependencies pulled from unfamiliar registries.</p> <p>Corroborating evidence worth checking includes file creation and modification timestamps, endpoint process telemetry showing the package manager and its child processes, browser, proxy, DNS and firewall logs showing registry or download access, shell history, package manager caches and logs, Git diffs and commits, and any new autoruns, scheduled tasks, services or startup items.</p> <p>The agent transcript can explain why a package was added. The operating system and project artifacts show what actually happened.</p> <h2 id="collection-cautions">Collection cautions</h2> <p>Do not collect only the main SQLite database. If the application was running, recent changes may still sit in the write ahead log rather than the main file. Preserve these together whenever they exist:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>state.vscdb
+state.vscdb-wal
+state.vscdb-shm
+state.vscdb.backup
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Work from a forensic copy. Opening a live SQLite database with a normal client can alter journal files, or simply fail because the database is locked by the running application.</p> <p>Also check for custom storage locations. Common overrides include:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>CODEX_HOME
+OLLAMA_MODELS
+OPENCODE_DB
+OPENCODE_CONFIG
+OPENCODE_CONFIG_DIR
+CLINE_DATA_DIR
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Cline also accepts an explicit <code class="language-plaintext highlighter-rouge">--data-dir</code> argument. Portable installations, alternate IDE profiles, remote development, containers, WSL and synced folders can all move relevant evidence away from the default path.</p> <p>Finally, treat recovered prompts, logs and configuration as sensitive. They can contain production URLs, source code, credentials, tokens, customer data or internal instructions.</p> <h2 id="project-level-evidence">Project level evidence</h2> <p>Do not stop at the application directory. The repository itself can contain instructions that shaped the agent’s behavior. Common files and directories to check:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre>AGENTS.md
+CLAUDE.md
+.cursorrules
+.clinerules
+.cline/
+.opencode/
+opencode.json
+opencode.jsonc
+mcp.json
+.vscode/
+.aiignore
+</pre></td></tr></tbody></table></code></pre></div></div> <p>These are often more important than they first look. A malicious repository can use instructions, MCP configuration, hooks or task definitions to steer an agent into reading sensitive files, running commands, downloading content or modifying the project on its own.</p> <h2 id="codex">Codex</h2> <p>Codex stores local state under <code class="language-plaintext highlighter-rouge">CODEX_HOME</code>. When that variable is not set, the default is <code class="language-plaintext highlighter-rouge">.codex</code> inside the user’s home directory.</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.codex\
+/home/&lt;user&gt;/.codex/
+/Users/&lt;user&gt;/.codex/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>The primary session artifacts are date partitioned JSONL rollout files:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.codex\sessions\YYYY\MM\DD\
+/home/&lt;user&gt;/.codex/sessions/YYYY/MM/DD/
+/Users/&lt;user&gt;/.codex/sessions/YYYY/MM/DD/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Collect the full <code class="language-plaintext highlighter-rouge">CODEX_HOME</code> directory. Session files can contain working directory metadata, user messages, agent messages, tool calls, command execution, tool output and file operations. The date based JSONL session layout is present in the Codex source (<a href="https://github.com/openai/codex/blob/main/codex-rs/app-server/tests/common/rollout.rs">source</a>).</p> <p>Also collect configuration and any local state databases present. Authentication behavior depends on version and configuration. <code class="language-plaintext highlighter-rouge">auth.json</code> may exist under <code class="language-plaintext highlighter-rouge">CODEX_HOME</code>, but credentials can also live in the operating system keyring or only for the active session.</p> <h2 id="cursor">Cursor</h2> <p>Cursor uses a VS Code derived storage model. Collect both global and workspace storage.</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>%APPDATA%\Cursor\User\globalStorage\
+%APPDATA%\Cursor\User\workspaceStorage\
+
+~/.config/Cursor/User/globalStorage/
+~/.config/Cursor/User/workspaceStorage/
+
+~/Library/Application Support/Cursor/User/globalStorage/
+~/Library/Application Support/Cursor/User/workspaceStorage/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Workspace directories use opaque identifiers. Preserve <code class="language-plaintext highlighter-rouge">workspace.json</code>, which can map the folder back to a project, together with <code class="language-plaintext highlighter-rouge">state.vscdb</code> and its SQLite sidecars. Cursor support material identifies <code class="language-plaintext highlighter-rouge">workspaceStorage/&lt;workspace-id&gt;/state.vscdb</code> as a source of workspace state and chat history (<a href="https://forum.cursor.com/t/agents-panel-right-sidebar-lost-session-list-no-way-to-restore/153481/4">source</a>).</p> <p>Database keys and schemas change between releases. Identify the tables and keys present in the collected version rather than assuming a fixed schema, and correlate the recovered state with the workspace path, Git history and modified files.</p> <h2 id="claude-code">Claude Code</h2> <p>Claude Code stores its application data under <code class="language-plaintext highlighter-rouge">.claude</code>.</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.claude\
+/home/&lt;user&gt;/.claude/
+/Users/&lt;user&gt;/.claude/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>The most important session artifacts sit under <code class="language-plaintext highlighter-rouge">projects/</code>:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.claude\projects\
+/home/&lt;user&gt;/.claude/projects/
+/Users/&lt;user&gt;/.claude/projects/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Collect those JSONL transcripts together with prompt history and file snapshots:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.claude\history.jsonl
+C:\Users\&lt;user&gt;\.claude\file-history\
+
+/home/&lt;user&gt;/.claude/history.jsonl
+/home/&lt;user&gt;/.claude/file-history/
+
+/Users/&lt;user&gt;/.claude/history.jsonl
+/Users/&lt;user&gt;/.claude/file-history/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Claude Code documents <code class="language-plaintext highlighter-rouge">projects/</code> as past session data, <code class="language-plaintext highlighter-rouge">history.jsonl</code> as prompt recall data and <code class="language-plaintext highlighter-rouge">file-history/</code> as pre edit snapshots used for checkpoint restoration (<a href="https://code.claude.com/docs/en/claude-directory">source</a>). Additional directories such as <code class="language-plaintext highlighter-rouge">plans/</code>, <code class="language-plaintext highlighter-rouge">tasks/</code>, <code class="language-plaintext highlighter-rouge">debug/</code>, <code class="language-plaintext highlighter-rouge">paste-cache/</code>, <code class="language-plaintext highlighter-rouge">shell-snapshots/</code>, <code class="language-plaintext highlighter-rouge">session-env/</code> and <code class="language-plaintext highlighter-rouge">backups/</code> can help with timeline reconstruction.</p> <h2 id="cline">Cline</h2> <p><strong>Cline CLI</strong> uses <code class="language-plaintext highlighter-rouge">.cline</code> by default:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.cline\
+/home/&lt;user&gt;/.cline/
+/Users/&lt;user&gt;/.cline/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Collect the entire directory. Current Cline documentation lists settings, provider configuration, global rules and skills, team state, session storage, logs and plugins under this location, and documents the session database as SQLite (<a href="https://docs.cline.bot/cli/cli-reference">source</a>).</p> <p>Also collect the project level Cline configuration:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>.cline/
+.cline/mcp.json
+.cline/rules/
+.cline/skills/
+.cline/hooks/
+.cline/plugins/
+.cline/agents.yaml
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Rules and lifecycle hooks can explain how Cline was instructed to behave. MCP configuration may identify local tools, remote services, credentials or data sources the agent had access to.</p> <p><strong>As a VS Code extension</strong>, Cline stores its data under the standard VS Code user data directories instead. Identify Cline related extension storage by checking installed extensions and the folders under <code class="language-plaintext highlighter-rouge">globalStorage/</code>, rather than relying on one fixed internal folder name across every version.</p> <h2 id="windsurf">Windsurf</h2> <p>Windsurf ships as a standalone editor and as plugins for several IDEs. Treat those as separate evidence sources.</p> <p>For the <strong>Windsurf Editor</strong>, start with its user data directory:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>%APPDATA%\Windsurf\User\
+~/.config/Windsurf/User/
+~/Library/Application Support/Windsurf/User/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Collect <code class="language-plaintext highlighter-rouge">globalStorage/</code>, <code class="language-plaintext highlighter-rouge">workspaceStorage/</code>, <code class="language-plaintext highlighter-rouge">state.vscdb</code> and its SQLite sidecars, <code class="language-plaintext highlighter-rouge">workspace.json</code>, and editor logs. As with other VS Code derived editors, workspace storage links agent activity to a specific project.</p> <p>For <strong>Windsurf plugins</strong>, collect the host IDE’s application data and logs rather than assuming every plugin uses the standalone editor layout. Windsurf documents log collection through the host environment. VS Code extension logs are available through Developer: Show Logs and the Windsurf log channel, and JetBrains plugins can generate Windsurf diagnostics through the IDE log directory (<a href="https://docs.windsurf.com/de/troubleshooting/plugins-gathering-logs">source</a>). For a forensic image, preserve the original plugin diagnostics and host logs before attempting to reproduce the issue.</p> <h2 id="jetbrains-ai-assistant">JetBrains AI Assistant</h2> <p>JetBrains AI Assistant includes chat features and agent capable coding workflows across JetBrains IDEs, rather than a single standalone product. JetBrains stores AI chat history separately for each project across IDE sessions (<a href="https://www.jetbrains.com/help/ai-assistant/chat-mode.html">source</a>).</p> <p>The main collection point is the <code class="language-plaintext highlighter-rouge">workspace/</code> folder inside the IDE configuration directory:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>%APPDATA%\JetBrains\&lt;IDE&gt;&lt;version&gt;\workspace\
+~/.config/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/
+~/Library/Application Support/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>This directory can contain project specific XML files with chat history. JetBrains documents that these files may include chat titles, model or agent identifiers, user messages, assistant messages and text attachments (<a href="https://youtrack.jetbrains.com/articles/SUPPORT-A-4167/Export-AI-Assistant-chat-history-to-Markdown">source</a>).</p> <p>Collect IDE logs as well:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>%LOCALAPPDATA%\JetBrains\&lt;IDE&gt;&lt;version&gt;\log\
+~/.cache/JetBrains/&lt;IDE&gt;&lt;version&gt;/log/
+~/Library/Logs/JetBrains/&lt;IDE&gt;&lt;version&gt;/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>AI Assistant can also maintain an <code class="language-plaintext highlighter-rouge">ai-assistant-requests.md</code> request log during the active session. This is a useful live response artifact, but it is not a substitute for preserved workspace data, since it can be cleaned up or disappear once the session ends (<a href="https://www.jetbrains.com/help/ai-assistant/how-we-handle-your-code-and-data.html">source</a>).</p> <h2 id="vs-code-and-ai-extensions">VS Code and AI extensions</h2> <p>For VS Code itself, collect both global and workspace storage:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>%APPDATA%\Code\User\globalStorage\
+%APPDATA%\Code\User\workspaceStorage\
+
+~/.config/Code/User/globalStorage/
+~/.config/Code/User/workspaceStorage/
+
+~/Library/Application Support/Code/User/globalStorage/
+~/Library/Application Support/Code/User/workspaceStorage/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>The workspace folder often contains <code class="language-plaintext highlighter-rouge">workspace.json</code>, <code class="language-plaintext highlighter-rouge">state.vscdb</code>, extension specific data and, depending on the installed version, chat session files. Collect the entire relevant workspace directory together with its SQLite sidecars.</p> <p>For GitHub Copilot, Cline, Continue, Windsurf and other extensions, also collect:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>User/settings.json
+User/globalStorage/
+extensions/
+logs/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>The extension configuration can reveal which provider, MCP server, local endpoint or custom model was in use.</p> <h2 id="opencode">OpenCode</h2> <p>OpenCode documents its local application data directory as:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>%USERPROFILE%\.local\share\opencode\
+~/.local/share/opencode/
+~/.local/share/opencode/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Collect the entire directory. Current documentation identifies <code class="language-plaintext highlighter-rouge">auth.json</code>, <code class="language-plaintext highlighter-rouge">log/</code> and <code class="language-plaintext highlighter-rouge">project/</code> inside it. The <code class="language-plaintext highlighter-rouge">project/</code> directory holds project specific session and message data, <code class="language-plaintext highlighter-rouge">auth.json</code> can contain provider authentication material, and <code class="language-plaintext highlighter-rouge">log/</code> helps with reconstructing activity (<a href="https://opencode.ai/docs/troubleshooting/">source</a>).</p> <p>Also collect global and project configuration. Global configuration normally sits under <code class="language-plaintext highlighter-rouge">.config/opencode</code>, and projects may contain <code class="language-plaintext highlighter-rouge">opencode.json</code>, <code class="language-plaintext highlighter-rouge">opencode.jsonc</code> or a <code class="language-plaintext highlighter-rouge">.opencode/</code> folder. Check <code class="language-plaintext highlighter-rouge">OPENCODE_DB</code>, <code class="language-plaintext highlighter-rouge">OPENCODE_CONFIG</code> and <code class="language-plaintext highlighter-rouge">OPENCODE_CONFIG_DIR</code> before assuming the defaults (<a href="https://opencode.ai/docs/config">source</a>).</p> <h2 id="local-llm-platforms">Local LLM platforms</h2> <p>Ollama and LM Studio are not coding agents by themselves. They matter because coding agents, IDE extensions, scripts and local applications can use them as a model backend.</p> <p><strong>Ollama’s</strong> default model directory is:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.ollama\models\
+/usr/share/ollama/.ollama/models/
+/Users/&lt;user&gt;/.ollama/models/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>The path can be changed through <code class="language-plaintext highlighter-rouge">OLLAMA_MODELS</code>. On Windows, collect application logs from <code class="language-plaintext highlighter-rouge">%LOCALAPPDATA%\Ollama\</code>. On Linux, review the Ollama systemd service configuration and journal logs. On macOS, collect <code class="language-plaintext highlighter-rouge">~/.ollama/</code> and <code class="language-plaintext highlighter-rouge">~/.ollama/logs/</code>. Ollama documents its default model locations, the <code class="language-plaintext highlighter-rouge">OLLAMA_MODELS</code> override, and its default API listener at <code class="language-plaintext highlighter-rouge">127.0.0.1:11434</code> (<a href="https://docs.ollama.com/faq">source</a>).</p> <p>A model file on disk proves that a model was available locally. It does not prove a specific prompt, command or agent action. Recover those from the client application, the agent transcript, proxy logs, shell history or endpoint telemetry.</p> <p><strong>LM Studio</strong> stores saved conversations as JSON files:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>%USERPROFILE%\.lmstudio\conversations\
+~/.lmstudio/conversations/
+~/.lmstudio/conversations/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>These files are high value evidence for local chat activity. LM Studio documents the location and advises against relying on undocumented internal schema details, so preserve the original JSON and parse it from a forensic copy (<a href="https://lmstudio.ai/docs/app/basics/chat">source</a>).</p> <p>The normal model directory is:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>%USERPROFILE%\.lmstudio\models\
+~/.lmstudio/models/
+~/.lmstudio/models/
+</pre></td></tr></tbody></table></code></pre></div></div> <p>Users can change the model directory inside the application, so verify the configured location rather than assuming the default (<a href="https://lmstudio.ai/docs/app/advanced/import-model">source</a>).</p> <p>If LM Studio’s local API server was enabled, identify the local client that called it. The default listener is <code class="language-plaintext highlighter-rouge">http://localhost:1234</code>. Authentication is optional there unless the user configured an API token (<a href="https://lmstudio.ai/docs/developer/rest/quickstart">source</a>).</p> <h2 id="practical-analysis-workflow">Practical analysis workflow</h2> <ol> <li>Identify the user account, the relevant project and the approximate time window.</li> <li>Preserve the full agent, IDE and local LLM data directories.</li> <li>Collect SQLite databases together with their WAL, SHM and backup files.</li> <li>Map workspace identifiers to project paths using <code class="language-plaintext highlighter-rouge">workspace.json</code>, timestamps, configuration and Git metadata.</li> <li>Extract prompts, responses, tool activity, commands, output, edited files, MCP configuration and provider settings.</li> <li>Review dependency, build, workflow, hook and persistence changes in the project and the operating system.</li> <li>Correlate the reconstructed timeline with endpoint, shell, network and Git evidence.</li> <li>Revoke exposed credentials through the relevant provider, and never test recovered keys against production systems.</li> </ol> <p>The goal is not to recover a model’s internal reasoning. It is to reconstruct observable activity: what the user requested, what the agent was allowed to do, what it attempted, what it changed, and what actually ran on the workstation.</p>]]></content><author><name></name></author><category term="Security"/><category term="DFIR"/><category term="AI"/><summary type="html"><![CDATA[A practical DFIR guide to artifacts left by AI coding agents, IDE assistants, and local LLM platforms.]]></summary></entry><entry><title type="html">Detection CVE-2024-35250</title><link href="https://eyezuhk.github.io/pt-br/blog/2024/CVE-2024-35250/" rel="alternate" type="text/html" title="Detection CVE-2024-35250"/><published>2024-12-19T12:00:00+00:00</published><updated>2024-12-19T12:00:00+00:00</updated><id>https://eyezuhk.github.io/blog/2024/CVE-2024-35250</id><content type="html" xml:base="https://eyezuhk.github.io/blog/2024/CVE-2024-35250/"><![CDATA[<p>A Agência de Segurança Cibernética e Infraestrutura dos EUA (CISA) adicionou, em 16/12, uma falha de segurança ao seu catálogo de Vulnerabilidades Exploradas Conhecidas (KEV), citando evidências de exploração ativa em ambientes reais.</p> <p>Verifiquei que já existe um PoC (Proof of Concept) disponível e, por considerar essa uma vulnerabilidade de alto risco, decidi compartilhar esta detecção.</p> <hr/> <p>Atualização 24/02/2025</p> <p>A regra de detecção foi adicionada ao repositório sigma no Merge <a href="https://github.com/SigmaHQ/sigma/pull/5136">PR #5136.</a></p> <figure> <picture> <source class="responsive-img-srcset" srcset="/assets/img/CVE-2024-35250/Aurora-480.webp 480w,/assets/img/CVE-2024-35250/Aurora-800.webp 800w,/assets/img/CVE-2024-35250/Aurora-1400.webp 1400w," type="image/webp" sizes="95vw"/> <img src="/assets/img/CVE-2024-35250/Aurora.jpg" class="img-fluid rounded z-depth-1" width="100%" height="100%" data-zoomable="" loading="lazy" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"/> </picture> </figure> <p>Aqui está a versão final da regra atualizada.</p> <div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4

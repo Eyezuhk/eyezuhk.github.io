@@ -1,0 +1,281 @@
+<!DOCTYPE html> <html lang="pt-br"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Forensics on AI Coding Agents. What to Collect and Where to Find It. | Eyezuhk Isaac Fernandes </title> <meta name="author" content="Eyezuhk Isaac Fernandes"> <meta name="description" content="A practical DFIR guide to artifacts left by AI coding agents, IDE assistants, and local LLM platforms."> <meta name="keywords" content="CyberSecurity, Malware-Analysis, DFIR, SIEM"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?f0b7046b84e425c55f3463ac249818f5"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link defer href="/assets/css/bootstrap-toc.min.css?6f5af0bb9aab25d79b2448143cbeaa88" rel="stylesheet"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%99%A0%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://eyezuhk.github.io/pt-br/blog/2026/DFIR-AI/"> <script src="/assets/js/theme.js?9a0c749ec5240d9cda97bc72359a72c0"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>initTheme();</script> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/img-comparison-slider@8.0.6/dist/styles.min.css" integrity="sha256-3qTIuuUWIFnnU3LpQMjqiXc0p09rvd0dmj+WkpQXSR8=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.0.5/swiper-bundle.min.css" integrity="sha256-yUoNxsvX+Vo8Trj3lZ/Y5ZBf8HlBFsB6Xwm7rH75/9E=" crossorigin="anonymous"> </head> <body class="fixed-top-nav sticky-bottom-footer"> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/pt-br/"> <span class="font-weight-bold">Eyezuhk</span> Isaac Fernandes </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/pt-br/">Sobre </a> </li> <li class="nav-item active"> <a class="nav-link" href="/pt-br/blog/">Blog </a> </li> <li class="nav-item "> <a class="nav-link" href="/pt-br/Differ/">Differ </a> </li> <li class="nav-item "> <a class="nav-link" href="/pt-br/HTMLive/">HTMLive </a> </li> <li class="nav-item "> <a class="nav-link" href="/pt-br/Pomodoro/">Pomodoro </a> </li> <li class="nav-item "> <a class="nav-link" href="/pt-br/github-repositories/">Github Repositórios </a> </li> <li class="nav-item "> <a class="nav-link" href="/pt-br/cv/">CV </a> </li> <li class="nav-item"> <button id="search-toggle" title="Search" onclick="openSearchModal()"> <span class="nav-link">ctrl k <i class="ti ti-search"></i></span> </button> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/2026/DFIR-AI/"> EN-US</a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="ti ti-sun-moon" id="light-toggle-system"></i> <i class="ti ti-moon-filled" id="light-toggle-dark"></i> <i class="ti ti-sun-filled" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="row"> <div class="col-sm-3"> <nav id="toc-sidebar" class="sticky-top"></nav> </div> <div class="col-sm-9"> <div class="post"> <header class="post-header"> <h1 class="post-title">Forensics on AI Coding Agents. What to Collect and Where to Find It.</h1> <p class="post-meta"> Criado em 13 de Agosto, 2026 </p> <p class="post-tags"> <a href="/pt-br/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/pt-br/blog/tag/dfir"> <i class="fa-solid fa-hashtag fa-sm"></i> DFIR</a>   <a href="/pt-br/blog/tag/ai"> <i class="fa-solid fa-hashtag fa-sm"></i> AI</a>   ·   <a href="/pt-br/blog/category/security"> <i class="fa-solid fa-tag fa-sm"></i> Security</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <p>AI coding agents are now common on developer workstations. Codex, Cursor, Claude Code, Cline, Windsurf, JetBrains AI Assistant, GitHub Copilot and OpenCode can all read code, change files, call external tools, run commands and retain chat history.</p> <p>That makes them a useful forensic source, and this guide is about where to find that evidence and how to collect it safely.</p> <h2 id="what-to-collect-first">What to collect first</h2> <p>If you need to triage a workstation quickly, start with:</p> <ol> <li>The agent or IDE user data directory.</li> <li>The affected project, including <code class="language-plaintext highlighter-rouge">.git/</code>, package manifests, lockfiles, build scripts and any project level agent instructions.</li> <li>SQLite databases together with their <code class="language-plaintext highlighter-rouge">-wal</code>, <code class="language-plaintext highlighter-rouge">-shm</code> and backup files.</li> <li>IDE, extension and agent logs.</li> <li>Shell history, process execution telemetry, network telemetry and file system timestamps.</li> </ol> <p>The questions worth answering are simple. What did the user ask the agent to do. Which project and files were involved. Which tools and commands did the agent invoke. What output did those commands produce. Which files changed. Did the agent install a package, download a binary, add a dependency, alter a build script or connect to an external service. Were credentials, API keys or local LLM endpoints configured.</p> <p>Paths in this guide are always listed <strong>Windows, then Linux, then macOS</strong>.</p> <table> <thead> <tr> <th>Tool</th> <th>Start here</th> <th>Most useful evidence</th> </tr> </thead> <tbody> <tr> <td>Codex</td> <td> <code class="language-plaintext highlighter-rouge">%USERPROFILE%\.codex\</code> → <code class="language-plaintext highlighter-rouge">~/.codex/</code> → <code class="language-plaintext highlighter-rouge">~/.codex/</code> </td> <td>JSONL session transcripts, working directories, tool calls, configuration</td> </tr> <tr> <td>Cursor</td> <td> <code class="language-plaintext highlighter-rouge">%APPDATA%\Cursor\User\</code> → <code class="language-plaintext highlighter-rouge">~/.config/Cursor/User/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Cursor/User/</code> </td> <td>Workspace mapping, SQLite state, chats, agent activity</td> </tr> <tr> <td>Claude Code</td> <td> <code class="language-plaintext highlighter-rouge">%USERPROFILE%\.claude\</code> → <code class="language-plaintext highlighter-rouge">~/.claude/</code> → <code class="language-plaintext highlighter-rouge">~/.claude/</code> </td> <td>Full JSONL sessions, prompt history, tool results, file snapshots</td> </tr> <tr> <td>Cline CLI</td> <td> <code class="language-plaintext highlighter-rouge">%USERPROFILE%\.cline\</code> → <code class="language-plaintext highlighter-rouge">~/.cline/</code> → <code class="language-plaintext highlighter-rouge">~/.cline/</code> </td> <td>Session database, provider settings, logs, rules, hooks</td> </tr> <tr> <td>Windsurf Editor</td> <td> <code class="language-plaintext highlighter-rouge">%APPDATA%\Windsurf\User\</code> → <code class="language-plaintext highlighter-rouge">~/.config/Windsurf/User/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Windsurf/User/</code> </td> <td>Workspace storage, state databases, editor logs</td> </tr> <tr> <td>JetBrains AI Assistant</td> <td> <code class="language-plaintext highlighter-rouge">%APPDATA%\JetBrains\&lt;IDE&gt;&lt;version&gt;\workspace\</code> → <code class="language-plaintext highlighter-rouge">~/.config/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/</code> </td> <td>Per project chat history, attachments, model metadata</td> </tr> <tr> <td>VS Code and AI extensions</td> <td> <code class="language-plaintext highlighter-rouge">%APPDATA%\Code\User\</code> → <code class="language-plaintext highlighter-rouge">~/.config/Code/User/</code> → <code class="language-plaintext highlighter-rouge">~/Library/Application Support/Code/User/</code> </td> <td>Extension state, chat sessions, workspace identity, logs</td> </tr> <tr> <td>OpenCode</td> <td> <code class="language-plaintext highlighter-rouge">%USERPROFILE%\.local\share\opencode\</code> → <code class="language-plaintext highlighter-rouge">~/.local/share/opencode/</code> → <code class="language-plaintext highlighter-rouge">~/.local/share/opencode/</code> </td> <td>Session and message data, logs, provider credentials</td> </tr> <tr> <td>Ollama</td> <td> <code class="language-plaintext highlighter-rouge">%USERPROFILE%\.ollama\</code> → <code class="language-plaintext highlighter-rouge">/usr/share/ollama/.ollama/</code> → <code class="language-plaintext highlighter-rouge">~/.ollama/</code> </td> <td>Model inventory, server configuration, logs</td> </tr> <tr> <td>LM Studio</td> <td> <code class="language-plaintext highlighter-rouge">%USERPROFILE%\.lmstudio\</code> → <code class="language-plaintext highlighter-rouge">~/.lmstudio/</code> → <code class="language-plaintext highlighter-rouge">~/.lmstudio/</code> </td> <td>Saved JSON conversations, model inventory, local API use</td> </tr> </tbody> </table> <h2 id="the-pattern-that-repeats-across-agents">The pattern that repeats across agents</h2> <p>The formats differ from tool to tool, but most agents leave the same categories of evidence.</p> <p>Chat history holds user prompts, model responses and sometimes attached files or selected code. Tool activity covers file reads, edits, searches, browser actions, MCP calls and other tool invocations. Command execution records what the agent proposed or ran, often with standard output, standard error, exit status and working directory. Workspace mapping links an opaque storage folder back to the project that was open. File changes show up as modified files, checkpoints, snapshots, local history or through Git itself. Configuration covers the model provider, endpoint URL, MCP servers, custom rules, permissions, extensions and plugins in use. Credentials show up as API keys, OAuth tokens or references to an operating system keyring.</p> <p>A transcript is not proof that a command succeeded. Treat it as evidence of intent and agent activity, then corroborate it with process execution, endpoint telemetry, file changes, shell history, package manager logs and network connections.</p> <h2 id="when-the-concern-is-malicious-software-or-dependencies">When the concern is malicious software or dependencies</h2> <p>An agent can be asked to install a library, fix a dependency error, download a tool or set up an environment. That can be entirely legitimate, but it is also a real attack path worth checking.</p> <p>Start with the agent transcript and look for commands like:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td> <td class="rouge-code"><pre>npm install
+pnpm add
+yarn add
+pip install
+uv add
+poetry add
+cargo add
+go get
+gem install
+composer require
+curl
+wget
+Invoke-WebRequest
+irm
+iex
+chmod +x
+powershell -enc
+bash -c
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Then inspect the project for changes to:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td> <td class="rouge-code"><pre>package.json
+package-lock.json
+npm-shrinkwrap.json
+pnpm-lock.yaml
+yarn.lock
+requirements.txt
+pyproject.toml
+poetry.lock
+Pipfile.lock
+Cargo.toml
+Cargo.lock
+go.mod
+go.sum
+Dockerfile
+docker-compose.yml
+Makefile
+.github/workflows/
+.git/hooks/
+.vscode/tasks.json
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Pay close attention to package lifecycle scripts, new Git hooks, CI workflow changes, newly added binaries, remote download URLs, obfuscated scripts and dependencies pulled from unfamiliar registries.</p> <p>Corroborating evidence worth checking includes file creation and modification timestamps, endpoint process telemetry showing the package manager and its child processes, browser, proxy, DNS and firewall logs showing registry or download access, shell history, package manager caches and logs, Git diffs and commits, and any new autoruns, scheduled tasks, services or startup items.</p> <p>The agent transcript can explain why a package was added. The operating system and project artifacts show what actually happened.</p> <h2 id="collection-cautions">Collection cautions</h2> <p>Do not collect only the main SQLite database. If the application was running, recent changes may still sit in the write ahead log rather than the main file. Preserve these together whenever they exist:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> <td class="rouge-code"><pre>state.vscdb
+state.vscdb-wal
+state.vscdb-shm
+state.vscdb.backup
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Work from a forensic copy. Opening a live SQLite database with a normal client can alter journal files, or simply fail because the database is locked by the running application.</p> <p>Also check for custom storage locations. Common overrides include:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td> <td class="rouge-code"><pre>CODEX_HOME
+OLLAMA_MODELS
+OPENCODE_DB
+OPENCODE_CONFIG
+OPENCODE_CONFIG_DIR
+CLINE_DATA_DIR
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Cline also accepts an explicit <code class="language-plaintext highlighter-rouge">--data-dir</code> argument. Portable installations, alternate IDE profiles, remote development, containers, WSL and synced folders can all move relevant evidence away from the default path.</p> <p>Finally, treat recovered prompts, logs and configuration as sensitive. They can contain production URLs, source code, credentials, tokens, customer data or internal instructions.</p> <h2 id="project-level-evidence">Project level evidence</h2> <p>Do not stop at the application directory. The repository itself can contain instructions that shaped the agent’s behavior. Common files and directories to check:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td> <td class="rouge-code"><pre>AGENTS.md
+CLAUDE.md
+.cursorrules
+.clinerules
+.cline/
+.opencode/
+opencode.json
+opencode.jsonc
+mcp.json
+.vscode/
+.aiignore
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>These are often more important than they first look. A malicious repository can use instructions, MCP configuration, hooks or task definitions to steer an agent into reading sensitive files, running commands, downloading content or modifying the project on its own.</p> <h2 id="codex">Codex</h2> <p>Codex stores local state under <code class="language-plaintext highlighter-rouge">CODEX_HOME</code>. When that variable is not set, the default is <code class="language-plaintext highlighter-rouge">.codex</code> inside the user’s home directory.</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.codex\
+/home/&lt;user&gt;/.codex/
+/Users/&lt;user&gt;/.codex/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>The primary session artifacts are date partitioned JSONL rollout files:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.codex\sessions\YYYY\MM\DD\
+/home/&lt;user&gt;/.codex/sessions/YYYY/MM/DD/
+/Users/&lt;user&gt;/.codex/sessions/YYYY/MM/DD/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Collect the full <code class="language-plaintext highlighter-rouge">CODEX_HOME</code> directory. Session files can contain working directory metadata, user messages, agent messages, tool calls, command execution, tool output and file operations. The date based JSONL session layout is present in the Codex source (<a href="https://github.com/openai/codex/blob/main/codex-rs/app-server/tests/common/rollout.rs" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>Also collect configuration and any local state databases present. Authentication behavior depends on version and configuration. <code class="language-plaintext highlighter-rouge">auth.json</code> may exist under <code class="language-plaintext highlighter-rouge">CODEX_HOME</code>, but credentials can also live in the operating system keyring or only for the active session.</p> <h2 id="cursor">Cursor</h2> <p>Cursor uses a VS Code derived storage model. Collect both global and workspace storage.</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td> <td class="rouge-code"><pre>%APPDATA%\Cursor\User\globalStorage\
+%APPDATA%\Cursor\User\workspaceStorage\
+
+~/.config/Cursor/User/globalStorage/
+~/.config/Cursor/User/workspaceStorage/
+
+~/Library/Application Support/Cursor/User/globalStorage/
+~/Library/Application Support/Cursor/User/workspaceStorage/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Workspace directories use opaque identifiers. Preserve <code class="language-plaintext highlighter-rouge">workspace.json</code>, which can map the folder back to a project, together with <code class="language-plaintext highlighter-rouge">state.vscdb</code> and its SQLite sidecars. Cursor support material identifies <code class="language-plaintext highlighter-rouge">workspaceStorage/&lt;workspace-id&gt;/state.vscdb</code> as a source of workspace state and chat history (<a href="https://forum.cursor.com/t/agents-panel-right-sidebar-lost-session-list-no-way-to-restore/153481/4" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>Database keys and schemas change between releases. Identify the tables and keys present in the collected version rather than assuming a fixed schema, and correlate the recovered state with the workspace path, Git history and modified files.</p> <h2 id="claude-code">Claude Code</h2> <p>Claude Code stores its application data under <code class="language-plaintext highlighter-rouge">.claude</code>.</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.claude\
+/home/&lt;user&gt;/.claude/
+/Users/&lt;user&gt;/.claude/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>The most important session artifacts sit under <code class="language-plaintext highlighter-rouge">projects/</code>:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.claude\projects\
+/home/&lt;user&gt;/.claude/projects/
+/Users/&lt;user&gt;/.claude/projects/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Collect those JSONL transcripts together with prompt history and file snapshots:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.claude\history.jsonl
+C:\Users\&lt;user&gt;\.claude\file-history\
+
+/home/&lt;user&gt;/.claude/history.jsonl
+/home/&lt;user&gt;/.claude/file-history/
+
+/Users/&lt;user&gt;/.claude/history.jsonl
+/Users/&lt;user&gt;/.claude/file-history/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Claude Code documents <code class="language-plaintext highlighter-rouge">projects/</code> as past session data, <code class="language-plaintext highlighter-rouge">history.jsonl</code> as prompt recall data and <code class="language-plaintext highlighter-rouge">file-history/</code> as pre edit snapshots used for checkpoint restoration (<a href="https://code.claude.com/docs/en/claude-directory" rel="external nofollow noopener" target="_blank">source</a>). Additional directories such as <code class="language-plaintext highlighter-rouge">plans/</code>, <code class="language-plaintext highlighter-rouge">tasks/</code>, <code class="language-plaintext highlighter-rouge">debug/</code>, <code class="language-plaintext highlighter-rouge">paste-cache/</code>, <code class="language-plaintext highlighter-rouge">shell-snapshots/</code>, <code class="language-plaintext highlighter-rouge">session-env/</code> and <code class="language-plaintext highlighter-rouge">backups/</code> can help with timeline reconstruction.</p> <h2 id="cline">Cline</h2> <p><strong>Cline CLI</strong> uses <code class="language-plaintext highlighter-rouge">.cline</code> by default:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.cline\
+/home/&lt;user&gt;/.cline/
+/Users/&lt;user&gt;/.cline/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Collect the entire directory. Current Cline documentation lists settings, provider configuration, global rules and skills, team state, session storage, logs and plugins under this location, and documents the session database as SQLite (<a href="https://docs.cline.bot/cli/cli-reference" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>Also collect the project level Cline configuration:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td> <td class="rouge-code"><pre>.cline/
+.cline/mcp.json
+.cline/rules/
+.cline/skills/
+.cline/hooks/
+.cline/plugins/
+.cline/agents.yaml
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Rules and lifecycle hooks can explain how Cline was instructed to behave. MCP configuration may identify local tools, remote services, credentials or data sources the agent had access to.</p> <p><strong>As a VS Code extension</strong>, Cline stores its data under the standard VS Code user data directories instead. Identify Cline related extension storage by checking installed extensions and the folders under <code class="language-plaintext highlighter-rouge">globalStorage/</code>, rather than relying on one fixed internal folder name across every version.</p> <h2 id="windsurf">Windsurf</h2> <p>Windsurf ships as a standalone editor and as plugins for several IDEs. Treat those as separate evidence sources.</p> <p>For the <strong>Windsurf Editor</strong>, start with its user data directory:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>%APPDATA%\Windsurf\User\
+~/.config/Windsurf/User/
+~/Library/Application Support/Windsurf/User/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Collect <code class="language-plaintext highlighter-rouge">globalStorage/</code>, <code class="language-plaintext highlighter-rouge">workspaceStorage/</code>, <code class="language-plaintext highlighter-rouge">state.vscdb</code> and its SQLite sidecars, <code class="language-plaintext highlighter-rouge">workspace.json</code>, and editor logs. As with other VS Code derived editors, workspace storage links agent activity to a specific project.</p> <p>For <strong>Windsurf plugins</strong>, collect the host IDE’s application data and logs rather than assuming every plugin uses the standalone editor layout. Windsurf documents log collection through the host environment. VS Code extension logs are available through Developer: Show Logs and the Windsurf log channel, and JetBrains plugins can generate Windsurf diagnostics through the IDE log directory (<a href="https://docs.windsurf.com/de/troubleshooting/plugins-gathering-logs" rel="external nofollow noopener" target="_blank">source</a>). For a forensic image, preserve the original plugin diagnostics and host logs before attempting to reproduce the issue.</p> <h2 id="jetbrains-ai-assistant">JetBrains AI Assistant</h2> <p>JetBrains AI Assistant includes chat features and agent capable coding workflows across JetBrains IDEs, rather than a single standalone product. JetBrains stores AI chat history separately for each project across IDE sessions (<a href="https://www.jetbrains.com/help/ai-assistant/chat-mode.html" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>The main collection point is the <code class="language-plaintext highlighter-rouge">workspace/</code> folder inside the IDE configuration directory:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>%APPDATA%\JetBrains\&lt;IDE&gt;&lt;version&gt;\workspace\
+~/.config/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/
+~/Library/Application Support/JetBrains/&lt;IDE&gt;&lt;version&gt;/workspace/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>This directory can contain project specific XML files with chat history. JetBrains documents that these files may include chat titles, model or agent identifiers, user messages, assistant messages and text attachments (<a href="https://youtrack.jetbrains.com/articles/SUPPORT-A-4167/Export-AI-Assistant-chat-history-to-Markdown" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>Collect IDE logs as well:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>%LOCALAPPDATA%\JetBrains\&lt;IDE&gt;&lt;version&gt;\log\
+~/.cache/JetBrains/&lt;IDE&gt;&lt;version&gt;/log/
+~/Library/Logs/JetBrains/&lt;IDE&gt;&lt;version&gt;/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>AI Assistant can also maintain an <code class="language-plaintext highlighter-rouge">ai-assistant-requests.md</code> request log during the active session. This is a useful live response artifact, but it is not a substitute for preserved workspace data, since it can be cleaned up or disappear once the session ends (<a href="https://www.jetbrains.com/help/ai-assistant/how-we-handle-your-code-and-data.html" rel="external nofollow noopener" target="_blank">source</a>).</p> <h2 id="vs-code-and-ai-extensions">VS Code and AI extensions</h2> <p>For VS Code itself, collect both global and workspace storage:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td> <td class="rouge-code"><pre>%APPDATA%\Code\User\globalStorage\
+%APPDATA%\Code\User\workspaceStorage\
+
+~/.config/Code/User/globalStorage/
+~/.config/Code/User/workspaceStorage/
+
+~/Library/Application Support/Code/User/globalStorage/
+~/Library/Application Support/Code/User/workspaceStorage/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>The workspace folder often contains <code class="language-plaintext highlighter-rouge">workspace.json</code>, <code class="language-plaintext highlighter-rouge">state.vscdb</code>, extension specific data and, depending on the installed version, chat session files. Collect the entire relevant workspace directory together with its SQLite sidecars.</p> <p>For GitHub Copilot, Cline, Continue, Windsurf and other extensions, also collect:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td> <td class="rouge-code"><pre>User/settings.json
+User/globalStorage/
+extensions/
+logs/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>The extension configuration can reveal which provider, MCP server, local endpoint or custom model was in use.</p> <h2 id="opencode">OpenCode</h2> <p>OpenCode documents its local application data directory as:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>%USERPROFILE%\.local\share\opencode\
+~/.local/share/opencode/
+~/.local/share/opencode/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Collect the entire directory. Current documentation identifies <code class="language-plaintext highlighter-rouge">auth.json</code>, <code class="language-plaintext highlighter-rouge">log/</code> and <code class="language-plaintext highlighter-rouge">project/</code> inside it. The <code class="language-plaintext highlighter-rouge">project/</code> directory holds project specific session and message data, <code class="language-plaintext highlighter-rouge">auth.json</code> can contain provider authentication material, and <code class="language-plaintext highlighter-rouge">log/</code> helps with reconstructing activity (<a href="https://opencode.ai/docs/troubleshooting/" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>Also collect global and project configuration. Global configuration normally sits under <code class="language-plaintext highlighter-rouge">.config/opencode</code>, and projects may contain <code class="language-plaintext highlighter-rouge">opencode.json</code>, <code class="language-plaintext highlighter-rouge">opencode.jsonc</code> or a <code class="language-plaintext highlighter-rouge">.opencode/</code> folder. Check <code class="language-plaintext highlighter-rouge">OPENCODE_DB</code>, <code class="language-plaintext highlighter-rouge">OPENCODE_CONFIG</code> and <code class="language-plaintext highlighter-rouge">OPENCODE_CONFIG_DIR</code> before assuming the defaults (<a href="https://opencode.ai/docs/config" rel="external nofollow noopener" target="_blank">source</a>).</p> <h2 id="local-llm-platforms">Local LLM platforms</h2> <p>Ollama and LM Studio are not coding agents by themselves. They matter because coding agents, IDE extensions, scripts and local applications can use them as a model backend.</p> <p><strong>Ollama’s</strong> default model directory is:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>C:\Users\&lt;user&gt;\.ollama\models\
+/usr/share/ollama/.ollama/models/
+/Users/&lt;user&gt;/.ollama/models/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>The path can be changed through <code class="language-plaintext highlighter-rouge">OLLAMA_MODELS</code>. On Windows, collect application logs from <code class="language-plaintext highlighter-rouge">%LOCALAPPDATA%\Ollama\</code>. On Linux, review the Ollama systemd service configuration and journal logs. On macOS, collect <code class="language-plaintext highlighter-rouge">~/.ollama/</code> and <code class="language-plaintext highlighter-rouge">~/.ollama/logs/</code>. Ollama documents its default model locations, the <code class="language-plaintext highlighter-rouge">OLLAMA_MODELS</code> override, and its default API listener at <code class="language-plaintext highlighter-rouge">127.0.0.1:11434</code> (<a href="https://docs.ollama.com/faq" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>A model file on disk proves that a model was available locally. It does not prove a specific prompt, command or agent action. Recover those from the client application, the agent transcript, proxy logs, shell history or endpoint telemetry.</p> <p><strong>LM Studio</strong> stores saved conversations as JSON files:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>%USERPROFILE%\.lmstudio\conversations\
+~/.lmstudio/conversations/
+~/.lmstudio/conversations/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>These files are high value evidence for local chat activity. LM Studio documents the location and advises against relying on undocumented internal schema details, so preserve the original JSON and parse it from a forensic copy (<a href="https://lmstudio.ai/docs/app/basics/chat" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>The normal model directory is:</p> <div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr>
+<td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td> <td class="rouge-code"><pre>%USERPROFILE%\.lmstudio\models\
+~/.lmstudio/models/
+~/.lmstudio/models/
+</pre></td> </tr></tbody></table></code></pre></div></div> <p>Users can change the model directory inside the application, so verify the configured location rather than assuming the default (<a href="https://lmstudio.ai/docs/app/advanced/import-model" rel="external nofollow noopener" target="_blank">source</a>).</p> <p>If LM Studio’s local API server was enabled, identify the local client that called it. The default listener is <code class="language-plaintext highlighter-rouge">http://localhost:1234</code>. Authentication is optional there unless the user configured an API token (<a href="https://lmstudio.ai/docs/developer/rest/quickstart" rel="external nofollow noopener" target="_blank">source</a>).</p> <h2 id="practical-analysis-workflow">Practical analysis workflow</h2> <ol> <li>Identify the user account, the relevant project and the approximate time window.</li> <li>Preserve the full agent, IDE and local LLM data directories.</li> <li>Collect SQLite databases together with their WAL, SHM and backup files.</li> <li>Map workspace identifiers to project paths using <code class="language-plaintext highlighter-rouge">workspace.json</code>, timestamps, configuration and Git metadata.</li> <li>Extract prompts, responses, tool activity, commands, output, edited files, MCP configuration and provider settings.</li> <li>Review dependency, build, workflow, hook and persistence changes in the project and the operating system.</li> <li>Correlate the reconstructed timeline with endpoint, shell, network and Git evidence.</li> <li>Revoke exposed credentials through the relevant provider, and never test recovered keys against production systems.</li> </ol> <p>The goal is not to recover a model’s internal reasoning. It is to reconstruct observable activity: what the user requested, what the agent was allowed to do, what it attempted, what it changed, and what actually ran on the workstation.</p> </div> </article> <br> <hr> <br> <ul class="list-disc pl-8"></ul> <h2 class="text-3xl font-semibold mb-4 mt-12">Gostou de Ler este Artigo?</h2> <p class="mb-2">Aqui estão alguns artigos relacionados que você pode gostar de ler:</p> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2026/DFIR-AI/">Forensics on AI Coding Agents. What to Collect and Where to Find It.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/">CyberDefenders Qradar101 Write up.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/Audit-Sysmon/">Script for enabling Windows Audit and Sysmon.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/FnStegoCrypt/">FnStegoCrypt - Encrypted Data in Images</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2024/Guacamole/">Step-by-step Apache Guacamole Installation.</a> </li> <li class="my-2"> <a class="text-pink-700 underline font-semibold hover:text-pink-800" href="/pt-br/blog/2023/First/">FIRST Fortaleza 2023.</a> </li> <div id="giscus_thread" style="max-width: 1000px; margin: 0 auto;"> <script>let giscusTheme=determineComputedTheme(),giscusAttributes={src:"https://giscus.app/client.js","data-repo":"Eyezuhk/eyezuhk.github.io","data-repo-id":"R_kgDONTi2VA","data-category":"General","data-category-id":"DIC_kwDONTi2VM4Ck09L","data-mapping":"title","data-strict":"1","data-reactions-enabled":"1","data-emit-metadata":"0","data-input-position":"bottom","data-theme":giscusTheme,"data-lang":"en",crossorigin:"anonymous",async:""},giscusScript=document.createElement("script");Object.entries(giscusAttributes).forEach(([t,e])=>giscusScript.setAttribute(t,e)),document.getElementById("giscus_thread").appendChild(giscusScript);</script> <noscript>Please enable JavaScript to view the <a href="http://giscus.app/?ref_noscript" rel="external nofollow noopener" target="_blank">comments powered by giscus.</a> </noscript> </div> </div> </div> </div> </div> <footer class="sticky-bottom mt-5" role="contentinfo"> <div class="container"> © Copyright 2026 Eyezuhk Isaac Fernandes. Disclaimer. All the opinions and views discussed here are mine and do not necessarily represent the views of my employer. I am not an expert. I am just sharing my views on topics, and I’m open to other perspectives. Last updated: August 13, 2026. </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="/assets/js/bootstrap.bundle.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script defer src="/assets/js/bootstrap-toc.min.js?c82ff4de8b0955d6ff14f5b05eed7eb6"></script> <script src="/assets/js/no_defer.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?e0514a05c5c95ac1a93a8dfd5249b92e"></script> <script defer src="/assets/js/copy_code.js?12775fdf7f95e901d7119054556e495f" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script type="text/javascript">function progressBarSetup(){"max"in document.createElement("progress")?(initializeProgressElement(),$(document).on("scroll",function(){progressBar.attr({value:getCurrentScrollPosition()})}),$(window).on("resize",initializeProgressElement)):(resizeProgressBar(),$(document).on("scroll",resizeProgressBar),$(window).on("resize",resizeProgressBar))}function getCurrentScrollPosition(){return $(window).scrollTop()}function initializeProgressElement(){let e=$("#navbar").outerHeight(!0);$("body").css({"padding-top":e}),$("progress-container").css({"padding-top":e}),progressBar.css({top:e}),progressBar.attr({max:getDistanceToScroll(),value:getCurrentScrollPosition()})}function getDistanceToScroll(){return $(document).height()-$(window).height()}function resizeProgressBar(){progressBar.css({width:getWidthPercentage()+"%"})}function getWidthPercentage(){return getCurrentScrollPosition()/getDistanceToScroll()*100}const progressBar=$("#progress");window.onload=function(){setTimeout(progressBarSetup,50)};</script> <script defer src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8.0.6/dist/index.min.js" integrity="sha256-EXHg3x1K4oIWdyohPeKX2ZS++Wxt/FRPH7Nl01nat1o=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/swiper@11.0.5/swiper-element-bundle.min.js" integrity="sha256-BPrwikijIybg9OQC5SYFFqhBjERYOn97tCureFgYH1E=" crossorigin="anonymous"></script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>addBackToTop();</script> <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Digite para iniciar a busca"> <div class="modal-footer" slot="footer"> <span class="help"> <svg version="1.0" class="ninja-examplekey" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 1280 1280"> <path d="M1013 376c0 73.4-.4 113.3-1.1 120.2a159.9 159.9 0 0 1-90.2 127.3c-20 9.6-36.7 14-59.2 15.5-7.1.5-121.9.9-255 1h-242l95.5-95.5 95.5-95.5-38.3-38.2-38.2-38.3-160 160c-88 88-160 160.4-160 161 0 .6 72 73 160 161l160 160 38.2-38.3 38.3-38.2-95.5-95.5-95.5-95.5h251.1c252.9 0 259.8-.1 281.4-3.6 72.1-11.8 136.9-54.1 178.5-116.4 8.6-12.9 22.6-40.5 28-55.4 4.4-12 10.7-36.1 13.1-50.6 1.6-9.6 1.8-21 2.1-132.8l.4-122.2H1013v110z"></path> </svg> para selecionar </span> <span class="help"> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24"> <path d="M0 0h24v24H0V0z" fill="none"></path> <path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"></path> </svg> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey" viewbox="0 0 24 24"> <path d="M0 0h24v24H0V0z" fill="none"></path> <path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"></path> </svg> para navegar </span> <span class="help"> <span class="ninja-examplekey esc">esc</span> para fechar </span> <span class="help"> <svg xmlns="http://www.w3.org/2000/svg" class="ninja-examplekey backspace" viewbox="0 0 20 20" fill="currentColor"> <path fill-rule="evenodd" d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z" clip-rule="evenodd"></path> </svg> voltar um nível </span> </div> </ninja-keys> <script>let searchTheme=determineComputedTheme();const ninjaKeys=document.querySelector("ninja-keys");"dark"===searchTheme?ninjaKeys.classList.add("dark"):ninjaKeys.classList.remove("dark");const openSearchModal=()=>{const e=$("#navbarNav");e.hasClass("show")&&e.collapse("hide"),ninjaKeys.open()};</script> <script>const ninja=document.querySelector("ninja-keys");ninja.data=[{id:"nav-sobre",title:"Sobre",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/"}},{id:"nav-blog",title:"Blog",description:"Uma cole\xe7\xe3o dos meus pensamentos sobre ciberseguran\xe7a e opini\xf5es pessoais que abrangem diversos t\xf3picos.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/blog/"}},{id:"nav-differ",title:"Differ",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/Differ/"}},{id:"nav-htmlive",title:"HTMLive",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/HTMLive/"}},{id:"nav-pomodoro",title:"Pomodoro",description:"",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/Pomodoro/"}},{id:"nav-github-reposit\xf3rios",title:"Github Reposit\xf3rios",description:"Projetos pessoais.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/github-repositories/"}},{id:"nav-cv",title:"CV",description:"Curriculum Vitae.",section:"Menu de navega\xe7\xe3o",handler:()=>{window.location.href="/pt-br/cv/"}},{id:"post-forensics-on-ai-coding-agents-what-to-collect-and-where-to-find-it",title:"Forensics on AI Coding Agents. What to Collect and Where to Find It....",description:"A practical DFIR guide to artifacts left by AI coding agents, IDE assistants, and local LLM platforms.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2026/DFIR-AI/"}},{id:"post-detection-cve-2024-35250",title:"Detection CVE-2024-35250",description:"Detecta quando cmd.exe com privil\xe9gios de sistema \xe9 executado depois que um processo carrega &#39;ksproxy.ax&#39; e &#39;ksuser.dll&#39;, indicando poss\xedvel explora\xe7\xe3o do CVE-2024-35250.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/CVE-2024-35250/"}},{id:"post-apts-ou-uaps",title:"APTs ou UAPs?",description:"Como Fen\xf4menos An\xf4malos se Assemelham a Amea\xe7as Cibern\xe9ticas.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/APT-UAP/"}},{id:"post-passo-a-passo-instala\xe7\xe3o-apache-guacamole",title:"Passo a passo instala\xe7\xe3o Apache Guacamole.",description:"Instala\xe7\xe3o Guacamole",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/Guacamole/"}},{id:"post-script-para-habilitar-auditorias-windows-e-sysmon",title:"Script para habilitar auditorias Windows e Sysmon.",description:"Auditorias Windows e Sysmon",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/Audit-Sysmon/"}},{id:"post-fnstegocrypt-dados-encriptados-em-imagens",title:"FnStegoCrypt dados encriptados em imagens.",description:"Programa que encripta os dados com aes-gcm e adiciona a imagens usando LSB.",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/FnStegoCrypt/"}},{id:"post-expondo-aplica\xe7\xf5es-locais-com-fnlocalcloud",title:"Expondo aplica\xe7\xf5es locais com FNLocalCloud.",description:"Programa baseado em agente e servidor para expor servi\xe7os de rede locais na internet bypassando cgnat...",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2024/FNLocalCloud/"}},{id:"post-first-fortaleza-2023",title:"FIRST Fortaleza 2023.",description:"FIRST (Forum of Incident Response and Security Teams)",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2023/First/"}},{id:"post-resolu\xe7\xe3o-cyberdefenders-qradar101",title:"Resolu\xe7\xe3o CyberDefenders Qradar101.",description:"Resolu\xe7\xe3o de CTF",section:"Postagens",handler:()=>{window.location.href="/pt-br/blog/2022/CyberDefenders-Qradar101-Write-up/"}},{id:"news-memento-mori",title:"Memento mori.",description:"",section:"Novidades"},{id:"projects-projects",title:"Projects",description:"with background image",section:"Projetos",handler:()=>{window.location.href="/pt-br/projects/1_project/"}},{id:"socials-email",title:"Enviar um email",section:"Redes sociais",handler:()=>{window.open("mailto:%65%79%65%7A%75%68%6B@%67%6D%61%69%6C.%63%6F%6D","_blank")}},{id:"socials-github",title:"GitHub",section:"Redes sociais",handler:()=>{window.open("https://github.com/Eyezuhk","_blank")}},{id:"socials-linkedin",title:"LinkedIn",section:"Redes sociais",handler:()=>{window.open("https://www.linkedin.com/in/isaacfn","_blank")}},{id:"socials-spotify",title:"Spotify",section:"Redes sociais",handler:()=>{window.open("https://open.spotify.com/user/12144303025","_blank")}},{id:"socials-rss",title:"RSS Feed",section:"Redes sociais",handler:()=>{window.open("/feed.xml","_blank")}},{id:"lang-en-us",title:"en-us",section:"Idiomas",handler:()=>{window.location.href="/blog/2026/DFIR-AI/"}},{id:"light-theme",title:"Muda o tema para claro",description:"Muda o tema do site para claro",section:"Tema",handler:()=>{setThemeSetting("light")}},{id:"dark-theme",title:"Muda o tema para escuro",description:"Muda o tema do site para escuro",section:"Tema",handler:()=>{setThemeSetting("dark")}},{id:"system-theme",title:"Usa o tema padr\xe3o do sistema",description:"Muda o tema do site para o padr\xe3o do sistema",section:"Tema",handler:()=>{setThemeSetting("system")}}];</script> <script src="/assets/js/shortcut-key.js?6f508d74becd347268a7f822bca7309d"></script> </body> </html>
